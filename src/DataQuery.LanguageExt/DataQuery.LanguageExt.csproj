@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <PackageVersion>0.0.3</PackageVersion>
+        <Title>Opiniate dataquery approach, using Dapper, LanguageExt and Npgsql</Title>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Description>Dapper + Npgsql database utilities using Language.Ext</Description>
+        <PackageProjectUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext</RepositoryUrl>
+        <RootNamespace>Dataquery.LanguageExt</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.0.123" />
+      <PackageReference Include="LanguageExt.Core" Version="4.0.3" />
+      <PackageReference Include="LanguageExt.Sys" Version="4.0.3" />
+      <PackageReference Include="Npgsql" Version="5.0.10" />
+    </ItemGroup>
+
+</Project>
