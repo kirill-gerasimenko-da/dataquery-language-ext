@@ -15,7 +15,7 @@ namespace Dataquery.LanguageExt
             /// <summary>
             /// Creates an effect, which runs the query with DatabaseRuntime.
             /// </summary>
-            Aff<TResult> RunAff<TResult>(Aff<DatabaseRuntime, TResult> query, CancellationToken cancelToken);
+            Aff<TResult> AsAff<TResult>(Aff<DatabaseRuntime, TResult> query, CancellationToken cancelToken);
         }
 
         public class QueryRunner : IQueryRunner
@@ -24,7 +24,7 @@ namespace Dataquery.LanguageExt
 
             public QueryRunner(ConnectionString connectionString) => _connectionString = connectionString;
 
-            public Aff<TResult> RunAff<TResult>(Aff<DatabaseRuntime, TResult> query, CancellationToken cancelToken) =>
+            public Aff<TResult> AsAff<TResult>(Aff<DatabaseRuntime, TResult> query, CancellationToken cancelToken) =>
                 AffMaybe(async () =>
                 {
                     await using var cnn = new NpgsqlConnection(_connectionString.Value);

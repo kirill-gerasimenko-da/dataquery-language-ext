@@ -18,22 +18,22 @@ namespace Dataquery.LanguageExt
             /// <summary>
             /// Returns query async effect
             /// </summary>
-            Aff<RT, TResult> asQuery<RT>(TQuery query) where RT : struct, HasDatabase<RT>;
+            Aff<RT, TResult> AsAff<RT>(TQuery query) where RT : struct, HasDatabase<RT>;
 
             /// <summary>
             /// Returns query async effect as pipe
             /// </summary>
-            Pipe<RT, TQuery, TResult, Unit> asPipe<RT>() where RT : struct, HasDatabase<RT>;
+            Pipe<RT, TQuery, TResult, Unit> AsPipe<RT>() where RT : struct, HasDatabase<RT>;
 
             /// <summary>
             /// Returns query async effect as producer 
             /// </summary>
-            Producer<RT, TResult, Unit> asProducer<RT>(TQuery query) where RT : struct, HasDatabase<RT>;
+            Producer<RT, TResult, Unit> AsProducer<RT>(TQuery query) where RT : struct, HasDatabase<RT>;
 
             /// <summary>
             /// Returns query async effect as consumer 
             /// </summary>
-            Consumer<RT, TQuery, TResult> asConsumer<RT>() where RT : struct, HasDatabase<RT>;
+            Consumer<RT, TQuery, TResult> AsConsumer<RT>() where RT : struct, HasDatabase<RT>;
         }
 
         /// <summary>
@@ -42,29 +42,29 @@ namespace Dataquery.LanguageExt
         public abstract class QueryHandler<TQuery, TResult> : IQueryHandler<TQuery, TResult>
             where TQuery : IQuery<TResult>
         {
-            public abstract Aff<RT, TResult> asQuery<RT>(TQuery query)
+            public abstract Aff<RT, TResult> AsAff<RT>(TQuery query)
                 where RT : struct, HasDatabase<RT>;
 
-            public Pipe<RT, TQuery, TResult, Unit> asPipe<RT>()
+            public Pipe<RT, TQuery, TResult, Unit> AsPipe<RT>()
                 where RT : struct, HasDatabase<RT>
                 =>
                     from input in Proxy.awaiting<TQuery>()
-                    from result in asQuery<RT>(input)
+                    from result in AsAff<RT>(input)
                     from _ in Proxy.yield(result)
                     select unit;
 
-            public Producer<RT, TResult, Unit> asProducer<RT>(TQuery query)
+            public Producer<RT, TResult, Unit> AsProducer<RT>(TQuery query)
                 where RT : struct, HasDatabase<RT>
                 =>
-                    from result in asQuery<RT>(query)
+                    from result in AsAff<RT>(query)
                     from _ in Proxy.yield(result)
                     select unit;
 
-            public Consumer<RT, TQuery, TResult> asConsumer<RT>()
+            public Consumer<RT, TQuery, TResult> AsConsumer<RT>()
                 where RT : struct, HasDatabase<RT>
                 =>
                     from input in Proxy.awaiting<TQuery>()
-                    from result in asQuery<RT>(input)
+                    from result in AsAff<RT>(input)
                     select result;
         }
     }
