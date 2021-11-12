@@ -13,7 +13,7 @@ namespace Dataquery.LanguageExt
             where RT : struct,
             HasSqlDatabase<RT>
         {
-            public static Aff<RT, Seq<TResult>> Query<TResult>(
+            public static Aff<RT, Seq<TResult>> query<TResult>(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
@@ -22,7 +22,7 @@ namespace Dataquery.LanguageExt
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
 
-            public static Aff<RT, GridReader> QueryMultiple(
+            public static Aff<RT, GridReader> queryMultiple(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
@@ -31,7 +31,7 @@ namespace Dataquery.LanguageExt
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
 
-            public static Aff<RT, int> Execute(
+            public static Aff<RT, int> execute(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
@@ -40,7 +40,7 @@ namespace Dataquery.LanguageExt
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
 
-            public static Aff<RT, T> ExecuteScalar<T>(
+            public static Aff<RT, T> executeScalar<T>(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
@@ -49,7 +49,7 @@ namespace Dataquery.LanguageExt
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
 
-            public static Aff<RT, IDataReader> ExecuteReader(
+            public static Aff<RT, IDataReader> executeReader(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()

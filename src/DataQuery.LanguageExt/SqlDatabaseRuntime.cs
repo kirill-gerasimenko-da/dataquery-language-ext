@@ -10,7 +10,7 @@ namespace Dataquery.LanguageExt
     {
         /// <summary>
         /// Default database runtime, cancellable, allows access to the
-        /// current connection, transaction and Dapper IO 
+        /// current connection, transaction and Dapper (via database IO) 
         /// </summary>
         public readonly struct SqlDatabaseRuntime : HasSqlDatabase<SqlDatabaseRuntime>
         {
