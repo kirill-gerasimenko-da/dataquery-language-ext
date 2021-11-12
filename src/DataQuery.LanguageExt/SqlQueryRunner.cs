@@ -10,28 +10,28 @@ namespace Dataquery.LanguageExt
 
     public static partial class DataQuery
     {
-        public interface IQueryRunner
+        public interface ISqlQueryRunner
         {
             /// <summary>
             /// Creates an effect, which runs the query with DatabaseRuntime.
             /// </summary>
-            Aff<TResult> AsAff<TResult>(Aff<DatabaseRuntime, TResult> query, CancellationToken cancelToken);
+            Aff<TResult> AsAff<TResult>(Aff<SqlDatabaseRuntime, TResult> query, CancellationToken cancelToken);
         }
 
-        public class QueryRunner : IQueryRunner
+        public class SqlQueryRunner : ISqlQueryRunner
         {
             private readonly ConnectionString _connectionString;
 
-            public QueryRunner(ConnectionString connectionString) => _connectionString = connectionString;
+            public SqlQueryRunner(ConnectionString connectionString) => _connectionString = connectionString;
 
-            public Aff<TResult> AsAff<TResult>(Aff<DatabaseRuntime, TResult> query, CancellationToken cancelToken) =>
+            public Aff<TResult> AsAff<TResult>(Aff<SqlDatabaseRuntime, TResult> query, CancellationToken cancelToken) =>
                 AffMaybe(async () =>
                 {
                     await using var cnn = new NpgsqlConnection(_connectionString.Value);
                     await cnn.OpenAsync(cancelToken);
 
                     var trn = await cnn.BeginTransactionAsync(cancelToken);
-                    var runtime = DatabaseRuntime.New(cnn, trn, cancelToken);
+                    var runtime = SqlDatabaseRuntime.New(cnn, trn, cancelToken);
 
                     var finalQuery = query.MapFailAsync(async error =>
                     {

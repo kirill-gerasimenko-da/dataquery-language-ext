@@ -12,35 +12,35 @@ namespace Dataquery.LanguageExt
         /// Default database runtime, cancellable, allows access to the
         /// current connection, transaction and Dapper IO 
         /// </summary>
-        public readonly struct DatabaseRuntime : HasDatabase<DatabaseRuntime>
+        public readonly struct SqlDatabaseRuntime : HasSqlDatabase<SqlDatabaseRuntime>
         {
-            private DatabaseRuntime(DatabaseRuntimeEnv env) => Env = env;
+            private SqlDatabaseRuntime(SqlDatabaseRuntimeEnv env) => Env = env;
 
-            public static DatabaseRuntime New(
+            public static SqlDatabaseRuntime New(
                 IDbConnection cnn,
                 Option<IDbTransaction> trn,
                 CancellationToken cancelToken)
                 =>
-                    new(new DatabaseRuntimeEnv(new CancellationTokenSource(), cancelToken, cnn, trn));
+                    new(new SqlDatabaseRuntimeEnv(new CancellationTokenSource(), cancelToken, cnn, trn));
 
-            public DatabaseRuntimeEnv Env { get; }
-            public DatabaseRuntime LocalCancel => new(Env.LocalCancel);
+            public SqlDatabaseRuntimeEnv Env { get; }
+            public SqlDatabaseRuntime LocalCancel => new(Env.LocalCancel);
             public CancellationToken CancellationToken => Env.Token;
             public CancellationTokenSource CancellationTokenSource => Env.Source;
             public IDbConnection Connection => Env.Connection;
             public Option<IDbTransaction> Transaction => Env.Transaction;
 
-            public Eff<DatabaseRuntime, IDatabaseIO> DatabaseEff => SuccessEff(LiveDatabaseIO.Default);
+            public Eff<SqlDatabaseRuntime, ISqlDatabaseIO> SqlDatabaseEff => SuccessEff(LiveSqlDatabaseIO.Default);
         }
 
-        public readonly struct DatabaseRuntimeEnv
+        public readonly struct SqlDatabaseRuntimeEnv
         {
             public readonly CancellationTokenSource Source;
             public readonly CancellationToken Token;
             public readonly IDbConnection Connection;
             public readonly Option<IDbTransaction> Transaction;
 
-            public DatabaseRuntimeEnv(
+            public SqlDatabaseRuntimeEnv(
                 CancellationTokenSource source,
                 CancellationToken token,
                 IDbConnection connection,
@@ -52,14 +52,14 @@ namespace Dataquery.LanguageExt
                 Transaction = transaction;
             }
 
-            private DatabaseRuntimeEnv(
+            private SqlDatabaseRuntimeEnv(
                 CancellationTokenSource source,
                 IDbConnection connection,
                 Option<IDbTransaction> transaction)
                 : this(source, source.Token, connection, transaction)
             { }
 
-            public DatabaseRuntimeEnv LocalCancel => new(new CancellationTokenSource(), Connection, Transaction);
+            public SqlDatabaseRuntimeEnv LocalCancel => new(new CancellationTokenSource(), Connection, Transaction);
         }
     }
 }

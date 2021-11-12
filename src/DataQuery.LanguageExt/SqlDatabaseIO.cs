@@ -10,7 +10,7 @@ namespace Dataquery.LanguageExt
 
     public static partial class DataQuery
     {
-        public interface IDatabaseIO
+        public interface ISqlDatabaseIO
         {
             ValueTask<Seq<T>> QueryAsync<T>(
                 IDbConnection cnn,
@@ -53,9 +53,9 @@ namespace Dataquery.LanguageExt
                 CommandType? commandType);
         }
 
-        public struct LiveDatabaseIO : IDatabaseIO
+        public struct LiveSqlDatabaseIO : ISqlDatabaseIO
         {
-            public static readonly IDatabaseIO Default = new LiveDatabaseIO();
+            public static readonly ISqlDatabaseIO Default = new LiveSqlDatabaseIO();
 
             public async ValueTask<Seq<T>> QueryAsync<T>(
                 IDbConnection cnn, string sql, object param,

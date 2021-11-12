@@ -9,60 +9,60 @@ namespace Dataquery.LanguageExt
 
     public static partial class DataQuery
     {
-        public static class Database<RT>
+        public static class SqlDatabase<RT>
             where RT : struct,
-            HasDatabase<RT>
+            HasSqlDatabase<RT>
         {
-            public static Aff<RT, Seq<TResult>> SqlQuery<TResult>(
+            public static Aff<RT, Seq<TResult>> Query<TResult>(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
                     from trn in transaction<RT>()
-                    from result in default(RT).DatabaseEff.MapAsync(dapper => dapper.QueryAsync<TResult>(
+                    from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryAsync<TResult>(
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
 
-            public static Aff<RT, GridReader> SqlQueryMultiple(
+            public static Aff<RT, GridReader> QueryMultiple(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
                     from trn in transaction<RT>()
-                    from result in default(RT).DatabaseEff.MapAsync(dapper => dapper.QueryMultipleAsync(
+                    from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryMultipleAsync(
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
 
-            public static Aff<RT, int> SqlExecute(
+            public static Aff<RT, int> Execute(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
                     from trn in transaction<RT>()
-                    from result in default(RT).DatabaseEff.MapAsync(dapper => dapper.ExecuteAsync(
+                    from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteAsync(
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
 
-            public static Aff<RT, T> SqlExecuteScalar<T>(
+            public static Aff<RT, T> ExecuteScalar<T>(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
                     from trn in transaction<RT>()
-                    from result in default(RT).DatabaseEff.MapAsync(dapper => dapper.ExecuteScalarAsync<T>(
+                    from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteScalarAsync<T>(
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
 
-            public static Aff<RT, IDataReader> SqlExecuteReader(
+            public static Aff<RT, IDataReader> ExecuteReader(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
                     from trn in transaction<RT>()
-                    from result in default(RT).DatabaseEff.MapAsync(dapper => dapper.ExecuteReaderAsync(
+                    from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteReaderAsync(
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
         }
 
-        static Eff<RT, IDbConnection> connection<RT>() where RT : struct, HasConnection<RT> =>
+        static Eff<RT, IDbConnection> connection<RT>() where RT : struct, HasSqlConnection<RT> =>
             Eff<RT, IDbConnection>(rt => rt.Connection);
 
-        static Eff<RT, IDbTransaction> transaction<RT>() where RT : struct, HasTransaction<RT> =>
+        static Eff<RT, IDbTransaction> transaction<RT>() where RT : struct, HasSqlTransaction<RT> =>
             Eff<RT, IDbTransaction>(rt => rt.Transaction.IfNoneUnsafe((IDbTransaction)null));
     }
 }
