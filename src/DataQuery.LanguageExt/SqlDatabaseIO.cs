@@ -36,15 +36,7 @@ namespace Dataquery.LanguageExt
                 int? commandTimeout,
                 CommandType? commandType);
 
-            ValueTask<IDataReader> ExecuteReaderAsync(
-                IDbConnection cnn,
-                string sql,
-                object param,
-                IDbTransaction transaction,
-                int? commandTimeout,
-                CommandType? commandType);
-
-            ValueTask<GridReader> QueryMultipleAsync(
+            ValueTask<ISqlGridReader> QueryMultipleAsync(
                 IDbConnection cnn,
                 string sql,
                 object param,
@@ -75,17 +67,12 @@ namespace Dataquery.LanguageExt
                 =>
                     await cnn.ExecuteScalarAsync<T>(sql, param, transaction, commandTimeout, commandType);
 
-            public async ValueTask<IDataReader> ExecuteReaderAsync(
+            public async ValueTask<ISqlGridReader> QueryMultipleAsync(
                 IDbConnection cnn, string sql, object param,
                 IDbTransaction transaction, int? commandTimeout, CommandType? commandType)
                 =>
-                    await cnn.ExecuteReaderAsync(sql, param, transaction, commandTimeout, commandType);
-
-            public async ValueTask<GridReader> QueryMultipleAsync(
-                IDbConnection cnn, string sql, object param,
-                IDbTransaction transaction, int? commandTimeout, CommandType? commandType)
-                =>
-                    await cnn.QueryMultipleAsync(sql, param, transaction, commandTimeout, commandType);
+                    new SqlGridReader(await cnn.QueryMultipleAsync(
+                        sql, param, transaction, commandTimeout, commandType));
         }
     }
 }

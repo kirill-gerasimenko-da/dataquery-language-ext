@@ -1,11 +1,9 @@
 using System.Data;
-using Dapper;
 using LanguageExt;
 
 namespace Dataquery.LanguageExt
 {
     using static Prelude;
-    using static SqlMapper;
 
     public static partial class DataQuery
     {
@@ -13,16 +11,16 @@ namespace Dataquery.LanguageExt
             where RT : struct,
             HasSqlDatabase<RT>
         {
-            public static Aff<RT, Seq<TResult>> query<TResult>(
+            public static Aff<RT, Seq<T>> query<T>(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
                     from trn in transaction<RT>()
-                    from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryAsync<TResult>(
+                    from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryAsync<T>(
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
 
-            public static Aff<RT, GridReader> queryMultiple(
+            public static Aff<RT, ISqlGridReader> queryMultiple(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
                 =>
                     from cnn in connection<RT>()
@@ -46,15 +44,6 @@ namespace Dataquery.LanguageExt
                     from cnn in connection<RT>()
                     from trn in transaction<RT>()
                     from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteScalarAsync<T>(
-                        cnn, sql, param, trn, cmdTimeout, cmdType))
-                    select result;
-
-            public static Aff<RT, IDataReader> executeReader(
-                string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-                =>
-                    from cnn in connection<RT>()
-                    from trn in transaction<RT>()
-                    from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteReaderAsync(
                         cnn, sql, param, trn, cmdTimeout, cmdType))
                     select result;
         }
