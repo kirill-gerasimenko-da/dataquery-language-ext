@@ -27,13 +27,13 @@ namespace Dataquery.LanguageExt
             CancellationToken cancelToken
         ) where RT : struct, HasSqlDatabase<RT>;
 
-        public class SqlQueryRunner<RT> : ISqlQueryRunner<RT>
+        public class PostgreSqlQueryRunner<RT> : ISqlQueryRunner<RT>
             where RT : struct, HasSqlDatabase<RT>
         {
             private readonly ConnectionString _connectionString;
             private readonly SqlDatabaseRuntimeFactory<RT> _runtimeFactory;
 
-            public SqlQueryRunner(ConnectionString connectionString, SqlDatabaseRuntimeFactory<RT> runtimeFactory)
+            public PostgreSqlQueryRunner(ConnectionString connectionString, SqlDatabaseRuntimeFactory<RT> runtimeFactory)
             {
                 _connectionString = connectionString;
                 _runtimeFactory = runtimeFactory;

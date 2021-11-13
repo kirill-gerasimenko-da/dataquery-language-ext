@@ -1,4 +1,6 @@
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 using LanguageExt;
 
 namespace Dataquery.LanguageExt
@@ -7,6 +9,25 @@ namespace Dataquery.LanguageExt
 
     public static partial class DataQuery
     {
+        public interface ISqlDatabase
+        {
+            Task<Fin<T>> RunQuery<T>(ISqlQuery<T> query, CancellationToken cancelToken);
+            Task<Fin<T>> RunQuery<T>(Aff<SqlDatabaseRuntime, T> query, CancellationToken cancelToken);
+        }
+
+        public class SqlDatabase : ISqlDatabase
+        {
+            private readonly ISqlQueryRunner<SqlDatabaseRuntime> _runner;
+
+            public SqlDatabase(ISqlQueryRunner<SqlDatabaseRuntime> runner) => _runner = runner;
+
+            public async Task<Fin<T>> RunQuery<T>(ISqlQuery<T> query, CancellationToken cancelToken) =>
+                await _runner.AsAff(query.AsAff<SqlDatabaseRuntime>(), cancelToken).Run();
+
+            public async Task<Fin<T>> RunQuery<T>(Aff<SqlDatabaseRuntime, T> query, CancellationToken cancelToken) =>
+                await _runner.AsAff(query, cancelToken).Run();
+        }
+
         public static class SqlDatabase<RT>
             where RT : struct,
             HasSqlDatabase<RT>
@@ -48,10 +69,10 @@ namespace Dataquery.LanguageExt
                     select result;
         }
 
-        static Eff<RT, IDbConnection> connection<RT>() where RT : struct, HasSqlConnection<RT> =>
+        public static Eff<RT, IDbConnection> connection<RT>() where RT : struct, HasSqlConnection<RT> =>
             Eff<RT, IDbConnection>(rt => rt.Connection);
 
-        static Eff<RT, IDbTransaction> transaction<RT>() where RT : struct, HasSqlTransaction<RT> =>
+        public static Eff<RT, IDbTransaction> transaction<RT>() where RT : struct, HasSqlTransaction<RT> =>
             Eff<RT, IDbTransaction>(rt => rt.Transaction.IfNoneUnsafe((IDbTransaction)null));
     }
 }
