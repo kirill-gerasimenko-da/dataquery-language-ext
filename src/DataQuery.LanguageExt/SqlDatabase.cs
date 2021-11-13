@@ -12,7 +12,6 @@ namespace Dataquery.LanguageExt
         public interface ISqlDatabase
         {
             Task<Fin<T>> RunQuery<T>(ISqlQuery<T> query, CancellationToken cancelToken);
-            Task<Fin<T>> RunQuery<T>(Aff<SqlDatabaseRuntime, T> query, CancellationToken cancelToken);
         }
 
         public class SqlDatabase : ISqlDatabase
@@ -23,9 +22,6 @@ namespace Dataquery.LanguageExt
 
             public async Task<Fin<T>> RunQuery<T>(ISqlQuery<T> query, CancellationToken cancelToken) =>
                 await _runner.AsAff(query.AsAff<SqlDatabaseRuntime>(), cancelToken).Run();
-
-            public async Task<Fin<T>> RunQuery<T>(Aff<SqlDatabaseRuntime, T> query, CancellationToken cancelToken) =>
-                await _runner.AsAff(query, cancelToken).Run();
         }
 
         public static class SqlDatabase<RT>
