@@ -1,3 +1,5 @@
+using System;
+using System.Data;
 using System.Runtime.Serialization;
 using System.Threading;
 using LanguageExt;
@@ -10,28 +12,41 @@ namespace Dataquery.LanguageExt
 
     public static partial class DataQuery
     {
-        public interface ISqlQueryRunner
+        public interface ISqlQueryRunner<RT>
+            where RT : struct, HasSqlDatabase<RT>
         {
             /// <summary>
             /// Creates an effect, which runs the query with DatabaseRuntime.
             /// </summary>
-            Aff<TResult> AsAff<TResult>(Aff<SqlDatabaseRuntime, TResult> query, CancellationToken cancelToken);
+            Aff<TResult> AsAff<TResult>(Aff<RT, TResult> query, CancellationToken cancelToken);
         }
 
-        public class SqlQueryRunner : ISqlQueryRunner
+        public delegate RT SqlDatabaseRuntimeFactory<out RT>(
+            IDbConnection connection,
+            Option<IDbTransaction> transaction,
+            CancellationToken cancelToken
+        ) where RT : struct, HasSqlDatabase<RT>;
+
+        public class SqlQueryRunner<RT> : ISqlQueryRunner<RT>
+            where RT : struct, HasSqlDatabase<RT>
         {
             private readonly ConnectionString _connectionString;
+            private readonly SqlDatabaseRuntimeFactory<RT> _runtimeFactory;
 
-            public SqlQueryRunner(ConnectionString connectionString) => _connectionString = connectionString;
+            public SqlQueryRunner(ConnectionString connectionString, SqlDatabaseRuntimeFactory<RT> runtimeFactory)
+            {
+                _connectionString = connectionString;
+                _runtimeFactory = runtimeFactory;
+            }
 
-            public Aff<TResult> AsAff<TResult>(Aff<SqlDatabaseRuntime, TResult> query, CancellationToken cancelToken) =>
+            public Aff<TResult> AsAff<TResult>(Aff<RT, TResult> query, CancellationToken cancelToken) =>
                 AffMaybe(async () =>
                 {
                     await using var cnn = new NpgsqlConnection(_connectionString.Value);
                     await cnn.OpenAsync(cancelToken);
 
                     var trn = await cnn.BeginTransactionAsync(cancelToken);
-                    var runtime = SqlDatabaseRuntime.New(cnn, trn, cancelToken);
+                    var runtime = _runtimeFactory(cnn, trn, cancelToken);
 
                     var finalQuery = query.MapFailAsync(async error =>
                     {
