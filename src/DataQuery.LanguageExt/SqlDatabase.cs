@@ -1,6 +1,4 @@
 using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
 using LanguageExt;
 
 namespace Dataquery.LanguageExt
@@ -9,21 +7,6 @@ namespace Dataquery.LanguageExt
 
     public static partial class DataQuery
     {
-        public interface ISqlDatabase
-        {
-            Task<Fin<T>> RunQuery<T>(ISqlQuery<T> query, CancellationToken cancelToken);
-        }
-
-        public class SqlDatabase : ISqlDatabase
-        {
-            private readonly ISqlQueryRunner<SqlDatabaseRuntime> _runner;
-
-            public SqlDatabase(ISqlQueryRunner<SqlDatabaseRuntime> runner) => _runner = runner;
-
-            public async Task<Fin<T>> RunQuery<T>(ISqlQuery<T> query, CancellationToken cancelToken) =>
-                await _runner.AsAff(query.AsAff<SqlDatabaseRuntime>(), cancelToken).Run();
-        }
-
         public static class SqlDatabase<RT>
             where RT : struct,
             HasSqlDatabase<RT>
