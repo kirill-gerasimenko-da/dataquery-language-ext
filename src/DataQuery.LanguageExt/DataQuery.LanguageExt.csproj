@@ -10,6 +10,9 @@
         <PackageProjectUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext</PackageProjectUrl>
         <RepositoryUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext</RepositoryUrl>
         <RootNamespace>Dataquery.LanguageExt</RootNamespace>
+        <Authors>Kirill Gerasimenko</Authors>
+        <PackageLicenseUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageTags>language-ext sql dapper</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
