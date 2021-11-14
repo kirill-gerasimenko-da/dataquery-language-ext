@@ -1,12 +1,7 @@
-using System;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Runtime.Serialization;
 using System.Threading;
 using LanguageExt;
-using LanguageExt.TypeClasses;
-using Npgsql;
 
 namespace Dataquery.LanguageExt
 {
@@ -20,7 +15,9 @@ namespace Dataquery.LanguageExt
             /// <summary>
             /// Creates an effect, which runs the query with DatabaseRuntime.
             /// </summary>
-            Aff<TResult> AsAff<TResult>(Aff<RT, TResult> query, IsolationLevel isolationLevel,
+            Aff<TResult> AsAff<TResult>(
+                Aff<RT, TResult> query,
+                IsolationLevel isolationLevel,
                 CancellationToken cancelToken);
         }
 
@@ -70,23 +67,6 @@ namespace Dataquery.LanguageExt
 
                         return result;
                     });
-        }
-
-        /// <summary>
-        /// Connection string, should be non empty string, otherwise fails
-        /// </summary>
-        public class ConnectionString : NewType<ConnectionString, string, ConnectionString.NotEmptyString>
-        {
-            public struct NotEmptyString : Pred<string>
-            {
-                public bool True(string value) => !string.IsNullOrEmpty(value);
-            }
-
-            public ConnectionString(string value) : base(value)
-            { }
-
-            public ConnectionString(SerializationInfo info, StreamingContext context) : base(info, context)
-            { }
         }
     }
 }
