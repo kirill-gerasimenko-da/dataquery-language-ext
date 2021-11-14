@@ -50,6 +50,16 @@ namespace Dataquery.LanguageExt
             container.RegisterSingleton<ISqlDatabase, SqlDatabase>();
         }
 
+        /// <summary>
+        /// Factory of SQL database, if one doesn't have|need DI container
+        /// </summary>
+        public static ISqlDatabase
+            CreateSqlDatabase(string connectionString, DriverType driverType = DriverType.Npgsql) =>
+            new SqlDatabase(
+                new SqlQueryRunner<SqlDatabaseRuntime>(
+                    toConnection(driverType, connectionString),
+                    SqlDatabaseRuntime.New));
+
         static SqlConnectionFactory toConnection(DriverType driverType, string connectionString) => driverType switch
         {
             DriverType.Npgsql => () => new NpgsqlConnection(connectionString),
