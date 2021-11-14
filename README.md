@@ -1,7 +1,11 @@
 # SQL data queries using Language Ext Aff monad
 
+There are couple of goals of this library: 
 
-SQL query to the database could be treated as data and be composable (thanks to Aff from LanguageExt).
+- treat SQL query as a data, so that it could be passed and returned as a value, asserted (for example in the unit tests etc.)
+- make composition of the queries easy and reuse the same query abstraction for the composite queries
+- have automatic error handling and propagation
+- hide, but still make available on-demand, SQL execution runtime context, like opened connection|transaction and cancellation token, so that the code is clean
 
 # Details
 
