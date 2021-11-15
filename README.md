@@ -1,15 +1,20 @@
 # SQL data queries using Language Ext Aff monad
 
-There are couple of goals of this library: 
+This is an experiment to find out if building an abstraction over the database query itself as opposed to the repository approach, with addition of some functional goodies from brilliant `Language.Ext` library, could be really viable.
 
-- treat SQL query as a data, so that it could be passed and returned as a value, asserted (for example in the unit tests etc.)
-- make composition of the queries easy and reuse the same query abstraction for the composite queries
-- have automatic error handling and propagation
-- hide, but still make available on-demand, SQL execution runtime context, like opened connection|transaction and cancellation token, so that the code is clean
+## The library emphasizes the following
 
-# Details
+- SQL query as data 
 
-Each SQL query is inherited from a record `SqlQuery<TResult>`. So it is an immutable data structure, holding an input to the SQL query, and by calling `AsAff` method on it - we could have it as an actual SQL query side effect, encoded in Aff monad. Data and code is mixed here, but it's so much more convenient this way, than having query object to be separate from the query code. 
+- composition (both ad-hoc and composite queries)
+
+- implicit SQL execution runtime context (like currently opened connection|transaction, cancellation token etc.), but with ability to get the context where it's needed
+
+- error handling
+
+### SQL query as data
+
+Each SQL query is inherited from a C# record `SqlQuery<TResult>`. It is an immutable data structure, holding an input to the SQL query and has encoded type of the returned value. It can be persisted, sent over the wire, accepted as argument and returned from the function.
 
 Typical query looks like the following
 
