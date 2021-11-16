@@ -6,7 +6,7 @@ namespace Dataquery.LanguageExt
 {
     using static Prelude;
 
-    public static partial class DataQuery
+    public static partial class DataQuerySql
     {
         /// <summary>
         /// Default database runtime, cancellable, allows access to the

@@ -4,7 +4,7 @@ using LanguageExt.Effects.Traits;
 
 namespace Dataquery.LanguageExt
 {
-    public static partial class DataQuery
+    public static partial class DataQuerySql
     {
         /// <summary>
         /// Allows to get current open connection from the runtime

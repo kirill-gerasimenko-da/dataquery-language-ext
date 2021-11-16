@@ -5,7 +5,7 @@ using LanguageExt;
 
 namespace Dataquery.LanguageExt
 {
-    public static partial class DataQuery
+    public static partial class DataQuerySql
     {
         /// <summary>
         /// Application level abstraction for running SQL queries.

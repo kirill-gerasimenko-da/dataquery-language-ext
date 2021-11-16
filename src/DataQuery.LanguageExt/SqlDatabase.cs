@@ -5,7 +5,7 @@ namespace Dataquery.LanguageExt
 {
     using static Prelude;
 
-    public static partial class DataQuery
+    public static partial class DataQuerySql
     {
         public static class SqlDatabase<RT>
             where RT : struct,

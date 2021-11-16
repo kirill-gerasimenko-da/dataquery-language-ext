@@ -8,7 +8,7 @@ namespace Dataquery.LanguageExt
     using static Prelude;
     using static SqlMapper;
 
-    public static partial class DataQuery
+    public static partial class DataQuerySql
     {
         public interface ISqlDatabaseIO
         {
