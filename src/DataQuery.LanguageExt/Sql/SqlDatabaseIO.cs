@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Dapper;
 using LanguageExt;
 
-namespace Dataquery.LanguageExt
+namespace DataQuery.LanguageExt.Sql
 {
     using static Prelude;
     using static SqlMapper;

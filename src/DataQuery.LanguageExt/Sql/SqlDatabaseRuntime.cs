@@ -2,7 +2,7 @@ using System.Data;
 using System.Threading;
 using LanguageExt;
 
-namespace Dataquery.LanguageExt
+namespace DataQuery.LanguageExt.Sql
 {
     using static Prelude;
 

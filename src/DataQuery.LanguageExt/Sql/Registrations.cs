@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using SimpleInjector;
 
-namespace Dataquery.LanguageExt
+namespace DataQuery.LanguageExt.Sql
 {
     public static partial class DataQuerySql
     {

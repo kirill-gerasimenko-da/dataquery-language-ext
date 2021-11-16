@@ -1,7 +1,7 @@
 using System.Data;
 using LanguageExt;
 
-namespace Dataquery.LanguageExt
+namespace DataQuery.LanguageExt.Sql
 {
     using static Prelude;
 

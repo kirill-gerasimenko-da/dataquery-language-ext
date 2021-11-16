@@ -2,7 +2,7 @@ using System.Data;
 using LanguageExt;
 using LanguageExt.Effects.Traits;
 
-namespace Dataquery.LanguageExt
+namespace DataQuery.LanguageExt.Sql
 {
     public static partial class DataQuerySql
     {

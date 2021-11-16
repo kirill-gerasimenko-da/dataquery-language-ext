@@ -9,7 +9,6 @@
         <Description>Dapper + Npgsql database utilities using Language.Ext</Description>
         <PackageProjectUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext</PackageProjectUrl>
         <RepositoryUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext</RepositoryUrl>
-        <RootNamespace>Dataquery.LanguageExt</RootNamespace>
         <Authors>Kirill Gerasimenko</Authors>
         <PackageLicenseUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext/blob/master/LICENSE</PackageLicenseUrl>
         <PackageTags>language-ext sql dapper</PackageTags>
@@ -19,10 +18,15 @@
       <PackageReference Include="Dapper" Version="2.0.123" />
       <PackageReference Include="LanguageExt.Core" Version="4.0.3" />
       <PackageReference Include="LanguageExt.Sys" Version="4.0.3" />
+      <PackageReference Include="Marten" Version="4.1.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
       <PackageReference Include="Npgsql" Version="6.0.0" />
       <PackageReference Include="SimpleInjector" Version="5.3.2" />
       <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Marten" />
     </ItemGroup>
 
 </Project>
