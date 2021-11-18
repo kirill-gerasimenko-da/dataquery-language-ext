@@ -1,0 +1,10 @@
+source https://api.nuget.org/v3/index.json
+
+storage: none
+framework: net5.0, netstandard2.0, netstandard2.1
+nuget Dapper 2.0.123
+nuget LanguageExt.Core 4.0.3
+nuget LanguageExt.Sys 4.0.3
+nuget Marten 4.1.0
+nuget Npgsql 5.0.11
+nuget System.Data.SqlClient 4.8.3
