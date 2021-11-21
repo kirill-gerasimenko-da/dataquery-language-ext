@@ -15,10 +15,7 @@ namespace DataQuery.LanguageExt.Sql
             /// <summary>
             /// Creates an effect, which runs the query with DatabaseRuntime.
             /// </summary>
-            Aff<TResult> AsAff<TResult>(
-                Aff<RT, TResult> query,
-                IsolationLevel isolationLevel,
-                CancellationToken cancelToken);
+            Aff<T> AsAff<T>(Aff<RT, T> query, IsolationLevel isolationLevel, CancellationToken cancelToken);
         }
 
         public delegate RT SqlDatabaseRuntimeFactory<out RT>(
@@ -42,31 +39,27 @@ namespace DataQuery.LanguageExt.Sql
                 _sqlConnectionFactory = sqlConnectionFactory;
             }
 
-            public Aff<TResult> AsAff<TResult>(
-                Aff<RT, TResult> query,
-                IsolationLevel isolationLevel,
-                CancellationToken cancelToken)
-                =>
-                    AffMaybe(async () =>
+            public Aff<T> AsAff<T>(Aff<RT, T> query, IsolationLevel isolationLevel, CancellationToken cancelToken) =>
+                AffMaybe(async () =>
+                {
+                    await using var cnn = _sqlConnectionFactory();
+                    await cnn.OpenAsync(cancelToken);
+
+                    var trn = await cnn.BeginTransactionAsync(isolationLevel, cancelToken);
+                    var runtime = _runtimeFactory(cnn, trn, cancelToken);
+
+                    var finalQuery = query.MapFailAsync(async error =>
                     {
-                        await using var cnn = _sqlConnectionFactory();
-                        await cnn.OpenAsync(cancelToken);
-
-                        var trn = await cnn.BeginTransactionAsync(isolationLevel, cancelToken);
-                        var runtime = _runtimeFactory(cnn, trn, cancelToken);
-
-                        var finalQuery = query.MapFailAsync(async error =>
-                        {
-                            await trn.RollbackAsync(cancelToken);
-                            return error;
-                        });
-
-                        var result = await finalQuery.Run(runtime);
-                        if (result.IsSucc)
-                            await trn.CommitAsync(cancelToken);
-
-                        return result;
+                        await trn.RollbackAsync(cancelToken);
+                        return error;
                     });
+
+                    var result = await finalQuery.Run(runtime);
+                    if (result.IsSucc)
+                        await trn.CommitAsync(cancelToken);
+
+                    return result;
+                });
         }
     }
 }

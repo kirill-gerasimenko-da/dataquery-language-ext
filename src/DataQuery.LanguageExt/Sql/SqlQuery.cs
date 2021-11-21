@@ -10,12 +10,12 @@ namespace DataQuery.LanguageExt.Sql
         /// <summary>
         /// Interface-marker 
         /// </summary>
-        public interface ISqlQuery<TResult>
+        public interface ISqlQuery<T>
         {
             /// <summary>
             /// Returns query as async effect
             /// </summary>
-            Aff<RT, TResult> AsAff<RT>() where RT : struct, HasSqlDatabase<RT>;
+            Aff<RT, T> AsAff<RT>() where RT : struct, HasSqlDatabase<RT>;
         }
 
         public abstract record SqlScalarQuery<T> : ISqlQuery<T>
@@ -66,13 +66,15 @@ namespace DataQuery.LanguageExt.Sql
         }
 
 
+        public abstract record SqlQuery : SqlScalarQuery<Unit>;
+
         /// <summary>
         /// Base class for query, allows not to put generic constraints
         /// to the AsAff implementations, thus making code cleaner
         /// </summary>
-        public abstract record SqlQuery<T> : ISqlQuery<Seq<T>>
+        public abstract record SqlQuery<T> : ISqlQuery<Lst<T>>
         {
-            public abstract Aff<RT, Seq<T>> AsAff<RT>() where RT : struct, HasSqlDatabase<RT>;
+            public abstract Aff<RT, Lst<T>> AsAff<RT>() where RT : struct, HasSqlDatabase<RT>;
 
             protected Aff<RT, Seq<T>> Query<RT>(
                 string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
