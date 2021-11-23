@@ -26,6 +26,6 @@ public static partial class DataQueryMarten
             select queryable;
     }
 
-    public static Eff<RT, IDocumentSession> session<RT>() where RT : struct, HasMartenDocumentSession<RT> =>
-        Eff<RT, IDocumentSession>(rt => rt.Session);
+    public static Eff<RT, IDocumentSession> session<RT>() where RT : struct, HasMartenDatabase<RT> =>
+        Eff<RT, IDocumentSession>(rt => rt.MartenSession);
 }

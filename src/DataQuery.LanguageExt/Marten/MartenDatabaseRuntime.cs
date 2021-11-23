@@ -20,7 +20,7 @@ public static partial class DataQueryMarten
         public MartenDatabaseRuntime LocalCancel => new(Env.LocalCancel);
         public CancellationToken CancellationToken => Env.Token;
         public CancellationTokenSource CancellationTokenSource => Env.Source;
-        public IDocumentSession Session => Env.Session;
+        public IDocumentSession MartenSession => Env.Session;
 
         public Eff<MartenDatabaseRuntime, IMartenDatabaseIO> MartenDatabaseEff =>
             SuccessEff(LiveMartenDatabaseIO.Default);

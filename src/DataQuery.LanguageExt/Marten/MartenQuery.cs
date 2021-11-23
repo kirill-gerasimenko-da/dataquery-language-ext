@@ -7,7 +7,7 @@ public static partial class DataQueryMarten
     /// <summary>
     /// Interface-marker 
     /// </summary>
-    public interface IDocQuery<T>
+    public interface IMartenQuery<T>
     {
         /// <summary>
         /// Returns query as async effect
@@ -15,7 +15,7 @@ public static partial class DataQueryMarten
         Aff<RT, T> AsAff<RT>() where RT : struct, HasMartenDatabase<RT>;
     }
 
-    public abstract record DocScalarQuery<T> : IDocQuery<T>
+    public abstract record MartenScalarQuery<T> : IMartenQuery<T>
     {
         public abstract Aff<RT, T> AsAff<RT>() where RT : struct, HasMartenDatabase<RT>;
 
@@ -26,9 +26,9 @@ public static partial class DataQueryMarten
             MartenDatabase<RT>.query<V>();
     }
 
-    public abstract record DocQuery : DocScalarQuery<Unit>;
+    public abstract record MartenQuery : MartenScalarQuery<Unit>;
 
-    public abstract record DocQuery<T> : IDocQuery<Lst<T>>
+    public abstract record MartenQuery<T> : IMartenQuery<Lst<T>>
     {
         public abstract Aff<RT, Lst<T>> AsAff<RT>() where RT : struct, HasMartenDatabase<RT>;
 

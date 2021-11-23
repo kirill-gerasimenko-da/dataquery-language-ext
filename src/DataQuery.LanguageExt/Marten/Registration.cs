@@ -4,6 +4,7 @@ namespace DataQuery.LanguageExt.Marten;
 
 public static partial class DataQueryMarten
 {
-    public static IDocDatabase CreateDocDatabase(IDocumentStore store)
-        => new DocDatabase(new DocQueryRunner<MartenDatabaseRuntime>(store, MartenDatabaseRuntime.New));
+    public static IMartenDatabase CreateMartenDatabase(IDocumentStore store)
+        => new MartenDatabaseDatabase(new MartenQueryRunner<MartenDatabaseRuntime>(
+            store, MartenDatabaseRuntime.New));
 }

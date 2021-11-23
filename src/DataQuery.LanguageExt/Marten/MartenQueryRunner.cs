@@ -1,5 +1,4 @@
 using System.Data;
-using System.Data.Common;
 using System.Threading;
 using Marten;
 
@@ -7,7 +6,7 @@ namespace DataQuery.LanguageExt.Marten;
 
 public static partial class DataQueryMarten
 {
-    public interface IDocQueryRunner<RT>
+    public interface IMartenQueryRunner<RT>
         where RT : struct, HasMartenDatabase<RT>
     {
         /// <summary>
@@ -19,15 +18,13 @@ public static partial class DataQueryMarten
     public delegate RT MartenDatabaseRuntimeFactory<out RT>(IDocumentSession session, CancellationToken cancelToken)
         where RT : struct, HasMartenDatabase<RT>;
 
-    public delegate DbConnection SqlConnectionFactory();
-
-    public class DocQueryRunner<RT> : IDocQueryRunner<RT>
+    public class MartenQueryRunner<RT> : IMartenQueryRunner<RT>
         where RT : struct, HasMartenDatabase<RT>
     {
         private readonly IDocumentStore _store;
         readonly MartenDatabaseRuntimeFactory<RT> _runtimeFactory;
 
-        public DocQueryRunner(IDocumentStore store, MartenDatabaseRuntimeFactory<RT> runtimeFactory)
+        public MartenQueryRunner(IDocumentStore store, MartenDatabaseRuntimeFactory<RT> runtimeFactory)
         {
             _store = store;
             _runtimeFactory = runtimeFactory;

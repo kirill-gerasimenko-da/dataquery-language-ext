@@ -6,49 +6,47 @@ namespace DataQuery.LanguageExt.Marten;
 
 public static partial class DataQueryMarten
 {
-    public interface IDocDatabase<RT>
+    public interface IMartenDatabase<RT>
         where RT : struct, HasMartenDatabase<RT>
     {
-        Task<Fin<T>> Run<T>(IDocQuery<T> query, CancellationToken cancelToken);
-        Task<Fin<T>> Run<T>(IDocQuery<T> query, IsolationLevel isolationLevel, CancellationToken cancelToken);
-        Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken);
-        Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, IsolationLevel isolationLevel, CancellationToken cancelToken);
+        ValueTask<Fin<T>> Run<T>(IMartenQuery<T> query, CancellationToken cancelToken);
+        ValueTask<Fin<T>> Run<T>(IMartenQuery<T> query, IsolationLevel isolationLevel, CancellationToken cancelToken);
+        ValueTask<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken);
+        ValueTask<Fin<T>> Run<T>(Aff<RT, T> queryAff, IsolationLevel isolationLevel, CancellationToken cancelToken);
     }
 
-    public abstract class DocDatabaseBase<RT> : IDocDatabase<RT>
+    public abstract class MartenDatabaseBase<RT> : IMartenDatabase<RT>
         where RT : struct, HasMartenDatabase<RT>
     {
-        private readonly IDocQueryRunner<RT> _runner;
+        private readonly IMartenQueryRunner<RT> _runner;
 
-        protected DocDatabaseBase(IDocQueryRunner<RT> runner) => _runner = runner;
+        protected MartenDatabaseBase(IMartenQueryRunner<RT> runner) => _runner = runner;
 
-        public async Task<Fin<T>> Run<T>(IDocQuery<T> query, CancellationToken cancelToken) =>
+        public async ValueTask<Fin<T>> Run<T>(IMartenQuery<T> query, CancellationToken cancelToken) =>
             await Run(query, IsolationLevel.ReadCommitted, cancelToken);
 
-        public async Task<Fin<T>> Run<T>(
-            IDocQuery<T> query,
+        public async ValueTask<Fin<T>> Run<T>(IMartenQuery<T> query,
             IsolationLevel isolationLevel,
             CancellationToken cancelToken)
             =>
                 await _runner.AsAff(query.AsAff<RT>(), isolationLevel, cancelToken).Run();
 
-        public async Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken) =>
+        public async ValueTask<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken) =>
             await Run(queryAff, IsolationLevel.ReadCommitted, cancelToken);
 
-        public async Task<Fin<T>> Run<T>(
-            Aff<RT, T> queryAff,
+        public async ValueTask<Fin<T>> Run<T>(Aff<RT, T> queryAff,
             IsolationLevel isolationLevel,
             CancellationToken cancelToken)
             =>
                 await _runner.AsAff(queryAff, isolationLevel, cancelToken).Run();
     }
 
-    public interface IDocDatabase : IDocDatabase<MartenDatabaseRuntime>
+    public interface IMartenDatabase : IMartenDatabase<MartenDatabaseRuntime>
     { }
 
-    public class DocDatabase : DocDatabaseBase<MartenDatabaseRuntime>, IDocDatabase
+    public class MartenDatabaseDatabase : MartenDatabaseBase<MartenDatabaseRuntime>, IMartenDatabase
     {
-        public DocDatabase(IDocQueryRunner<MartenDatabaseRuntime> runner) : base(runner)
+        public MartenDatabaseDatabase(IMartenQueryRunner<MartenDatabaseRuntime> runner) : base(runner)
         { }
     }
 }

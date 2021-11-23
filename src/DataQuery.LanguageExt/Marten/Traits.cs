@@ -4,19 +4,13 @@ namespace DataQuery.LanguageExt.Marten;
 
 public static partial class DataQueryMarten
 {
-    public interface HasMartenDocumentSession<RT>
-        where RT : struct, 
-        HasMartenDocumentSession<RT>
-    {
-        IDocumentSession Session { get; }
-    }
-        
     public interface HasMartenDatabase<RT> :
-        HasCancel<RT>,
-        HasMartenDocumentSession<RT>
+        HasCancel<RT>
         where RT : struct,
         HasMartenDatabase<RT>
     {
+        IDocumentSession MartenSession { get; }
+        
         Eff<RT, IMartenDatabaseIO> MartenDatabaseEff { get; }
     }
 }
