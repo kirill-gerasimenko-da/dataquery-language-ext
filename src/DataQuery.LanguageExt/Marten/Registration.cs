@@ -1,10 +1,9 @@
 using Marten;
 
-namespace DataQuery.LanguageExt.Marten
+namespace DataQuery.LanguageExt.Marten;
+
+public static partial class DataQueryMarten
 {
-    public static partial class DataQueryMarten
-    {
-        public static IDocDatabase CreateDocDatabase(IDocumentStore store)
-            => new DocDatabase(new DocQueryRunner<MartenDatabaseRuntime>(store, MartenDatabaseRuntime.New));
-    }
+    public static IDocDatabase CreateDocDatabase(IDocumentStore store)
+        => new DocDatabase(new DocQueryRunner<MartenDatabaseRuntime>(store, MartenDatabaseRuntime.New));
 }
