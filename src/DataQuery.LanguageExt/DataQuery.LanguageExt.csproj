@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <PackageVersion>0.0.3</PackageVersion>
     <Title>Opiniate dataquery approach, using Dapper, LanguageExt and Npgsql</Title>
@@ -12,6 +12,14 @@
     <Authors>Kirill Gerasimenko</Authors>
     <PackageLicenseUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>language-ext sql dapper</PackageTags>
+    <LangVersion>10</LangVersion>
   </PropertyGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="LanguageExt.Core" Version="4.0.3" />
+    <PackageReference Include="LanguageExt.Sys" Version="4.0.3" />
+    <PackageReference Include="Marten" Version="4.2.0" />
+    <PackageReference Include="Npgsql" Version="6.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
 </Project>
