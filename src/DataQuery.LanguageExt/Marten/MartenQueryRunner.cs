@@ -24,7 +24,7 @@ public static partial class DataQueryMarten
         private readonly IDocumentStore _store;
         readonly MartenDatabaseRuntimeFactory<RT> _runtimeFactory;
 
-        public MartenQueryRunner(IDocumentStore store, MartenDatabaseRuntimeFactory<RT> runtimeFactory)
+        protected MartenQueryRunner(IDocumentStore store, MartenDatabaseRuntimeFactory<RT> runtimeFactory)
         {
             _store = store;
             _runtimeFactory = runtimeFactory;
@@ -36,5 +36,17 @@ public static partial class DataQueryMarten
                 await using var session = _store.LightweightSession(isolationLevel);
                 return await query.Run(_runtimeFactory(session, cancelToken));
             });
+    }
+
+    public interface IMartenQueryRunner : IMartenQueryRunner<MartenDatabaseRuntime>
+    { }
+
+    public class MartenQueryRunner : MartenQueryRunner<MartenDatabaseRuntime>, IMartenQueryRunner
+    {
+        public MartenQueryRunner(
+            IDocumentStore store,
+            MartenDatabaseRuntimeFactory<MartenDatabaseRuntime> runtimeFactory)
+            : base(store, runtimeFactory)
+        { }
     }
 }
