@@ -18,27 +18,4 @@ Each SQL query is inherited from a C# record `SqlQuery<TResult>`. It is an immut
 
 Typical query looks like the following
 
-```csharp
-
-public record GetCustomerByIdQuery(CustomerId Id) : SqlQuery<Customer>
-{
-    public override Aff<RT, Customer> AsAff<RT>() => SqlDatabase<RT>
-        .query<Customer>(@"
-            SELECT id, fist_name, last_name, status
-            FROM customer
-            WHERE deleted_when IS NULL AND id = @id
-            ", 
-            new 
-            {
-               id = Id.Value
-            });
-}
-
-```
-
-One could create an instance of the query, just like any other object
-
-```csharp
-var customerId = CustomerId.New(Guid.Parse("8bc750f0-5c0b-4a94-97f4-1a6ff2b6857f"));
-var getCustomer = new GetCustomerByIdQuery(customerId);
-```
+WIP
