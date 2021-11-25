@@ -34,7 +34,13 @@ public static partial class DataQueryMarten
             AffMaybe(async () =>
             {
                 await using var session = _store.LightweightSession(isolationLevel);
-                return await query.Run(_runtimeFactory(session, cancelToken));
+
+                var result = await query.Run(_runtimeFactory(session, cancelToken));
+
+                if (result.IsSucc)
+                    await session.SaveChangesAsync(cancelToken);
+
+                return result;
             });
     }
 

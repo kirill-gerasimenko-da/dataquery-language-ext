@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <PackageVersion>0.0.3</PackageVersion>
     <Title>Opiniate dataquery approach, using Dapper, LanguageExt and Npgsql</Title>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

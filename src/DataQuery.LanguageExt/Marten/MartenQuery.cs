@@ -20,10 +20,10 @@ public static partial class DataQueryMarten
         public abstract Aff<RT, T> AsAff<RT>() where RT : struct, HasMartenDatabase<RT>;
 
         protected Aff<RT, IMartenQueryable<T>> Query<RT>() where RT : struct, HasMartenDatabase<RT> =>
-            MartenDatabase<RT>.query<T>();
+            MartenDb<RT>.query<T>();
 
         protected Aff<RT, IMartenQueryable<V>> Query<RT, V>() where RT : struct, HasMartenDatabase<RT> =>
-            MartenDatabase<RT>.query<V>();
+            MartenDb<RT>.query<V>();
     }
 
     public abstract record MartenQuery : MartenScalarQuery<Unit>;
@@ -33,9 +33,9 @@ public static partial class DataQueryMarten
         public abstract Aff<RT, Lst<T>> AsAff<RT>() where RT : struct, HasMartenDatabase<RT>;
 
         protected Aff<RT, IMartenQueryable<T>> Query<RT>() where RT : struct, HasMartenDatabase<RT> =>
-            MartenDatabase<RT>.query<T>();
+            MartenDb<RT>.query<T>();
 
         protected Aff<RT, IMartenQueryable<V>> Query<RT, V>() where RT : struct, HasMartenDatabase<RT> =>
-            MartenDatabase<RT>.query<V>();
+            MartenDb<RT>.query<V>();
     }
 }

@@ -23,43 +23,43 @@ public static partial class DataQuerySql
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.query<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.query<T>(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, Seq<V>> Query<RT, V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.query<V>(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.query<V>(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, ISqlGridReader> QueryMultiple<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.queryMultiple(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.queryMultiple(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, int> Execute<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.execute(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.execute(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, Unit> ExecuteAsUnit<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.execute(sql, param, cmdTimeout, cmdType).Bind(_ => unitAff);
+                SqlDb<RT>.execute(sql, param, cmdTimeout, cmdType).Bind(_ => unitAff);
 
         protected Aff<RT, T> ExecuteScalar<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.executeScalar<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.executeScalar<T>(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, V> ExecuteScalar<RT, V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.executeScalar<V>(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.executeScalar<V>(sql, param, cmdTimeout, cmdType);
     }
 
 
@@ -77,42 +77,42 @@ public static partial class DataQuerySql
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.query<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.query<T>(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, Seq<V>> Query<RT, V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.query<V>(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.query<V>(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, ISqlGridReader> QueryMultiple<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.queryMultiple(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.queryMultiple(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, int> Execute<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.execute(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.execute(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, Unit> ExecuteAsUnit<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.execute(sql, param, cmdTimeout, cmdType).Bind(_ => unitAff);
+                SqlDb<RT>.execute(sql, param, cmdTimeout, cmdType).Bind(_ => unitAff);
 
         protected Aff<RT, T> ExecuteScalar<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.executeScalar<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.executeScalar<T>(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, V> ExecuteScalar<RT, V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
-                SqlDatabase<RT>.executeScalar<V>(sql, param, cmdTimeout, cmdType);
+                SqlDb<RT>.executeScalar<V>(sql, param, cmdTimeout, cmdType);
     }
 }

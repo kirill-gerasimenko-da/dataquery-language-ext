@@ -4,7 +4,7 @@ namespace DataQuery.LanguageExt.Sql;
 
 public static partial class DataQuerySql
 {
-    public static class SqlDatabase<RT>
+    public static class SqlDb<RT>
         where RT : struct,
         HasSqlDatabase<RT>
     {
