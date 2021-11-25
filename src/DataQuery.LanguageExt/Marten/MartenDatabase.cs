@@ -42,6 +42,11 @@ public static partial class DataQueryMarten
             from result in Aff(async () => Optional(await query.FirstOrDefaultAsync(cancelToken)))
             select result;
 
+        public static Aff<RT, T> head<T>(IQueryable<T> query) =>
+            from cancelToken in cancelToken<RT>()
+            from result in Aff(async () => await query.FirstOrDefaultAsync(cancelToken))
+            select result;
+
         public static Aff<RT, bool> any<T>(IQueryable<T> query) =>
             from cancelToken in cancelToken<RT>()
             from result in Aff(async () => await query.AnyAsync(cancelToken))
