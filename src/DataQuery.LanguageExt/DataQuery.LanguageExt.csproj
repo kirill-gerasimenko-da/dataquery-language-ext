@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
     <PackageVersion>0.0.3</PackageVersion>
     <Title>Opiniate dataquery approach, using Dapper, LanguageExt and Npgsql</Title>
@@ -13,6 +12,7 @@
     <PackageLicenseUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>language-ext sql dapper</PackageTags>
     <LangVersion>10</LangVersion>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
