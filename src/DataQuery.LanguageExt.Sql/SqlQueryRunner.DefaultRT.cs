@@ -2,14 +2,14 @@ namespace DataQuery.LanguageExt.Sql;
 
 public static partial class DataQuerySql
 {
-    public interface ISqlQueryRunner : ISqlQueryRunner<SqlDatabaseRuntime>
+    public interface ISqlQueryRunner : ISqlQueryRunner<DefaultRT>
     { }
 
-    public class SqlQueryRunner : SqlQueryRunner<SqlDatabaseRuntime>, ISqlQueryRunner
+    public class SqlQueryRunner : SqlQueryRunner<DefaultRT>, ISqlQueryRunner
     {
         public SqlQueryRunner(
             SqlConnectionFactory sqlConnectionFactory,
-            SqlDatabaseRuntimeFactory<SqlDatabaseRuntime> runtimeFactory)
+            SqlDatabaseRuntimeFactory<DefaultRT> runtimeFactory)
             : base(sqlConnectionFactory, runtimeFactory)
         { }
     }

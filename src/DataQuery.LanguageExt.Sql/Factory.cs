@@ -13,7 +13,7 @@ public static partial class DataQuerySql
     }
 
     public static ISqlDatabase CreateSqlDatabase(string connectionString, DriverType driverType = DriverType.Npgsql) =>
-        new SqlDatabase(new SqlQueryRunner(toConnection(driverType, connectionString), SqlDatabaseRuntime.New));
+        new SqlDatabase(new SqlQueryRunner(toConnection(driverType, connectionString), DefaultRT.New));
 
     static SqlConnectionFactory toConnection(DriverType driverType, string connectionString) => driverType switch
     {

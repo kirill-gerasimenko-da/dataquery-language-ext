@@ -9,35 +9,35 @@ public static partial class DataQuerySql
     /// Default database runtime, cancellable, allows access to the
     /// current connection, transaction and Dapper (via database IO) 
     /// </summary>
-    public readonly struct SqlDatabaseRuntime : HasSqlDatabase<SqlDatabaseRuntime>
+    public readonly struct DefaultRT : HasSqlDatabase<DefaultRT>
     {
-        private SqlDatabaseRuntime(SqlDatabaseRuntimeEnv env) => Env = env;
+        private DefaultRT(DefaultRtEnv env) => Env = env;
 
-        public static SqlDatabaseRuntime New(
+        public static DefaultRT New(
             IDbConnection cnn,
             Option<IDbTransaction> trn,
             CancellationToken cancelToken)
             =>
-                new(new SqlDatabaseRuntimeEnv(new CancellationTokenSource(), cancelToken, cnn, trn));
+                new(new DefaultRtEnv(new CancellationTokenSource(), cancelToken, cnn, trn));
 
-        public SqlDatabaseRuntimeEnv Env { get; }
-        public SqlDatabaseRuntime LocalCancel => new(Env.LocalCancel);
+        public DefaultRtEnv Env { get; }
+        public DefaultRT LocalCancel => new(Env.LocalCancel);
         public CancellationToken CancellationToken => Env.Token;
         public CancellationTokenSource CancellationTokenSource => Env.Source;
         public IDbConnection Connection => Env.Connection;
         public Option<IDbTransaction> Transaction => Env.Transaction;
 
-        public Eff<SqlDatabaseRuntime, ISqlDatabaseIO> SqlDatabaseEff => SuccessEff(LiveSqlDatabaseIO.Default);
+        public Eff<DefaultRT, ISqlDatabaseIO> SqlDatabaseEff => SuccessEff(LiveSqlDatabaseIO.Default);
     }
 
-    public readonly struct SqlDatabaseRuntimeEnv
+    public readonly struct DefaultRtEnv
     {
         public readonly CancellationTokenSource Source;
         public readonly CancellationToken Token;
         public readonly IDbConnection Connection;
         public readonly Option<IDbTransaction> Transaction;
 
-        public SqlDatabaseRuntimeEnv(
+        public DefaultRtEnv(
             CancellationTokenSource source,
             CancellationToken token,
             IDbConnection connection,
@@ -49,13 +49,13 @@ public static partial class DataQuerySql
             Transaction = transaction;
         }
 
-        private SqlDatabaseRuntimeEnv(
+        private DefaultRtEnv(
             CancellationTokenSource source,
             IDbConnection connection,
             Option<IDbTransaction> transaction)
             : this(source, source.Token, connection, transaction)
         { }
 
-        public SqlDatabaseRuntimeEnv LocalCancel => new(new CancellationTokenSource(), Connection, Transaction);
+        public DefaultRtEnv LocalCancel => new(new CancellationTokenSource(), Connection, Transaction);
     }
 }
