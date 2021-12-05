@@ -8,36 +8,28 @@ public static partial class DataQuerySql
 {
     /// <summary>
     /// Application level abstraction for running SQL queries.
-    /// 
-    /// Main purpose is to make consumer more clean, without
-    /// a need to know about SqlQueryRunner and SqlDatabaseRuntime etc.
     /// </summary>
     public interface ISqlDatabase<RT>
         where RT : struct, HasSqlDatabase<RT>
     {
         /// <summary>
-        /// Runs the supplied query, handles errors and returns
-        /// Fin<T>, which encodes successful and failed cases
+        /// Runs the supplied query
         /// </summary>
         Task<Fin<T>> Run<T>(ISqlQuery<T> query, CancellationToken cancelToken);
 
         /// <summary>
         /// Runs the supplied query, with specified transaction isolation
-        /// level, handles errors and returns Fin<T>, which encodes successful
-        /// and failed cases
+        /// level
         /// </summary>
         Task<Fin<T>> Run<T>(ISqlQuery<T> query, IsolationLevel isolationLevel, CancellationToken cancelToken);
 
         /// <summary>
-        /// Runs the supplied query aff, handles errors and returns
-        /// Fin<T>, which encodes successful and failed cases
+        /// Runs the supplied query aff, handles errors
         /// </summary>
         Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken);
 
         /// <summary>
-        /// Runs the supplied query aff, with specified transaction isolation
-        /// level, handles errors and returns Fin<T>, which encodes successful
-        /// and failed cases
+        /// Runs the supplied query aff, with specified transaction isolation level
         /// </summary>
         Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, IsolationLevel isolationLevel, CancellationToken cancelToken);
     }
