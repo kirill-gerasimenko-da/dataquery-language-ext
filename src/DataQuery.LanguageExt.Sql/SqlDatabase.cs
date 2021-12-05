@@ -1,52 +1,72 @@
 namespace DataQuery.LanguageExt.Sql;
 
 using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
 public static partial class DataQuerySql
 {
-    public static class SqlDb<RT>
+    /// <summary>
+    /// Application level abstraction for running SQL queries.
+    /// 
+    /// Main purpose is to make consumer more clean, without
+    /// a need to know about SqlQueryRunner and SqlDatabaseRuntime etc.
+    /// </summary>
+    public interface ISqlDatabase<RT>
         where RT : struct, HasSqlDatabase<RT>
     {
-        public static Aff<RT, Seq<T>> query<T>(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            =>
-                from cnn in connection<RT>()
-                from trn in transaction<RT>()
-                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryAsync<T>(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
-                select result;
+        /// <summary>
+        /// Runs the supplied query, handles errors and returns
+        /// Fin<T>, which encodes successful and failed cases
+        /// </summary>
+        Task<Fin<T>> Run<T>(ISqlQuery<T> query, CancellationToken cancelToken);
 
-        public static Aff<RT, ISqlGridReader> queryMultiple(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            =>
-                from cnn in connection<RT>()
-                from trn in transaction<RT>()
-                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryMultipleAsync(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
-                select result;
+        /// <summary>
+        /// Runs the supplied query, with specified transaction isolation
+        /// level, handles errors and returns Fin<T>, which encodes successful
+        /// and failed cases
+        /// </summary>
+        Task<Fin<T>> Run<T>(ISqlQuery<T> query, IsolationLevel isolationLevel, CancellationToken cancelToken);
 
-        public static Aff<RT, int> execute(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            =>
-                from cnn in connection<RT>()
-                from trn in transaction<RT>()
-                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteAsync(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
-                select result;
+        /// <summary>
+        /// Runs the supplied query aff, handles errors and returns
+        /// Fin<T>, which encodes successful and failed cases
+        /// </summary>
+        Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken);
 
-        public static Aff<RT, T> executeScalar<T>(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            =>
-                from cnn in connection<RT>()
-                from trn in transaction<RT>()
-                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteScalarAsync<T>(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
-                select result;
+        /// <summary>
+        /// Runs the supplied query aff, with specified transaction isolation
+        /// level, handles errors and returns Fin<T>, which encodes successful
+        /// and failed cases
+        /// </summary>
+        Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, IsolationLevel isolationLevel, CancellationToken cancelToken);
     }
 
-    public static Eff<RT, IDbConnection> connection<RT>() where RT : struct, HasSqlConnection<RT> =>
-        Eff<RT, IDbConnection>(rt => rt.Connection);
+    public abstract class SqlDatabaseBase<RT> : ISqlDatabase<RT>
+        where RT : struct, HasSqlDatabase<RT>
+    {
+        private readonly ISqlQueryRunner<RT> _runner;
 
-    public static Eff<RT, IDbTransaction> transaction<RT>() where RT : struct, HasSqlTransaction<RT> =>
-        Eff<RT, IDbTransaction>(rt => rt.Transaction.IfNoneUnsafe((IDbTransaction)null));
+        protected SqlDatabaseBase(ISqlQueryRunner<RT> runner) => _runner = runner;
+
+        public async Task<Fin<T>> Run<T>(ISqlQuery<T> query, CancellationToken cancelToken) =>
+            await _runner.AsAff(query.AsAff<RT>(), IsolationLevel.Unspecified, cancelToken).Run();
+
+        public async Task<Fin<T>> Run<T>(
+            ISqlQuery<T> query,
+            IsolationLevel isolationLevel,
+            CancellationToken cancelToken)
+            =>
+                await _runner.AsAff(query.AsAff<RT>(), isolationLevel, cancelToken).Run();
+
+        public async Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken) =>
+            await _runner.AsAff(queryAff, IsolationLevel.Unspecified, cancelToken).Run();
+
+        public async Task<Fin<T>> Run<T>(
+            Aff<RT, T> queryAff,
+            IsolationLevel isolationLevel,
+            CancellationToken cancelToken)
+            =>
+                await _runner.AsAff(queryAff, isolationLevel, cancelToken).Run();
+    }
 }
