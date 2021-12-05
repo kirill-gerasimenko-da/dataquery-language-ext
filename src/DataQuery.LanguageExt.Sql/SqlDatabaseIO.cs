@@ -1,8 +1,8 @@
+namespace DataQuery.LanguageExt.Sql;
+
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
-
-namespace DataQuery.LanguageExt.Sql;
 
 public static partial class DataQuerySql
 {

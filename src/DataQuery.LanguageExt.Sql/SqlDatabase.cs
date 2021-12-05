@@ -1,12 +1,11 @@
-using System.Data;
-
 namespace DataQuery.LanguageExt.Sql;
+
+using System.Data;
 
 public static partial class DataQuerySql
 {
     public static class SqlDb<RT>
-        where RT : struct,
-        HasSqlDatabase<RT>
+        where RT : struct, HasSqlDatabase<RT>
     {
         public static Aff<RT, Seq<T>> query<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)

@@ -1,6 +1,6 @@
-using System.Data;
-
 namespace DataQuery.LanguageExt.Sql;
+
+using System.Data;
 
 public static partial class DataQuerySql
 {

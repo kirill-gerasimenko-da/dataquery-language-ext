@@ -1,10 +1,6 @@
-using System;
-using System.Linq;
-using System.Threading;
-using Marten;
-using Marten.Linq;
-
 namespace DataQuery.LanguageExt.Marten;
+
+using System.Linq;
 
 public static partial class DataQueryMarten
 {

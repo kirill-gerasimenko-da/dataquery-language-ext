@@ -1,0 +1,10 @@
+global using LanguageExt;
+global using static LanguageExt.Prelude;
+global using LanguageExt.Common;
+global using LanguageExt.Effects.Traits;
+global using Marten;
+global using Marten.Linq;
+global using System;
+global using System.Data;
+global using System.Threading;
+global using System.Threading.Tasks;

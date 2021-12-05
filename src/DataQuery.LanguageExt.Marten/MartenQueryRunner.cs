@@ -1,7 +1,3 @@
-using System.Data;
-using System.Threading;
-using Marten;
-
 namespace DataQuery.LanguageExt.Marten;
 
 public static partial class DataQueryMarten

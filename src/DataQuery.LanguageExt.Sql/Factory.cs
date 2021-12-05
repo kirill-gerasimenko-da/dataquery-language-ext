@@ -1,8 +1,8 @@
+namespace DataQuery.LanguageExt.Sql;
+
 using System;
 using System.Data.SqlClient;
 using Npgsql;
-
-namespace DataQuery.LanguageExt.Sql;
 
 public static partial class DataQuerySql
 {

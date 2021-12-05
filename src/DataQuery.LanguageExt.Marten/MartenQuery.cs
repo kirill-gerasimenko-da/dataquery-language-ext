@@ -1,5 +1,3 @@
-using Marten.Linq;
-
 namespace DataQuery.LanguageExt.Marten;
 
 public static partial class DataQueryMarten
