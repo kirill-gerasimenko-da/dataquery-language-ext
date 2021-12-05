@@ -1,47 +1,30 @@
-namespace DataQuery.LanguageExt.Sql;
-
 using System.Data;
+
+namespace DataQuery.LanguageExt.Sql;
 
 public static partial class DataQuerySql
 {
     public static class SqlDb
     {
         public static Aff<DefaultRT, Seq<T>> query<T>(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null, bool buffered = true)
             =>
-                from cnn in connection()
-                from trn in transaction()
-                from result in default(DefaultRT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryAsync<T>(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
-                select result;
+                SqlDb<DefaultRT>.query<T>(sql, param, cmdTimeout, cmdType, buffered);
 
         public static Aff<DefaultRT, ISqlGridReader> queryMultiple(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                from cnn in connection()
-                from trn in transaction()
-                from result in default(DefaultRT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryMultipleAsync(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
-                select result;
+                SqlDb<DefaultRT>.queryMultiple(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, int> execute(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                from cnn in connection()
-                from trn in transaction()
-                from result in default(DefaultRT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteAsync(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
-                select result;
+                SqlDb<DefaultRT>.execute(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, T> executeScalar<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                from cnn in connection()
-                from trn in transaction()
-                from result in default(DefaultRT).SqlDatabaseEff.MapAsync(dapper =>
-                    dapper.ExecuteScalarAsync<T>(
-                        cnn, sql, param, trn, cmdTimeout, cmdType))
-                select result;
+                SqlDb<DefaultRT>.executeScalar<T>(sql, param, cmdTimeout, cmdType);
     }
 
     public static Eff<DefaultRT, IDbConnection> connection() =>

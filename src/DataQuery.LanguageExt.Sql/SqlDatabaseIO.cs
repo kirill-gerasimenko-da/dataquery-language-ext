@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading;
+
 namespace DataQuery.LanguageExt.Sql;
 
 using System.Data;
@@ -8,13 +11,15 @@ public static partial class DataQuerySql
 {
     public interface ISqlDatabaseIO
     {
-        ValueTask<Seq<T>> QueryAsync<T>(
+        ValueTask<IEnumerable<T>> QueryAsync<T>(
             IDbConnection cnn,
             string sql,
             object param,
             IDbTransaction transaction,
             int? commandTimeout,
-            CommandType? commandType);
+            CommandType? commandType,
+            bool buffered,
+            CancellationToken cancelToken);
 
         ValueTask<int> ExecuteAsync(
             IDbConnection cnn,
@@ -45,11 +50,23 @@ public static partial class DataQuerySql
     {
         public static readonly ISqlDatabaseIO Default = new LiveSqlDatabaseIO();
 
-        public async ValueTask<Seq<T>> QueryAsync<T>(
-            IDbConnection cnn, string sql, object param,
-            IDbTransaction transaction, int? commandTimeout, CommandType? commandType)
+        public async ValueTask<IEnumerable<T>> QueryAsync<T>(IDbConnection cnn,
+            string sql,
+            object param,
+            IDbTransaction transaction,
+            int? commandTimeout,
+            CommandType? commandType,
+            bool buffered,
+            CancellationToken cancelToken)
             =>
-                toSeq(await cnn.QueryAsync<T>(sql, param, transaction, commandTimeout, commandType));
+                await cnn.QueryAsync<T>(new CommandDefinition(
+                    sql,
+                    param,
+                    transaction,
+                    commandTimeout,
+                    commandType,
+                    buffered ? CommandFlags.Buffered : CommandFlags.None,
+                    cancelToken));
 
         public async ValueTask<int> ExecuteAsync(
             IDbConnection cnn, string sql, object param,

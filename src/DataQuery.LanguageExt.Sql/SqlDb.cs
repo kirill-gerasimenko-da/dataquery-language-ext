@@ -1,6 +1,8 @@
+using System.Data;
+
 namespace DataQuery.LanguageExt.Sql;
 
-using System.Data;
+using static Prelude;
 
 public static partial class DataQuerySql
 {
@@ -8,13 +10,14 @@ public static partial class DataQuerySql
         where RT : struct, HasSqlDatabase<RT>
     {
         public static Aff<RT, Seq<T>> query<T>(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null, bool buffered = true)
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
+                from token in cancelToken<RT>()
                 from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryAsync<T>(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
-                select result;
+                    cnn, sql, param, trn, cmdTimeout, cmdType, buffered, token))
+                select toSeq(result);
 
         public static Aff<RT, ISqlGridReader> queryMultiple(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
