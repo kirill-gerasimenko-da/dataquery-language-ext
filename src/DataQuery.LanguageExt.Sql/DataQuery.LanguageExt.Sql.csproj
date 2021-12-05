@@ -14,7 +14,7 @@
     <LangVersion>10</LangVersion>
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>DataQuery.LanguageExt</PackageId>
-    <Product>DataQuery.LanguageExt</Product>
+    <Product>DataQuery.LanguageExt.Sql</Product>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123" />
