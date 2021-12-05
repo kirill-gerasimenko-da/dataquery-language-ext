@@ -69,9 +69,9 @@ public static partial class DataQuerySql
     /// Base class for query, allows not to put generic constraints
     /// to the AsAff implementations, thus making code cleaner
     /// </summary>
-    public abstract record SqlQuery<T> : ISqlQuery<Lst<T>>
+    public abstract record SqlQuery<T> : ISqlQuery<Seq<T>>
     {
-        public abstract Aff<RT, Lst<T>> AsAff<RT>() where RT : struct, HasSqlDatabase<RT>;
+        public abstract Aff<RT, Seq<T>> AsAff<RT>() where RT : struct, HasSqlDatabase<RT>;
 
         protected Aff<RT, Seq<T>> Query<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
