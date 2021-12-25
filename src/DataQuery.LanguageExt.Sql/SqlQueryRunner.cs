@@ -22,13 +22,13 @@ public static partial class DataQuerySql
 
     public delegate DbConnection SqlConnectionFactory();
 
-    public class SqlQueryRunner<RT> : ISqlQueryRunner<RT>
+    public abstract class SqlQueryRunner<RT> : ISqlQueryRunner<RT>
         where RT : struct, HasSqlDatabase<RT>
     {
         readonly SqlConnectionFactory _sqlConnectionFactory;
         readonly SqlDatabaseRuntimeFactory<RT> _runtimeFactory;
 
-        public SqlQueryRunner(
+        protected SqlQueryRunner(
             SqlConnectionFactory sqlConnectionFactory,
             SqlDatabaseRuntimeFactory<RT> runtimeFactory)
         {
