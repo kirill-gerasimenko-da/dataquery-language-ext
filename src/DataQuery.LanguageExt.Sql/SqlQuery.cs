@@ -1,6 +1,7 @@
 namespace DataQuery.LanguageExt.Sql;
 
 using System.Data;
+using Dapper;
 
 public static partial class DataQuerySql
 {
@@ -31,7 +32,31 @@ public static partial class DataQuerySql
             =>
                 SqlDb<RT>.query<V>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, ISqlGridReader> QueryMultiple<RT>(
+        protected Aff<RT, Option<T>> QueryFirst<RT>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.queryFirst<T>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, Option<V>> QueryFirst<RT, V>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.queryFirst<V>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, T> QuerySingle<RT>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.querySingle<T>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, V> QuerySingle<RT, V>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.querySingle<V>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, SqlMapper.GridReader> QueryMultiple<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
@@ -60,6 +85,12 @@ public static partial class DataQuerySql
             where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.executeScalar<V>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, IDataReader> ExecuteReader<RT>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.executeReader(sql, param, cmdTimeout, cmdType);
     }
 
 
@@ -85,7 +116,31 @@ public static partial class DataQuerySql
             =>
                 SqlDb<RT>.query<V>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, ISqlGridReader> QueryMultiple<RT>(
+        protected Aff<RT, Option<T>> QueryFirst<RT>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.queryFirst<T>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, Option<V>> QueryFirst<RT, V>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.queryFirst<V>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, T> QuerySingle<RT>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.querySingle<T>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, V> QuerySingle<RT, V>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.querySingle<V>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, SqlMapper.GridReader> QueryMultiple<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
@@ -114,5 +169,11 @@ public static partial class DataQuerySql
             where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.executeScalar<V>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, IDataReader> ExecuteReader<RT>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.executeReader(sql, param, cmdTimeout, cmdType);
     }
 }

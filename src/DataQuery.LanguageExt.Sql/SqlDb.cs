@@ -2,6 +2,7 @@ using System.Data;
 
 namespace DataQuery.LanguageExt.Sql;
 
+using static Dapper.SqlMapper;
 using static Prelude;
 
 public static partial class DataQuerySql
@@ -15,16 +16,34 @@ public static partial class DataQuerySql
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
                 from token in cancelToken<RT>()
-                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryAsync<T>(
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.Query<T>(
                     cnn, sql, param, trn, cmdTimeout, cmdType, buffered, token))
-                select toSeq(result);
+                select toSeq(result).Strict();
 
-        public static Aff<RT, ISqlGridReader> queryMultiple(
+        public static Aff<RT, Option<T>> queryFirst<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
-                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryMultipleAsync(
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryFirst<T>(
+                    cnn, sql, param, trn, cmdTimeout, cmdType))
+                select result;
+
+        public static Aff<RT, T> querySingle<T>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            =>
+                from cnn in connection<RT>()
+                from trn in transaction<RT>()
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QuerySingle<T>(
+                    cnn, sql, param, trn, cmdTimeout, cmdType))
+                select result;
+
+        public static Aff<RT, GridReader> queryMultiple(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            =>
+                from cnn in connection<RT>()
+                from trn in transaction<RT>()
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryMultiple(
                     cnn, sql, param, trn, cmdTimeout, cmdType))
                 select result;
 
@@ -33,7 +52,7 @@ public static partial class DataQuerySql
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
-                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteAsync(
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.Execute(
                     cnn, sql, param, trn, cmdTimeout, cmdType))
                 select result;
 
@@ -42,7 +61,16 @@ public static partial class DataQuerySql
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
-                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteScalarAsync<T>(
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteScalar<T>(
+                    cnn, sql, param, trn, cmdTimeout, cmdType))
+                select result;
+
+        public static Aff<RT, IDataReader> executeReader(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            =>
+                from cnn in connection<RT>()
+                from trn in transaction<RT>()
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteReader(
                     cnn, sql, param, trn, cmdTimeout, cmdType))
                 select result;
     }
