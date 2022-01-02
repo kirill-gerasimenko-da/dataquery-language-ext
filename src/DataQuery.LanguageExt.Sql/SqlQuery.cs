@@ -24,11 +24,23 @@ public static partial class DataQuerySql
             =>
                 SqlDb<RT>.query<T>(sql, param, cmdTimeout, cmdType);
 
+        protected Aff<RT, IEnumerable<V>> Query<RT, V>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.query<V>(sql, param, cmdTimeout, cmdType);
+
         protected Aff<RT, Seq<T>> QueryAll<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.queryAll<T>(sql, param, cmdTimeout, cmdType);
+
+        protected Aff<RT, Seq<V>> QueryAll<RT, V>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.queryAll<V>(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, T> QueryFirst<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
@@ -107,7 +119,7 @@ public static partial class DataQuerySql
             where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.executeScalar<V>(sql, param, cmdTimeout, cmdType);
-        
+
         protected Aff<RT, IDataReader> ExecuteReader<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
