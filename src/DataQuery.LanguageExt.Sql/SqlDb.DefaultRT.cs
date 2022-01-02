@@ -1,18 +1,23 @@
 namespace DataQuery.LanguageExt.Sql;
 
+using System.Collections.Generic;
 using System.Data;
-using Dapper;
 
 public static partial class DataQuerySql
 {
     public static class SqlDb
     {
-        public static Aff<DefaultRT, Seq<T>> query<T>(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null, bool buffered = true)
+        public static Aff<DefaultRT, IEnumerable<T>> query<T>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.query<T>(sql, param, cmdTimeout, cmdType, buffered);
+                SqlDb<DefaultRT>.query<T>(sql, param, cmdTimeout, cmdType);
 
-        public static Aff<DefaultRT, Option<T>> queryFirst<T>(
+        public static Aff<DefaultRT, Seq<T>> queryAll<T>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            =>
+                SqlDb<DefaultRT>.queryAll<T>(sql, param, cmdTimeout, cmdType);
+
+        public static Aff<DefaultRT, T> queryFirst<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 SqlDb<DefaultRT>.queryFirst<T>(sql, param, cmdTimeout, cmdType);
@@ -22,7 +27,17 @@ public static partial class DataQuerySql
             =>
                 SqlDb<DefaultRT>.querySingle<T>(sql, param, cmdTimeout, cmdType);
 
-        public static Aff<DefaultRT, SqlMapper.GridReader> queryMultiple(
+        public static Aff<DefaultRT, Option<T>> tryQueryFirst<T>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            =>
+                SqlDb<DefaultRT>.tryQueryFirst<T>(sql, param, cmdTimeout, cmdType);
+
+        public static Aff<DefaultRT, Option<T>> tryQuerySingle<T>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            =>
+                SqlDb<DefaultRT>.tryQuerySingle<T>(sql, param, cmdTimeout, cmdType);
+
+        public static Aff<DefaultRT, ISqlGridReader> queryMultiple(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 SqlDb<DefaultRT>.queryMultiple(sql, param, cmdTimeout, cmdType);
@@ -37,7 +52,7 @@ public static partial class DataQuerySql
             =>
                 SqlDb<DefaultRT>.executeScalar<T>(sql, param, cmdTimeout, cmdType);
 
-        public static Aff<DefaultRT, IDataReader> executeReader<T>(
+        public static Aff<DefaultRT, IDataReader> executeReader(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 SqlDb<DefaultRT>.executeReader(sql, param, cmdTimeout, cmdType);

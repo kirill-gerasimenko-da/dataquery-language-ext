@@ -1,8 +1,7 @@
-using System.Data;
-
 namespace DataQuery.LanguageExt.Sql;
 
-using static Dapper.SqlMapper;
+using System.Collections.Generic;
+using System.Data;
 using static Prelude;
 
 public static partial class DataQuerySql
@@ -10,23 +9,34 @@ public static partial class DataQuerySql
     public static class SqlDb<RT>
         where RT : struct, HasSqlDatabase<RT>
     {
-        public static Aff<RT, Seq<T>> query<T>(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null, bool buffered = true)
+        public static Aff<RT, Seq<T>> queryAll<T>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
                 from token in cancelToken<RT>()
                 from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.Query<T>(
-                    cnn, sql, param, trn, cmdTimeout, cmdType, buffered, token))
+                    cnn, sql, param, trn, cmdTimeout, cmdType, true, token))
                 select toSeq(result).Strict();
 
-        public static Aff<RT, Option<T>> queryFirst<T>(
+        public static Aff<RT, IEnumerable<T>> query<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
+                from token in cancelToken<RT>()
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.Query<T>(
+                    cnn, sql, param, trn, cmdTimeout, cmdType, false, token))
+                select result;
+
+        public static Aff<RT, T> queryFirst<T>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            =>
+                from cnn in connection<RT>()
+                from trn in transaction<RT>()
+                from token in cancelToken<RT>()
                 from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryFirst<T>(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
+                    cnn, sql, param, trn, cmdTimeout, cmdType, token))
                 select result;
 
         public static Aff<RT, T> querySingle<T>(
@@ -34,17 +44,39 @@ public static partial class DataQuerySql
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
+                from token in cancelToken<RT>()
                 from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QuerySingle<T>(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
+                    cnn, sql, param, trn, cmdTimeout, cmdType, token))
                 select result;
 
-        public static Aff<RT, GridReader> queryMultiple(
+        public static Aff<RT, Option<T>> tryQueryFirst<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
+                from token in cancelToken<RT>()
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.TryQueryFirst<T>(
+                    cnn, sql, param, trn, cmdTimeout, cmdType, token))
+                select result;
+
+        public static Aff<RT, Option<T>> tryQuerySingle<T>(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            =>
+                from cnn in connection<RT>()
+                from trn in transaction<RT>()
+                from token in cancelToken<RT>()
+                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.TryQuerySingle<T>(
+                    cnn, sql, param, trn, cmdTimeout, cmdType, token))
+                select result;
+
+        public static Aff<RT, ISqlGridReader> queryMultiple(
+            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
+            =>
+                from cnn in connection<RT>()
+                from trn in transaction<RT>()
+                from token in cancelToken<RT>()
                 from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.QueryMultiple(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
+                    cnn, sql, param, trn, cmdTimeout, cmdType, token))
                 select result;
 
         public static Aff<RT, int> execute(
@@ -52,8 +84,9 @@ public static partial class DataQuerySql
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
+                from token in cancelToken<RT>()
                 from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.Execute(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
+                    cnn, sql, param, trn, cmdTimeout, cmdType, token))
                 select result;
 
         public static Aff<RT, T> executeScalar<T>(
@@ -61,8 +94,9 @@ public static partial class DataQuerySql
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
+                from token in cancelToken<RT>()
                 from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteScalar<T>(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
+                    cnn, sql, param, trn, cmdTimeout, cmdType, token))
                 select result;
 
         public static Aff<RT, IDataReader> executeReader(
@@ -70,8 +104,9 @@ public static partial class DataQuerySql
             =>
                 from cnn in connection<RT>()
                 from trn in transaction<RT>()
+                from token in cancelToken<RT>()
                 from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.ExecuteReader(
-                    cnn, sql, param, trn, cmdTimeout, cmdType))
+                    cnn, sql, param, trn, cmdTimeout, cmdType, token))
                 select result;
     }
 
