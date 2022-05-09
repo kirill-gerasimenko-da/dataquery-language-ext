@@ -8,131 +8,113 @@ public static partial class DataQuerySql
     /// <summary>
     /// Interface-marker 
     /// </summary>
-    public interface ISqlQuery<T>
+    public interface ISqlQuery<RT, T> where RT : struct, HasSqlDatabase<RT>
     {
         /// <summary>
         /// Returns query as async effect
         /// </summary>
-        Aff<RT, T> AsAff<RT>() where RT : struct, HasSqlDatabase<RT>;
+        Aff<RT, T> AsAff();
     }
 
-    public abstract record SqlQueryRT : SqlQueryBaseRT<Unit>, ISqlQuery<Unit>
+    public abstract record SqlQuery : SqlQueryBase<DefaultRT, Unit>, ISqlQuery<DefaultRT, Unit>
     {
-        public abstract Aff<RT, Unit> AsAff<RT>() where RT : struct, HasSqlDatabase<RT>;
+        public abstract Aff<DefaultRT, Unit> AsAff();
     }
 
-    public abstract record SqlQueryRT<T> : SqlQueryBaseRT<T>, ISqlQuery<T>
+    public abstract record SqlQuery<T> : SqlQueryBase<DefaultRT, T>, ISqlQuery<DefaultRT, T>
     {
-        public abstract Aff<RT, T> AsAff<RT>() where RT : struct, HasSqlDatabase<RT>;
+        public abstract Aff<DefaultRT, T> AsAff();
     }
 
-    public abstract record SqlQueryBaseRT<T>
+    public abstract record SqlQueryBase<RT, T> where RT : struct, HasSqlDatabase<RT>
     {
-        protected Aff<RT, IEnumerable<T>> Query<RT>(
+        protected Aff<RT, IEnumerable<T>> Query(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.query<T>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, IEnumerable<V>> Query<RT, V>(
+        protected Aff<RT, IEnumerable<V>> Query<V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.query<V>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, Seq<T>> QueryAll<RT>(
+        protected Aff<RT, Seq<T>> QueryAll(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.queryAll<T>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, Seq<V>> QueryAll<RT, V>(
+        protected Aff<RT, Seq<V>> QueryAll<V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.queryAll<V>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, T> QueryFirst<RT>(
+        protected Aff<RT, T> QueryFirst(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.queryFirst<T>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, V> QueryFirst<RT, V>(
+        protected Aff<RT, V> QueryFirst<V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.queryFirst<V>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, T> QuerySingle<RT>(
+        protected Aff<RT, T> QuerySingle(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.querySingle<T>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, V> QuerySingle<RT, V>(
+        protected Aff<RT, V> QuerySingle<V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.querySingle<V>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, Option<T>> TryQueryFirst<RT>(
+        protected Aff<RT, Option<T>> TryQueryFirst(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.tryQueryFirst<T>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, Option<V>> TryQueryFirst<RT, V>(
+        protected Aff<RT, Option<V>> TryQueryFirst<V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.tryQueryFirst<V>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, Option<T>> TryQuerySingle<RT>(
+        protected Aff<RT, Option<T>> TryQuerySingle(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.tryQuerySingle<T>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, Option<V>> TryQuerySingle<RT, V>(
+        protected Aff<RT, Option<V>> TryQuerySingle<V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.tryQuerySingle<V>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, ISqlGridReader> QueryMultiple<RT>(
+        protected Aff<RT, ISqlGridReader> QueryMultiple(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.queryMultiple(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, int> Execute<RT>(
+        protected Aff<RT, int> Execute(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.execute(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, Unit> ExecuteAsUnit<RT>(
+        protected Aff<RT, Unit> ExecuteAsUnit(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.execute(sql, param, cmdTimeout, cmdType).Bind(_ => unitAff);
 
-        protected Aff<RT, T> ExecuteScalar<RT>(
+        protected Aff<RT, T> ExecuteScalar(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.executeScalar<T>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, V> ExecuteScalar<RT, V>(
+        protected Aff<RT, V> ExecuteScalar<V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.executeScalar<V>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, IDataReader> ExecuteReader<RT>(
+        protected Aff<RT, IDataReader> ExecuteReader(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            where RT : struct, HasSqlDatabase<RT>
             =>
                 SqlDb<RT>.executeReader(sql, param, cmdTimeout, cmdType);
     }
