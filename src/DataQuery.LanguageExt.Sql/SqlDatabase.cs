@@ -48,7 +48,7 @@ public static partial class DataQuerySql
     public abstract class SqlDatabaseBase<RT> : ISqlDatabase<RT>
         where RT : struct, HasSqlDatabase<RT>
     {
-        private readonly ISqlQueryRunner<RT> _runner;
+        protected readonly ISqlQueryRunner<RT> _runner;
 
         protected SqlDatabaseBase(ISqlQueryRunner<RT> runner) => _runner = runner;
 
