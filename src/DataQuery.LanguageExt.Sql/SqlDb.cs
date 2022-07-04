@@ -1,6 +1,5 @@
 namespace DataQuery.LanguageExt.Sql;
 
-using System.Collections.Generic;
 using System.Data;
 using static Prelude;
 
@@ -9,7 +8,7 @@ public static partial class DataQuerySql
     public static class SqlDb<RT>
         where RT : struct, HasSqlDatabase<RT>
     {
-        public static Aff<RT, Seq<T>> queryAll<T>(
+        public static Aff<RT, Seq<T>> query<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 from cnn in connection<RT>()
@@ -17,17 +16,7 @@ public static partial class DataQuerySql
                 from token in cancelToken<RT>()
                 from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.Query<T>(
                     cnn, sql, param, trn, cmdTimeout, cmdType, true, token))
-                select toSeq(result).Strict();
-
-        public static Aff<RT, IEnumerable<T>> query<T>(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            =>
-                from cnn in connection<RT>()
-                from trn in transaction<RT>()
-                from token in cancelToken<RT>()
-                from result in default(RT).SqlDatabaseEff.MapAsync(dapper => dapper.Query<T>(
-                    cnn, sql, param, trn, cmdTimeout, cmdType, false, token))
-                select result;
+                select toSeq(result);
 
         public static Aff<RT, T> queryFirst<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)

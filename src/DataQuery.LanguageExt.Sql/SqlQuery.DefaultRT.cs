@@ -28,25 +28,15 @@ public static partial class DataQuerySql
 
     public abstract record SqlQueryBase<RT, T> where RT : struct, HasSqlDatabase<RT>
     {
-        protected Aff<RT, IEnumerable<T>> Query(
+        protected Aff<RT, Seq<T>> Query(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 SqlDb<RT>.query<T>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, IEnumerable<V>> Query<V>(
+        protected Aff<RT, Seq<V>> Query<V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 SqlDb<RT>.query<V>(sql, param, cmdTimeout, cmdType);
-
-        protected Aff<RT, Seq<T>> QueryAll(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            =>
-                SqlDb<RT>.queryAll<T>(sql, param, cmdTimeout, cmdType);
-
-        protected Aff<RT, Seq<V>> QueryAll<V>(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            =>
-                SqlDb<RT>.queryAll<V>(sql, param, cmdTimeout, cmdType);
 
         protected Aff<RT, T> QueryFirst(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)

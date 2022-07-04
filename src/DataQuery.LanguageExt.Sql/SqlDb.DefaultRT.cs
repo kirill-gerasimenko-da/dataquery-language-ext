@@ -1,21 +1,15 @@
 namespace DataQuery.LanguageExt.Sql;
 
-using System.Collections.Generic;
 using System.Data;
 
 public static partial class DataQuerySql
 {
     public static class SqlDb
     {
-        public static Aff<DefaultRT, IEnumerable<T>> Query<T>(
+        public static Aff<DefaultRT, Seq<T>> Query<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
                 SqlDb<DefaultRT>.query<T>(sql, param, cmdTimeout, cmdType);
-
-        public static Aff<DefaultRT, Seq<T>> QueryAll<T>(
-            string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
-            =>
-                SqlDb<DefaultRT>.queryAll<T>(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, T> QueryFirst<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
@@ -62,5 +56,5 @@ public static partial class DataQuerySql
         Eff<DefaultRT, IDbConnection>(rt => rt.Connection);
 
     public static Eff<DefaultRT, IDbTransaction> Transaction() =>
-        Eff<DefaultRT, IDbTransaction>(rt => rt.Transaction.IfNoneUnsafe((IDbTransaction)null));
+        Eff<DefaultRT, IDbTransaction>(rt => rt.Transaction.IfNoneUnsafe((IDbTransaction) null));
 }
