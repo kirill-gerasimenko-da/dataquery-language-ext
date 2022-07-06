@@ -53,10 +53,10 @@ public static partial class DataQuerySql
         protected SqlDatabaseBase(ISqlQueryRunner<RT> runner) => _runner = runner;
 
         public async Task<Fin<T>> Run<T>(ISqlQuery<T> query, CancellationToken cancelToken) =>
-            await _runner.AsAff(query.AsAff<RT>(), IsolationLevel.Unspecified, cancelToken).Run();
+            await _runner.AsAff(query.AsAff<RT>(), IsolationLevel.ReadCommitted, cancelToken).Run();
 
         public async Task<Fin<T>> Run<T>(ISqlQuery<RT, T> query, CancellationToken cancelToken) =>
-            await _runner.AsAff(query.AsAff(), IsolationLevel.Unspecified, cancelToken).Run();
+            await _runner.AsAff(query.AsAff(), IsolationLevel.ReadCommitted, cancelToken).Run();
 
         public async Task<Fin<T>> Run<T>(
             ISqlQuery<RT, T> query,
@@ -73,7 +73,7 @@ public static partial class DataQuerySql
                 await _runner.AsAff(query.AsAff<RT>(), isolationLevel, cancelToken).Run();
 
         public async Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken) =>
-            await _runner.AsAff(queryAff, IsolationLevel.Unspecified, cancelToken).Run();
+            await _runner.AsAff(queryAff, IsolationLevel.ReadCommitted, cancelToken).Run();
 
         public async Task<Fin<T>> Run<T>(
             Aff<RT, T> queryAff,
