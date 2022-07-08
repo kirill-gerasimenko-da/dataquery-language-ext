@@ -34,7 +34,7 @@ public static partial class DataQuerySql
             =>
                 SqlDb<RT>.query<T>(sql, param, cmdTimeout, cmdType);
 
-        protected Aff<RT, Seq<V>> QueryAll<RT, V>(
+        protected Aff<RT, Seq<V>> Query<RT, V>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
             =>

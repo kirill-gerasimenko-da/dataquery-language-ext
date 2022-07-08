@@ -1,19 +1,18 @@
 namespace DataQuery.LanguageExt.Sql;
 
 using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using static Dapper.SqlMapper;
 
 public static partial class DataQuerySql
 {
     public interface ISqlGridReader : IDisposable
     {
-        Aff<IEnumerable<T>> Read<T>();
-        Aff<Seq<T>> ReadAll<T>();
-        Aff<T> ReadFirst<T>();
-        Aff<T> ReadSingle<T>();
-        Aff<Option<T>> TryReadFirst<T>();
-        Aff<Option<T>> TryReadSingle<T>();
+        ValueTask<Seq<T>> Read<T>();
+        ValueTask<T> ReadFirst<T>();
+        ValueTask<T> ReadSingle<T>();
+        ValueTask<Option<T>> TryReadFirst<T>();
+        ValueTask<Option<T>> TryReadSingle<T>();
     }
 
     public class SqlGridReader : ISqlGridReader
@@ -24,43 +23,10 @@ public static partial class DataQuerySql
 
         public void Dispose() => _reader.Dispose();
 
-        public Aff<IEnumerable<T>> Read<T>() =>
-            Aff(async () => await _reader.ReadAsync<T>(buffered: false));
-
-        public Aff<Seq<T>> ReadAll<T>() =>
-            Aff(async () => await _reader.ReadAsync<T>(buffered: true))
-                .Map(x => x.ToSeq().Strict());
-
-        public Aff<T> ReadFirst<T>() =>
-            Aff(async () => await _reader.ReadFirstAsync<T>());
-
-        public Aff<T> ReadSingle<T>() =>
-            Aff(async () => await _reader.ReadSingleAsync<T>());
-
-        public Aff<Option<T>> TryReadFirst<T>() => Aff(async () =>
-        {
-            var results = await _reader.ReadAsync<T>(buffered: false);
-
-            using var enumerator = results.GetEnumerator();
-
-            return enumerator.MoveNext() ? Some(enumerator.Current) : None;
-        });
-
-        public Aff<Option<T>> TryReadSingle<T>() => Aff(async () =>
-        {
-            var results = await _reader.ReadAsync<T>(buffered: false);
-
-            using var enumerator = results.GetEnumerator();
-
-            if (!enumerator.MoveNext())
-                return None;
-
-            var result = Some(enumerator.Current);
-
-            if (enumerator.MoveNext())
-                throw new InvalidOperationException("Sequence contains more than one element");
-
-            return result;
-        });
+        public async ValueTask<Seq<T>> Read<T>() => toSeq(await _reader.ReadAsync<T>(buffered: true));
+        public async ValueTask<T> ReadFirst<T>() => await _reader.ReadFirstAsync<T>();
+        public async ValueTask<T> ReadSingle<T>() => await _reader.ReadSingleAsync<T>();
+        public async ValueTask<Option<T>> TryReadFirst<T>() => Optional(await _reader.ReadFirstOrDefaultAsync<T>());
+        public async ValueTask<Option<T>> TryReadSingle<T>() => Optional(await _reader.ReadSingleOrDefaultAsync<T>());
     }
 }

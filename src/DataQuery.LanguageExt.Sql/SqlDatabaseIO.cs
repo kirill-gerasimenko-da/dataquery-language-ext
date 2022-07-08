@@ -158,20 +158,14 @@ public static partial class DataQuerySql
             int? commandTimeout,
             CommandType? commandType,
             CancellationToken cancelToken)
-        {
-            using var reader = await cnn.ExecuteReaderAsync(new CommandDefinition(
-                sql,
-                param,
-                transaction,
-                commandTimeout,
-                commandType,
-                cancellationToken: cancelToken));
-
-            if (!reader.Read())
-                return None;
-
-            return reader.GetRowParser<T>()(reader);
-        }
+            =>
+                Optional(await cnn.QueryFirstOrDefaultAsync<T>(new CommandDefinition(
+                    sql,
+                    param,
+                    transaction,
+                    commandTimeout,
+                    commandType,
+                    cancellationToken: cancelToken)));
 
         public async ValueTask<Option<T>> TryQuerySingle<T>(
             IDbConnection cnn,
@@ -181,25 +175,14 @@ public static partial class DataQuerySql
             int? commandTimeout,
             CommandType? commandType,
             CancellationToken cancelToken)
-        {
-            using var reader = await cnn.ExecuteReaderAsync(new CommandDefinition(
-                sql,
-                param,
-                transaction,
-                commandTimeout,
-                commandType,
-                cancellationToken: cancelToken));
-
-            if (!reader.Read())
-                return None;
-
-            var result = reader.GetRowParser<T>()(reader);
-
-            if (reader.Read())
-                throw new InvalidOperationException("Sequence contains more than one element");
-
-            return result;
-        }
+            =>
+                Optional(await cnn.QuerySingleOrDefaultAsync<T>(new CommandDefinition(
+                    sql,
+                    param,
+                    transaction,
+                    commandTimeout,
+                    commandType,
+                    cancellationToken: cancelToken)));
 
         public async ValueTask<int> Execute(
             IDbConnection cnn,
