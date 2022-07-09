@@ -64,7 +64,7 @@ var insertUserWithAudit =
     from appointmentId in QuerySingle<long>(@"SELECT id FROM appointment...", new { user_id = userId });
     select (userId, logId, appointmentId);
     
-// run the compound query: the connection and transaction will be shared for both
+// run the compound query: the connection and transaction will be shared for all 
 // queries, if anything fails - the transaction is automatically reverted
 var (userId, logId, _) = await database.RunOrFail(insertUserWithAudit, cancelToken);    
 
