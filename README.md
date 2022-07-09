@@ -1,4 +1,5 @@
 # SQL queries on steroids
+![Nuget](https://img.shields.io/nuget/v/DataQuery.LanguageExt)
 
 This library is a wrapper around [Dapper](https://dapperlib.github.io/Dapper/) to access relation databases ([Npgsql](https://www.npgsql.org/) driver for `PostgreSQL` and `ADO.NET` driver for other databases). Most operations supported are calling `Dapper` directly and have the same set of parameters. The project is heavily based on [Language.Ext](https://github.com/louthy/language-ext) - an amazing functional C# extensions library.
 
