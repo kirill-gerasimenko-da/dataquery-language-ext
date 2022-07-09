@@ -9,52 +9,52 @@ public static partial class DataQuerySql
         public static Aff<DefaultRT, Seq<T>> Query<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.query<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<DefaultRT>.Query<T>(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, T> QueryFirst<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.queryFirst<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<DefaultRT>.QueryFirst<T>(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, T> QuerySingle<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.querySingle<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<DefaultRT>.QuerySingle<T>(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, Option<T>> TryQueryFirst<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.tryQueryFirst<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<DefaultRT>.TryQueryFirst<T>(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, Option<T>> TryQuerySingle<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.tryQuerySingle<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<DefaultRT>.TryQuerySingle<T>(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, ISqlGridReader> QueryMultiple(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.queryMultiple(sql, param, cmdTimeout, cmdType);
+                SqlDb<DefaultRT>.QueryMultiple(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, int> Execute(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.execute(sql, param, cmdTimeout, cmdType);
+                SqlDb<DefaultRT>.Execute(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, T> ExecuteScalar<T>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.executeScalar<T>(sql, param, cmdTimeout, cmdType);
+                SqlDb<DefaultRT>.ExecuteScalar<T>(sql, param, cmdTimeout, cmdType);
 
         public static Aff<DefaultRT, IDataReader> ExecuteReader(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             =>
-                SqlDb<DefaultRT>.executeReader(sql, param, cmdTimeout, cmdType);
+                SqlDb<DefaultRT>.ExecuteReader(sql, param, cmdTimeout, cmdType);
     }
 
-    public static Eff<DefaultRT, IDbConnection> Connection() =>
+    public static Eff<DefaultRT, IDbConnection> connection() =>
         Eff<DefaultRT, IDbConnection>(rt => rt.Connection);
 
-    public static Eff<DefaultRT, IDbTransaction> Transaction() =>
-        Eff<DefaultRT, IDbTransaction>(rt => rt.Transaction.IfNoneUnsafe((IDbTransaction) null));
+    public static Eff<DefaultRT, Option<IDbTransaction>> transaction() =>
+        Eff<DefaultRT, Option<IDbTransaction>>(rt => rt.Transaction);
 }
