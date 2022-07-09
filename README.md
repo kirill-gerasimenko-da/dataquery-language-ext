@@ -1,77 +1,95 @@
-# SQL data queries using Language Ext Aff monad
+# SQL queries on steroids
 
-This is an experiment to find out if building an abstraction over the database query itself as opposed to the repository
-approach, with addition of some functional goodies from brilliant `Language.Ext` library, could be really viable.
+This library is a wrapper around [Dapper](https://dapperlib.github.io/Dapper/) to access relation databases ([Npgsql](https://www.npgsql.org/) driver for `PostgreSQL` and `ADO.NET` driver for other databases). Most operations supported are calling `Dapper` directly and have the same set of parameters. The project is heavily based on [Language.Ext](https://github.com/louthy/language-ext) - an amazing functional C# extensions library.
 
-## The library emphasizes the following
+## Goals
 
 - SQL query as data
-
 - composition (both ad-hoc and composite queries)
-
-- implicit SQL execution runtime context (like currently opened connection|transaction, cancellation token etc.), but
-  with ability to get the context where it's needed
-
+- implicit SQL execution runtime context: connection, transaction and cancellation token are passed to each query implicitly, but it is possible to get these from the context if required 
 - error handling
 
-### Examples
+## Usage
 
-Scalar query (getting single value):
+### Ad-hoc queries
 
-``` c#
-public record GetBenefitsCountForType(BenefitType Type) : SqlScalarQuery<uint>
-{
-    public override Aff<RT, uint> AsAff<RT>() => ExecuteScalar<RT>(@"
-        SELECT 
-            COUNT(*)
-        FROM 
-            "benefit" b 
-        WHERE
-            b.type = @benefitType",
-        new
-        {
-            benefitType = (int)Type
-        });
-}
+Create database client first:
+
+```csharp
+using static DataQuerySql;
+
+// create database client with Npgsql driver by default
+var postgresDatabase = CreateSqlDatabaseClient("connection-string");
+
+// create database client with ADO.NET driver
+var sqlDatabase = CreateSqlDatabaseClient("connection-string", DriverType.AdoNet);
 ```
 
-Another example - find entity by id, returning `Option<T>`:
+Below examples show how ad-hoc queries might be constructed and executed without a lot of ceremonies: 
 
+```csharp
+using static DataQuerySql;
 
-``` c#
-public record FindCustomer(CustomerId Id) : SqlScalarQuery<Option<Customer>>
-{
-    public override Aff<RT, Option<Customer>> AsAff<RT>() =>
-        from customers in Query<RT, Customer>(@"
-            SELECT * FROM customer WHERE id = @customerId",
-            new
-            {
-                customerId = Id
-            })
-        select customers.HeadOrNone();
-}
+// get count of users
+var usersCount = await database.RunOrFail(Query<int>(@"select count(*) from users"), cancelToken);
+
+// create ad-hoc query object for inserting new user
+var insertQuery = ExecuteScalar<int>(@"
+    INSERT INTO users (name, email, zip_code)
+    VALUES (@name, @email, @zip_code)
+    RETURNING id", new
+    {
+        name = "John Smith",
+        email = "jsmith@email.com",
+        zip_code = "73000"
+    });
+
+var userId = await database.RunOrFail(insertQuery, cancelToken);
 ```
 
-The same could be achieved using errors mechanics from LanguageExt:
+The next examples show how to compose more than one queries together into a compound query, which still has the same qualities as the ones it comprises of:
 
-``` c#
-public record FindCustomer(CustomerId Id) : SqlScalarQuery<Option<Customer>>
-{
-    static Error noCustomersFound = Error.New(1000, "no customers found");
+```csharp
+using static DataQuerySql;
 
-    public override Aff<RT, Option<Customer>> AsAff<RT>() =>
-    (
-        from customers in Query<RT, Customer>(@"
-            SELECT * FROM customer WHERE id = @customerId",
-            new
-            {
-                customerId = Id
-            })
-        from _ in guard(customers != Empty, noCustomersFound)
-        select Some(customers.Head)
-    ) | @catch(noCustomersFound, Option<Customer>.None); 
-}
+var insertUser = ExecuteScalar<int>("...", new {...});
+var insertUserAuditLog = ExecuteScalar<int>(@"...", new {...});
+    
+// create ad-hoc compound query using LINQ syntax, which has the usual semantics:
+// for example if insertUser query fails - other queries in the chain won't even
+// start and the error will be propagated (and transaction rolled back)
+var insertUserWithAudit =
+    from userId in insertUser
+    from logId in insertUserAuditLog
+    from appointmentId in QuerySingle<long>(@"SELECT id FROM appointment...", new { user_id = userId });
+    select (userId, logId, appointmentId);
+    
+// run the compound query: the connection and transaction will be shared for both
+// queries, if anything fails - the transaction is automatically reverted
+var (userId, logId, _) = await database.RunOrFail(insertUserWithAudit, cancelToken);    
+
+// or run inline with addition of new queries, passing values from the
+// previous query execution results
+var  = await database.RunOrFail(
+    from insertResult in insertUserWithAudit
+    from _ in ExecuteScalar(@"INSERT ...", new { id = insertResult.appointmentId })
+    select (userId, logId),
+    cancelToken); 
 ```
 
-In the above query, it might look like overkill, but in some circumstances it's the way to short-circuit the query processing (and even rollback the transaction if necessary).
+From examples above it is clear that ad-hoc queries could be combined in a different ways. This allows to split complex queries and/or add additional queries on top of existing ones - PROFIT. 
 
+In addition we could create query that can be stopped conditionally, like this: 
+
+```csharp
+// queries from previous examples 
+from userId in insertUser
+from logId in insertUserAuditLog
+from _ in guard(logId % 2 == 0, Error.New("Can't allow this!"))
+from appointmentId in QuerySingle<long>(@"SELECT id FROM appointment...", new {...});
+select (userId, logId, appointmentId);
+```
+
+### Record-based queries
+
+TBD
