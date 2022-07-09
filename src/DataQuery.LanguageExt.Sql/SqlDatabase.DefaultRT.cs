@@ -2,6 +2,7 @@ namespace DataQuery.LanguageExt.Sql;
 
 public static partial class DataQuerySql
 {
+    /// <inheritdoc />
     public interface ISqlDatabase : ISqlDatabase<DefaultRT>
     { }
 

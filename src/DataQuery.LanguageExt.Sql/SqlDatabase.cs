@@ -13,36 +13,38 @@ public static partial class DataQuerySql
         where RT : struct, HasSqlDatabase<RT>
     {
         /// <summary>
-        /// Runs the supplied query
+        /// Runs the supplied query in a new transaction with IsolationLevel.ReadCommitted.
         /// </summary>
         Task<Fin<T>> Run<T>(ISqlQuery<T> query, CancellationToken cancelToken);
 
         /// <summary>
-        /// Runs the supplied query
+        /// Runs the supplied query in a new transaction with IsolationLevel.ReadCommitted.
         /// </summary>
         Task<Fin<T>> Run<T>(ISqlQuery<RT, T> query, CancellationToken cancelToken);
 
         /// <summary>
-        /// Runs the supplied query, with specified transaction isolation
-        /// level
-        /// </summary>
-        Task<Fin<T>> Run<T>(ISqlQuery<T> query, IsolationLevel isolationLevel, CancellationToken cancelToken);
-
-        /// <summary>
-        /// Runs the supplied query, with specified transaction isolation
-        /// level
-        /// </summary>
-        Task<Fin<T>> Run<T>(ISqlQuery<RT, T> query, IsolationLevel isolationLevel, CancellationToken cancelToken);
-
-        /// <summary>
-        /// Runs the supplied query aff, handles errors
+        /// Runs the supplied query in a new transaction with IsolationLevel.ReadCommitted.
         /// </summary>
         Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken);
 
         /// <summary>
-        /// Runs the supplied query aff, with specified transaction isolation level
+        /// Runs the supplied query in a new transaction with specified transaction isolation level.
+        /// If no isolation level is provided - the the transaction is not created.
         /// </summary>
-        Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, IsolationLevel isolationLevel, CancellationToken cancelToken);
+        Task<Fin<T>> Run<T>(ISqlQuery<T> query, Option<IsolationLevel> isolationLevel, CancellationToken cancelToken);
+
+        /// <summary>
+        /// Runs the supplied query in a new transaction with specified transaction isolation level.
+        /// If no isolation level is provided - the the transaction is not created.
+        /// </summary>
+        Task<Fin<T>> Run<T>(ISqlQuery<RT, T> query, Option<IsolationLevel> isolationLevel,
+            CancellationToken cancelToken);
+
+        /// <summary>
+        /// Runs the supplied query in a new transaction with specified transaction isolation level.
+        /// If no isolation level is provided - the the transaction is not created.
+        /// </summary>
+        Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, Option<IsolationLevel> isolationLevel, CancellationToken cancelToken);
     }
 
     public abstract class SqlDatabaseBase<RT> : ISqlDatabase<RT>
@@ -58,31 +60,31 @@ public static partial class DataQuerySql
         public async Task<Fin<T>> Run<T>(ISqlQuery<RT, T> query, CancellationToken cancelToken) =>
             await _runner.AsAff(query.AsAff(), IsolationLevel.ReadCommitted, cancelToken).Run();
 
-        public async Task<Fin<T>> Run<T>(
-            ISqlQuery<RT, T> query,
-            IsolationLevel isolationLevel,
+        public async Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken) =>
+            await _runner.AsAff(queryAff, IsolationLevel.ReadCommitted, cancelToken).Run();
+
+        public async Task<Fin<T>> Run<T>(ISqlQuery<RT, T> query,
+            Option<IsolationLevel> isolationLevel,
             CancellationToken cancelToken)
             =>
                 await _runner.AsAff(query.AsAff(), isolationLevel, cancelToken).Run();
 
-        public async Task<Fin<T>> Run<T>(
-            ISqlQuery<T> query,
-            IsolationLevel isolationLevel,
+        public async Task<Fin<T>> Run<T>(ISqlQuery<T> query,
+            Option<IsolationLevel> isolationLevel,
             CancellationToken cancelToken)
             =>
                 await _runner.AsAff(query.AsAff<RT>(), isolationLevel, cancelToken).Run();
 
-        public async Task<Fin<T>> Run<T>(Aff<RT, T> queryAff, CancellationToken cancelToken) =>
-            await _runner.AsAff(queryAff, IsolationLevel.ReadCommitted, cancelToken).Run();
-
-        public async Task<Fin<T>> Run<T>(
-            Aff<RT, T> queryAff,
-            IsolationLevel isolationLevel,
+        public async Task<Fin<T>> Run<T>(Aff<RT, T> queryAff,
+            Option<IsolationLevel> isolationLevel,
             CancellationToken cancelToken)
             =>
                 await _runner.AsAff(queryAff, isolationLevel, cancelToken).Run();
     }
 
+    /// <summary>
+    /// Runs the supplied query in a new transaction with IsolationLevel.ReadCommitted.
+    /// </summary>
     public static async Task<T> RunOrFail<T>(
         this ISqlDatabase database,
         ISqlQuery<DefaultRT, T> query,
@@ -90,14 +92,9 @@ public static partial class DataQuerySql
         =>
             (await database.Run(query, cancelToken)).ThrowIfFail();
 
-    public static async Task<T> RunOrFail<T>(
-        this ISqlDatabase database,
-        ISqlQuery<DefaultRT, T> query,
-        IsolationLevel isolationLevel,
-        CancellationToken cancelToken)
-        =>
-            (await database.Run(query, isolationLevel, cancelToken)).ThrowIfFail();
-
+    /// <summary>
+    /// Runs the supplied query in a new transaction with IsolationLevel.ReadCommitted.
+    /// </summary>
     public static async Task<T> RunOrFail<T>(
         this ISqlDatabase database,
         Aff<DefaultRT, T> queryAff,
@@ -105,10 +102,26 @@ public static partial class DataQuerySql
         =>
             (await database.Run(queryAff, cancelToken)).ThrowIfFail();
 
+    /// <summary>
+    /// Runs the supplied query in a new transaction if isolation level is specified,
+    /// otherwise - without it. 
+    /// </summary>
+    public static async Task<T> RunOrFail<T>(
+        this ISqlDatabase database,
+        ISqlQuery<DefaultRT, T> query,
+        Option<IsolationLevel> isolationLevel,
+        CancellationToken cancelToken)
+        =>
+            (await database.Run(query, isolationLevel, cancelToken)).ThrowIfFail();
+
+    /// <summary>
+    /// Runs the supplied query in a new transaction if isolation level is specified,
+    /// otherwise - without it.
+    /// </summary>
     public static async Task<T> RunOrFail<T>(
         this ISqlDatabase database,
         Aff<DefaultRT, T> queryAff,
-        IsolationLevel isolationLevel,
+        Option<IsolationLevel> isolationLevel,
         CancellationToken cancelToken)
         =>
             (await database.Run(queryAff, isolationLevel, cancelToken)).ThrowIfFail();

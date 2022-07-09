@@ -12,8 +12,10 @@ public static partial class DataQuerySql
         /// <summary>
         /// Creates an effect, which runs the query with DatabaseRuntime.
         ///
-        /// If isolation level is supplied - new transaction is started with
-        /// the supplied level and it is passed to the query in the runtime context. 
+        /// <p>If isolation level is supplied - new transaction is started with
+        /// the supplied level and it is passed to the query in the runtime context.</p>
+        ///
+        /// <p>If no isolation level is supplied - no transaction is started.</p> 
         /// </summary>
         Aff<T> AsAff<T>(
             Aff<RT, T> query,
@@ -50,18 +52,29 @@ public static partial class DataQuerySql
             await using var cnn = _sqlConnectionFactory();
             await cnn.OpenAsync(cancelToken);
 
-            var trn = await isolationLevel.MapAsync(async lvl => await cnn.BeginTransactionAsync(lvl, cancelToken));
-            var runtime = _runtimeFactory(cnn, trn, cancelToken);
+            Option<DbTransaction> tran = isolationLevel.Case switch
+            {
+                IsolationLevel level => await cnn.BeginTransactionAsync(level, cancelToken),
+                _ => None
+            };
+
+            var runtime = _runtimeFactory(cnn, tran.Map(t => (IDbTransaction) t), cancelToken);
 
             var finalQuery = query.MapFailAsync(async error =>
             {
-                await trn.RollbackAsync(cancelToken);
+                // rollback transaction
+                async void Rollback(DbTransaction t) => await t.RollbackAsync(cancelToken);
+                var _ = await tran.IterAsync(Rollback);
                 return error;
             });
 
             var result = await finalQuery.Run(runtime);
-            if (result.IsSucc)
-                await trn.CommitAsync(cancelToken);
+            if (!result.IsSucc)
+                return result;
+
+            // commit transaction
+            async void Commit(DbTransaction t) => await t.CommitAsync(cancelToken);
+            var _ = await tran.IterAsync(Commit);
 
             return result;
         });

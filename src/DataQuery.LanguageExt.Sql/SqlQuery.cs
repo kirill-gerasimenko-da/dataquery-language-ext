@@ -1,6 +1,5 @@
 namespace DataQuery.LanguageExt.Sql;
 
-using System.Collections.Generic;
 using System.Data;
 
 public static partial class DataQuerySql

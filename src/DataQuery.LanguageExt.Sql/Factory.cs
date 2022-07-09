@@ -12,7 +12,14 @@ public static partial class DataQuerySql
         Npgsql = 2
     }
 
-    public static ISqlDatabase CreateSqlDatabase(string connectionString, DriverType driverType = DriverType.Npgsql) =>
+    /// <summary>
+    /// Creates new SQL database client. Supports Npgsql and AdoNet drivers.
+    /// </summary>
+    public static ISqlDatabase CreateSqlDatabaseClient
+    (
+        string connectionString,
+        DriverType driverType = DriverType.Npgsql
+    ) =>
         new SqlDatabase(new SqlQueryRunner(toConnection(driverType, connectionString), DefaultRT.New));
 
     static SqlConnectionFactory toConnection(DriverType driverType, string connectionString) => driverType switch
