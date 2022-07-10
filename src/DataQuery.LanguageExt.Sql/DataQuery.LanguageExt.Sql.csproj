@@ -14,6 +14,7 @@
     <LangVersion>10</LangVersion>
     <PackageId>DataQuery.LanguageExt</PackageId>
     <Product>DataQuery.LanguageExt.Sql</Product>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
