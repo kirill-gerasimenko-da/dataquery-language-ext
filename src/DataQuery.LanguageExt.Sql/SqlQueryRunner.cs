@@ -62,9 +62,7 @@ public static partial class DataQuerySql
 
             var finalQuery = query.MapFailAsync(async error =>
             {
-                // rollback transaction
-                async void Rollback(DbTransaction t) => await t.RollbackAsync(cancelToken);
-                var _ = await tran.IterAsync(Rollback);
+                var _ = await tran.MapAsync(async t => await t.RollbackAsync(cancelToken));
                 return error;
             });
 
@@ -72,9 +70,7 @@ public static partial class DataQuerySql
             if (!result.IsSucc)
                 return result;
 
-            // commit transaction
-            async void Commit(DbTransaction t) => await t.CommitAsync(cancelToken);
-            var _ = await tran.IterAsync(Commit);
+            var _ = await tran.MapAsync(async t => await t.CommitAsync(cancelToken));
 
             return result;
         });
