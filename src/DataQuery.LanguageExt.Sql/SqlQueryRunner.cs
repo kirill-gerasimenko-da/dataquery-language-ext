@@ -52,25 +52,19 @@ public static partial class DataQuerySql
             await using var cnn = _sqlConnectionFactory();
             await cnn.OpenAsync(cancelToken);
 
-            Option<DbTransaction> tran = isolationLevel.Case switch
+            DbTransaction tran = isolationLevel.Case switch
             {
                 IsolationLevel level => await cnn.BeginTransactionAsync(level, cancelToken),
-                _ => None
+                _ => null
             };
 
-            var runtime = _runtimeFactory(cnn, tran.Map(t => (IDbTransaction) t), cancelToken);
+            var runtime = _runtimeFactory(cnn, tran, cancelToken);
 
-            var finalQuery = query.MapFailAsync(async error =>
-            {
-                var _ = await tran.MapAsync(async t => await t.RollbackAsync(cancelToken));
-                return error;
-            });
-
-            var result = await finalQuery.Run(runtime);
-            if (!result.IsSucc)
-                return result;
-
-            var _ = await tran.MapAsync(async t => await t.CommitAsync(cancelToken));
+            var result = await query.Run(runtime);
+            if (result.IsSucc)
+                await tran!.CommitAsync(cancelToken);
+            else
+                await tran!.RollbackAsync(cancelToken);
 
             return result;
         });
