@@ -21,6 +21,19 @@ public static partial class DataQuerySql
             bool buffered,
             CancellationToken cancelToken);
 
+        ValueTask<IEnumerable<T>> QueryMultiMap<T>(
+            IDbConnection cnn,
+            string sql,
+            Type[] types,
+            Func<object[], T> map,
+            object param,
+            IDbTransaction transaction,
+            bool buffered,
+            string splitOn,
+            int? commandTimeout,
+            CommandType? commandType,
+            CancellationToken cancelToken);
+
         ValueTask<T> QueryFirst<T>(
             IDbConnection cnn,
             string sql,
@@ -115,6 +128,30 @@ public static partial class DataQuerySql
                     commandType,
                     buffered ? CommandFlags.Buffered : CommandFlags.None,
                     cancellationToken: cancelToken));
+
+        public async ValueTask<IEnumerable<T>> QueryMultiMap<T>(
+            IDbConnection cnn,
+            string sql,
+            Type[] types,
+            Func<object[], T> map,
+            object param,
+            IDbTransaction transaction,
+            bool buffered,
+            string splitOn,
+            int? commandTimeout,
+            CommandType? commandType,
+            CancellationToken _)
+            =>
+                await cnn.QueryAsync(
+                    sql,
+                    types,
+                    map,
+                    param,
+                    transaction,
+                    buffered,
+                    splitOn,
+                    commandTimeout,
+                    commandType);
 
         public async ValueTask<T> QueryFirst<T>(
             IDbConnection cnn,

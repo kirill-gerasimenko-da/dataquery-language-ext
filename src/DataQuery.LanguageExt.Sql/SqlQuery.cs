@@ -1,5 +1,6 @@
 namespace DataQuery.LanguageExt.Sql;
 
+using System;
 using System.Data;
 
 public static partial class DataQuerySql
@@ -27,6 +28,94 @@ public static partial class DataQuerySql
 
     public abstract record SqlQueryBaseRT<T>
     {
+        protected Aff<RT, Seq<T>> QueryMultiMap
+        <
+            RT, TFirst, TSecond, TThird, TFourth, TFifth
+        >
+        (string sql, Func<TFirst, TSecond, TThird, TFourth, TFifth, T> map,
+            object param = null, string splitOn = "Id",
+            int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT> =>
+            SqlDb<RT>.QueryMultiMap(sql, map, param, splitOn, cmdTimeout, cmdType);
+
+        protected Aff<RT, Seq<V>> QueryMultiMap
+        <
+            RT, TFirst, TSecond, TThird, TFourth, TFifth, V
+        >
+        (string sql, Func<TFirst, TSecond, TThird, TFourth, TFifth, V> map,
+            object param = null, string splitOn = "Id",
+            int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.QueryMultiMap(sql, map, param, splitOn, cmdTimeout, cmdType);
+
+        protected Aff<RT, Seq<T>> QueryMultiMap
+        <
+            RT, TFirst, TSecond, TThird, TFourth
+        >
+        (string sql, Func<TFirst, TSecond, TThird, TFourth, T> map,
+            object param = null, string splitOn = "Id",
+            int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.QueryMultiMap(
+                    sql, map, param, splitOn, cmdTimeout, cmdType);
+
+        protected Aff<RT, Seq<V>> QueryMultiMap
+        <
+            RT, TFirst, TSecond, TThird, TFourth, V
+        >
+        (string sql, Func<TFirst, TSecond, TThird, TFourth, V> map,
+            object param = null, string splitOn = "Id",
+            int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.QueryMultiMap(sql, map, param, splitOn, cmdTimeout, cmdType);
+
+        protected Aff<RT, Seq<T>> QueryMultiMap
+        <
+            RT, TFirst, TSecond, TThird
+        >
+        (string sql, Func<TFirst, TSecond, TThird, T> map,
+            object param = null, string splitOn = "Id",
+            int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.QueryMultiMap(sql, map, param, splitOn, cmdTimeout, cmdType);
+
+        protected Aff<RT, Seq<V>> QueryMultiMap
+        <
+            RT, TFirst, TSecond, TThird, V
+        >
+        (string sql, Func<TFirst, TSecond, TThird, V> map,
+            object param = null, string splitOn = "Id",
+            int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.QueryMultiMap(sql, map, param, splitOn, cmdTimeout, cmdType);
+
+        protected Aff<RT, Seq<T>> QueryMultiMap
+        <
+            RT, TFirst, TSecond
+        >
+        (string sql, Func<TFirst, TSecond, T> map,
+            object param = null, string splitOn = "Id",
+            int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.QueryMultiMap(sql, map, param, splitOn, cmdTimeout, cmdType);
+
+        protected Aff<RT, Seq<V>> QueryMultiMap
+        <
+            RT, TFirst, TSecond, V
+        >
+        (string sql, Func<TFirst, TSecond, V> map,
+            object param = null, string splitOn = "Id",
+            int? cmdTimeout = null, CommandType? cmdType = null)
+            where RT : struct, HasSqlDatabase<RT>
+            =>
+                SqlDb<RT>.QueryMultiMap(sql, map, param, splitOn, cmdTimeout, cmdType);
+
         protected Aff<RT, Seq<T>> Query<RT>(
             string sql, object param = null, int? cmdTimeout = null, CommandType? cmdType = null)
             where RT : struct, HasSqlDatabase<RT>
