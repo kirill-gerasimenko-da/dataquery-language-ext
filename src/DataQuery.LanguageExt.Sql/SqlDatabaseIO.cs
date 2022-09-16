@@ -3,6 +3,7 @@ namespace DataQuery.LanguageExt.Sql;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
@@ -195,14 +196,21 @@ public static partial class DataQuerySql
             int? commandTimeout,
             CommandType? commandType,
             CancellationToken cancelToken)
-            =>
-                Optional(await cnn.QueryFirstOrDefaultAsync<T>(new CommandDefinition(
-                    sql,
-                    param,
-                    transaction,
-                    commandTimeout,
-                    commandType,
-                    cancellationToken: cancelToken)));
+        {
+            var entities = await cnn.QueryAsync<T>(new CommandDefinition(
+                sql,
+                param,
+                transaction,
+                commandTimeout,
+                commandType,
+                flags: CommandFlags.None, // disable buffering
+                cancellationToken: cancelToken));
+
+            foreach (var entity in entities)
+                return entity;
+
+            return None;
+        }
 
         public async ValueTask<Option<T>> TryQuerySingle<T>(
             IDbConnection cnn,
@@ -212,14 +220,32 @@ public static partial class DataQuerySql
             int? commandTimeout,
             CommandType? commandType,
             CancellationToken cancelToken)
-            =>
-                Optional(await cnn.QuerySingleOrDefaultAsync<T>(new CommandDefinition(
-                    sql,
-                    param,
-                    transaction,
-                    commandTimeout,
-                    commandType,
-                    cancellationToken: cancelToken)));
+        {
+            var entities = await cnn.QueryAsync<T>(new CommandDefinition(
+                sql,
+                param,
+                transaction,
+                commandTimeout,
+                commandType,
+                flags: CommandFlags.None, // disable buffering
+                cancellationToken: cancelToken));
+
+            Option<T> result = default;
+
+            var i = 0;
+            foreach (var entity in entities)
+            {
+                if (i++ == 0)
+                {
+                    result = entity;
+                    continue;
+                }
+
+                throw new InvalidOperationException("There are multiple results available when single expected");
+            }
+
+            return result;
+        }
 
         public async ValueTask<int> Execute(
             IDbConnection cnn,
