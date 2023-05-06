@@ -1,8 +1,10 @@
 namespace DataQuery.LanguageExt.Sql;
 
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
+using System.Threading.Tasks;
 
 public static partial class DataQuerySql
 {
@@ -58,13 +60,22 @@ public static partial class DataQuerySql
                 _ => null
             };
 
-            var runtime = _runtimeFactory(cnn, tran, cancelToken);
+            RT runtime;
+            try
+            {
+                runtime = _runtimeFactory(cnn, tran, cancelToken);
+            }
+            catch
+            {
+                if (tran != null) await tran.RollbackAsync(cancelToken);
+                throw;
+            }
 
             var result = await query.Run(runtime);
-            if (result.IsSucc)
-                await tran!.CommitAsync(cancelToken);
-            else
-                await tran!.RollbackAsync(cancelToken);
+            switch (result.IsSucc) { 
+                case true when tran != null: await tran.CommitAsync(cancelToken); break;
+                case false when tran != null: await tran.RollbackAsync(cancelToken); break;
+            }
 
             return result;
         });
