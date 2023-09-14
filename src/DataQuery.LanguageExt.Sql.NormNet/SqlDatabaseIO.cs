@@ -2,7 +2,9 @@ namespace DataQuery.LanguageExt.Sql.NormNet;
 
 using System.Data.Common;
 using System.Threading;
+using global::LanguageExt.Effects.Traits;
 using Norm;
+using static global::LanguageExt.Prelude;
 
 public abstract class DataQuery
 {
@@ -27,7 +29,7 @@ public class GetUser3
 {
     public void Invoke()
     {
-        DataQuery.Connection.Execute("").Execute("");
+        var x = Eff(() => DataQuery.Connection.Execute("").Execute("")).Run().Match(_ => 1, _ => 2);
     }
 }
 

@@ -70,11 +70,11 @@ public class DataQueryDiagnosticAnalyzer : DiagnosticAnalyzer
         }
 
         if (!hasInvokeMethod)
-            context.ReportDiagnostic(Diagnostic.Create(FunctionGenerator.NoInvokeMethodFound,
+            context.ReportDiagnostic(Diagnostic.Create(DataQueryGenerator.NoInvokeMethodFound,
                 classSymbol.Locations.FirstOrDefault(),
                 classSymbol.Name));
     }
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-        ImmutableArray.Create(FunctionGenerator.NoInvokeMethodFound);
+        ImmutableArray.Create(DataQueryGenerator.NoInvokeMethodFound);
 }

@@ -17,7 +17,7 @@ public record InputParameter
     public string TypeName { get; set; }
 }
 
-public record FuncMetadata
+public record DataQueryMetadata
 {
     public ClassDeclarationSyntax ClassDeclarationSyntax { get; set; }
 
@@ -41,7 +41,7 @@ public record FuncMetadata
 
 [Generator]
 [SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1036:Specify analyzer banned API enforcement setting")]
-public class FunctionGenerator : IIncrementalGenerator
+public class DataQueryGenerator : IIncrementalGenerator
 {
     public static readonly DiagnosticDescriptor NoInvokeMethodFound = new(
         id: "TUTLS01",
@@ -85,18 +85,18 @@ public class FunctionGenerator : IIncrementalGenerator
             }
             else
             {
-                var result = FunctionSourcesGenerator.GenerateDelegates(del);
+                var result = DataQuerySourcesGenerator.GenerateDelegates(del);
                 context.AddSource($"{del.NamespaceName}.{del.FuncName}.g.cs", SourceText.From(result, Encoding.UTF8));
             }
         }
     }
 
-    static List<FuncMetadata> GetTypesToGenerate(
+    static List<DataQueryMetadata> GetTypesToGenerate(
         Compilation compilation,
         IEnumerable<ClassDeclarationSyntax> classes,
         CancellationToken ct)
     {
-        var functionsToGenerate = new List<FuncMetadata>();
+        var functionsToGenerate = new List<DataQueryMetadata>();
 
         var recordAttribute = compilation.GetTypeByMetadataName("DataQuery.LanguageExt.Sql.NormNet.DataQueryAttribute");
         if (recordAttribute == null)
@@ -110,7 +110,7 @@ public class FunctionGenerator : IIncrementalGenerator
             if (semanticModel.GetDeclaredSymbol(classDeclarationSyntax) is not INamedTypeSymbol classSymbol)
                 continue;
 
-            var func = new FuncMetadata
+            var func = new DataQueryMetadata
             {
                 ClassDeclarationSyntax = classDeclarationSyntax,
                 FuncName = classSymbol.Name,

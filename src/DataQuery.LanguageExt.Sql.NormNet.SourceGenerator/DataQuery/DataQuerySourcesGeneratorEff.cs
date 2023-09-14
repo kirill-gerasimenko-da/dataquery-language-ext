@@ -3,9 +3,9 @@ namespace DataQuery.LanguageExt.Sql.NormNet.SourceGenerator.DataQuery;
 using System.Collections.Generic;
 using System.Linq;
 
-public static class FunctionSourcesGeneratorEff
+public static class DataQuerySourcesGeneratorEff
 {
-    public class FuncEff
+    public class DataQueryEff
     {
         public string FuncName { get; set; }
         public string NamespaceName { get; set; }
@@ -16,7 +16,7 @@ public static class FunctionSourcesGeneratorEff
         public List<InputParameter> Parameters { get; set; } = new();
     }
 
-    public static string GenerateAff(FuncEff meta)
+    public static string GenerateEff(DataQueryEff meta)
     {
         var outerClassBegin = meta.ParentClassName != null
             ? $@"public {(meta.ParentClassIsStatic ? "static" : "")} partial class {meta.ParentClassName}

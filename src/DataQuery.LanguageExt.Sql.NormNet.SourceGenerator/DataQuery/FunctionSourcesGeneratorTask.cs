@@ -3,9 +3,9 @@ namespace DataQuery.LanguageExt.Sql.NormNet.SourceGenerator.DataQuery;
 using System.Collections.Generic;
 using System.Linq;
 
-public static class FunctionSourcesGeneratorTask
+public static class DataQuerySourcesGeneratorTask
 {
-    public class FuncTask
+    public class DataQueryTask
     {
         public string FuncName { get; set; }
         public string NamespaceName { get; set; }
@@ -16,7 +16,7 @@ public static class FunctionSourcesGeneratorTask
         public List<InputParameter> Parameters { get; set; } = new();
     }
 
-    public static string GenerateAff(FuncTask meta)
+    public static string GenerateAff(DataQueryTask meta)
     {
         var outerClassBegin = meta.ParentClassName != null
             ? $@"public {(meta.ParentClassIsStatic ? "static" : "")} partial class {meta.ParentClassName}

@@ -2,12 +2,12 @@ namespace DataQuery.LanguageExt.Sql.NormNet.SourceGenerator.DataQuery;
 
 using System;
 
-public static class FunctionSourcesGenerator
+public static class DataQuerySourcesGenerator
 {
-    public static string GenerateDelegates(FuncMetadata meta) => meta switch
+    public static string GenerateDelegates(DataQueryMetadata meta) => meta switch
     {
-        { ReturnIsTask: true } => FunctionSourcesGeneratorTask.GenerateAff(
-            new FunctionSourcesGeneratorTask.FuncTask
+        { ReturnIsTask: true } => DataQuerySourcesGeneratorTask.GenerateAff(
+            new DataQuerySourcesGeneratorTask.DataQueryTask
             {
                 FuncName = meta.FuncName,
                 Parameters = meta.Parameters,
@@ -17,8 +17,8 @@ public static class FunctionSourcesGenerator
                 ReturnSubTypeName = meta.ReturnSubTypeName
             }
         ),
-        { ReturnIsAff: true } => FunctionSourcesGeneratorAff.GenerateAff(
-            new FunctionSourcesGeneratorAff.FuncAff
+        { ReturnIsAff: true } => DataQuerySourcesGeneratorAff.GenerateAff(
+            new DataQuerySourcesGeneratorAff.DataQueryAff
             {
                 FuncName = meta.FuncName,
                 Parameters = meta.Parameters,
@@ -27,8 +27,8 @@ public static class FunctionSourcesGenerator
                 ParentClassIsStatic = meta.ParentClassIsStatic,
                 ReturnSubTypeName = meta.ReturnSubTypeName
             }),
-        { ReturnIsEff: true } => FunctionSourcesGeneratorEff.GenerateAff(
-            new FunctionSourcesGeneratorEff.FuncEff
+        { ReturnIsEff: true } => DataQuerySourcesGeneratorEff.GenerateEff(
+            new DataQuerySourcesGeneratorEff.DataQueryEff
             {
                 FuncName = meta.FuncName,
                 Parameters = meta.Parameters,
