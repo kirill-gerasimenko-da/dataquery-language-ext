@@ -8,7 +8,10 @@ public class GetUser
 {
     public async Task<Unit> Invoke()
     {
-        Connection.Read("");
+        var t  = await Connection.WithCancellationToken(Token).ReadAsync("").FirstOrDefaultAsync();
+
+        var tt = t.Map(x => new { x.name, x.value});
+
         return unit;
     }
 }
