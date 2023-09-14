@@ -10,6 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{AE
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Sql.NormNet", "DataQuery.LanguageExt.Sql.NormNet\DataQuery.LanguageExt.Sql.NormNet.csproj", "{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Sql.NormNet.SourceGenerator", "DataQuery.LanguageExt.Sql.NormNet.SourceGenerator\DataQuery.LanguageExt.Sql.NormNet.SourceGenerator.csproj", "{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,5 +27,13 @@ Global
 		{A43B52E6-5310-414E-8987-222243A07C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A43B52E6-5310-414E-8987-222243A07C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A43B52E6-5310-414E-8987-222243A07C85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
