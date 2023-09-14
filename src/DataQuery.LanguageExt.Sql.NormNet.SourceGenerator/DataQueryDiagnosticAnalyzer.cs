@@ -38,7 +38,7 @@ public class DataQueryDiagnosticAnalyzer : DiagnosticAnalyzer
             var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
             var fullName = attributeContainingTypeSymbol.ToDisplayString();
 
-            if (fullName == "DataQuery.LanguageExt.Sql.NormNet.DataQueryNorm.DataQueryAttribute")
+            if (fullName == "DataQuery.LanguageExt.Sql.NormNet.DataQueryAttribute")
             {
                 hasFunctionAttribute = true;
                 break;

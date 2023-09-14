@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Sql.N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Sql.NormNet.SourceGenerator", "DataQuery.LanguageExt.Sql.NormNet.SourceGenerator\DataQuery.LanguageExt.Sql.NormNet.SourceGenerator.csproj", "{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{C0E222DF-BF50-4DAD-8877-44A395DD5635}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,5 +37,9 @@ Global
 		{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

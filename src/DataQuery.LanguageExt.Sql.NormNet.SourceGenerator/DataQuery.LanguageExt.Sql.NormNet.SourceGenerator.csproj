@@ -7,7 +7,7 @@
         <Nullable>disable</Nullable>
         <LangVersion>10</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>1.0.1</Version>
+        <Version>0.0.8</Version>
     </PropertyGroup>
 
     <ItemGroup>

@@ -2,26 +2,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Nullable>disable</Nullable>
-    <PackageVersion>0.0.3</PackageVersion>
-    <Title>Opiniated dataquery approach, using Dapper, LanguageExt and Npgsql</Title>
+    <PackageVersion>0.0.8</PackageVersion>
+    <Title>Opiniated dataquery approach, using Norm.Net, LanguageExt and Npgsql</Title>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>Dapper + Npgsql database utilities using Language.Ext</Description>
+    <Description>Norm.Net + Npgsql database utilities using Language.Ext</Description>
     <PackageProjectUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext</RepositoryUrl>
     <Authors>Kirill Gerasimenko</Authors>
     <PackageLicenseUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageTags>language-ext sql dapper</PackageTags>
+    <PackageTags>language-ext sql norm</PackageTags>
     <LangVersion>11</LangVersion>
-    <PackageId>DataQuery.LanguageExt</PackageId>
+    <PackageId>DataQuery.LanguageExt.Sql.NormNet</PackageId>
     <Product>DataQuery.LanguageExt.Sql</Product>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LanguageExt.Core" Version="4.4.4" />
-    <PackageReference Include="LanguageExt.Sys" Version="4.4.4" />
     <PackageReference Include="Norm.net" Version="5.3.8" />
     <PackageReference Include="Npgsql" Version="7.0.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+    <PackageReference Include="TheUtils" Version="0.0.18" />
   </ItemGroup>
 </Project>

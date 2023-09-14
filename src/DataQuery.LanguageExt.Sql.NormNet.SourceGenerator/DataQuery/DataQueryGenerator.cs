@@ -98,7 +98,7 @@ public class DataQueryGenerator : IIncrementalGenerator
     {
         var functionsToGenerate = new List<DataQueryMetadata>();
 
-        var recordAttribute = compilation.GetTypeByMetadataName("DataQuery.LanguageExt.Sql.NormNet.DataQueryNorm.DataQueryAttribute");
+        var recordAttribute = compilation.GetTypeByMetadataName("DataQuery.LanguageExt.Sql.NormNet.DataQueryAttribute");
         if (recordAttribute == null)
             return functionsToGenerate;
 
@@ -368,7 +368,7 @@ public class DataQueryGenerator : IIncrementalGenerator
             var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
             var fullName = attributeContainingTypeSymbol.ToDisplayString();
 
-            if (fullName == "DataQuery.LanguageExt.Sql.NormNet.DataQueryNorm.DataQueryAttribute")
+            if (fullName == "DataQuery.LanguageExt.Sql.NormNet.DataQueryAttribute")
                 return classDeclarationSyntax;
         }
 
