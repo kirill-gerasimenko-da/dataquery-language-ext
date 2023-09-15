@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class DataQueryDiagnosticAnalyzer : DiagnosticAnalyzer
+public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
 {
     public override void Initialize(AnalysisContext context)
     {
@@ -38,7 +38,7 @@ public class DataQueryDiagnosticAnalyzer : DiagnosticAnalyzer
             var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
             var fullName = attributeContainingTypeSymbol.ToDisplayString();
 
-            if (fullName == "DataQuery.LanguageExt.Sql.NormNet.DataQueryAttribute")
+            if (fullName == "DataQuery.LanguageExt.Sql.NormNet.DbQueryAttribute")
             {
                 hasFunctionAttribute = true;
                 break;
@@ -63,7 +63,17 @@ public class DataQueryDiagnosticAnalyzer : DiagnosticAnalyzer
             {
                 if (msr.Name == "Invoke")
                 {
-                    hasInvokeMethod = true;
+                    if (msr.Parameters.Length == 0)
+                        break;
+
+                    var dbConnection = msr.Parameters.First();
+                    if (dbConnection.Type.ToDisplayString() == "System.Data.Common.DbConnection" &&
+                        (msr.ReturnType.MetadataName == "ValueTask`1" ||
+                         msr.ReturnType.MetadataName == "ValueTask" ||
+                         msr.ReturnType.MetadataName == "Task`1" ||
+                         msr.ReturnType.MetadataName == "Task"))
+                        hasInvokeMethod = true;
+
                     break;
                 }
             }

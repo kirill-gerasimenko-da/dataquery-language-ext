@@ -55,7 +55,12 @@ namespace {meta.NamespaceName}
     using Unit = LanguageExt.Unit;
 
     {outerClassBegin}
-    public delegate Aff<{meta.ReturnSubTypeName}> {meta.FuncName}Aff({inputParams});
+    public delegate Aff
+    <
+        DataQuery.LanguageExt.Sql.NormNet.QueryRuntime,
+        {meta.ReturnSubTypeName}
+    > {meta.FuncName}Aff({inputParams});
+
     public delegate ValueTask<Fin<{meta.ReturnSubTypeName}>> {meta.FuncName}Safe({inputParams});
     public delegate ValueTask<{meta.ReturnSubTypeName}> {meta.FuncName}Unsafe({inputParams});
     {outerClassEnd}

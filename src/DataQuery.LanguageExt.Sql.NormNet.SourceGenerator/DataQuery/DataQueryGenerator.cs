@@ -98,7 +98,7 @@ public class DataQueryGenerator : IIncrementalGenerator
     {
         var functionsToGenerate = new List<DataQueryMetadata>();
 
-        var recordAttribute = compilation.GetTypeByMetadataName("DataQuery.LanguageExt.Sql.NormNet.DataQueryAttribute");
+        var recordAttribute = compilation.GetTypeByMetadataName("DataQuery.LanguageExt.Sql.NormNet.DbQueryAttribute");
         if (recordAttribute == null)
             return functionsToGenerate;
 
@@ -125,94 +125,7 @@ public class DataQueryGenerator : IIncrementalGenerator
                                            && msr.IsStatic == false
                                            && msr.DeclaredAccessibility == Accessibility.Public)
                 {
-                    if (msr.Name == "Invoke" && msr.ReturnType.MetadataName == "Aff`1")
-                    {
-                        func.ReturnIsAff = true;
-                        func.ReturnTypeName = msr.ReturnType.ToMinimalDisplayString(semanticModel, 0);
-
-                        var returnIsFin =
-                            Regex.IsMatch(func.ReturnTypeName, @"^LanguageExt\.Aff\<Fin\<.*\>\>$");
-
-                        if (returnIsFin)
-                            func.ReturnSubTypeName =
-                                Regex.Match(func.ReturnTypeName, @"^LanguageExt\.Aff\<Fin\<(.*)\>\>$").Groups[1]
-                                    .Value;
-                        else
-                        {
-                            func.ReturnSubTypeName = Regex.Match(func.ReturnTypeName, @"^LanguageExt\.Aff\<(.*)\>$")
-                                .Groups[1].Value;
-                        }
-
-                        foreach (var p in msr.Parameters)
-                        {
-                            func.Parameters.Add(new InputParameter
-                            {
-                                Name = p.Name,
-                                TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
-                            });
-                        }
-
-                        func.FoundInvokeFunction = true;
-                    }
-                    else if (msr.Name == "Invoke" && msr.ReturnType.MetadataName == "Eff`1")
-                    {
-                        func.ReturnIsEff = true;
-                        func.ReturnTypeName = msr.ReturnType.ToMinimalDisplayString(semanticModel, 0);
-
-                        var returnIsFin =
-                            Regex.IsMatch(func.ReturnTypeName, @"^LanguageExt\.Eff\<Fin\<.*\>\>$");
-
-                        if (returnIsFin)
-                            func.ReturnSubTypeName =
-                                Regex.Match(func.ReturnTypeName, @"^LanguageExt\.Eff\<Fin\<(.*)\>\>$").Groups[1]
-                                    .Value;
-                        else
-                        {
-                            func.ReturnSubTypeName = Regex.Match(func.ReturnTypeName, @"^LanguageExt\.Eff\<(.*)\>$")
-                                .Groups[1].Value;
-                        }
-
-                        foreach (var p in msr.Parameters)
-                        {
-                            func.Parameters.Add(new InputParameter
-                            {
-                                Name = p.Name,
-                                TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
-                            });
-                        }
-
-                        func.FoundInvokeFunction = true;
-                    }
-                    else if (msr.Name == "Invoke" && msr.ReturnType.MetadataName == "Fin`1")
-                    {
-                        func.ReturnIsEff = true;
-                        func.ReturnTypeName = msr.ReturnType.ToMinimalDisplayString(semanticModel, 0);
-
-                        var returnIsFin =
-                            Regex.IsMatch(func.ReturnTypeName, @"^Fin\<Fin\<.*\>\>$");
-
-                        if (returnIsFin)
-                            func.ReturnSubTypeName =
-                                Regex.Match(func.ReturnTypeName, @"^Fin\<Fin\<(.*)\>\>$").Groups[1]
-                                    .Value;
-                        else
-                        {
-                            func.ReturnSubTypeName =
-                                Regex.Match(func.ReturnTypeName, @"^Fin\<(.*)\>$").Groups[1].Value;
-                        }
-
-                        foreach (var p in msr.Parameters)
-                        {
-                            func.Parameters.Add(new InputParameter
-                            {
-                                Name = p.Name,
-                                TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
-                            });
-                        }
-
-                        func.FoundInvokeFunction = true;
-                    }
-                    else if (msr.Name == "Invoke" && msr.ReturnType.MetadataName == "ValueTask`1")
+                    if (msr.Name == "Invoke" && msr.ReturnType.MetadataName == "ValueTask`1")
                     {
                         func.ReturnTypeName = msr.ReturnType.ToMinimalDisplayString(semanticModel, 0);
                         func.ReturnIsTask = true;
@@ -304,39 +217,6 @@ public class DataQueryGenerator : IIncrementalGenerator
 
                         func.FoundInvokeFunction = true;
                     }
-                    else if (msr.Name == "Invoke" && msr.ReturnType.MetadataName == "Void")
-                    {
-                        func.ReturnIsEff = true;
-                        func.ReturnSubTypeName = "Unit";
-
-                        foreach (var p in msr.Parameters)
-                        {
-                            func.Parameters.Add(new InputParameter
-                            {
-                                Name = p.Name,
-                                TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
-                            });
-                        }
-
-                        func.FoundInvokeFunction = true;
-                    }
-                    else if (msr.Name == "Invoke")
-                    {
-                        func.ReturnIsEff = true;
-                        func.ReturnTypeName = msr.ReturnType.ToMinimalDisplayString(semanticModel, 0);
-                        func.ReturnSubTypeName = func.ReturnTypeName;
-
-                        foreach (var p in msr.Parameters)
-                        {
-                            func.Parameters.Add(new InputParameter
-                            {
-                                Name = p.Name,
-                                TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
-                            });
-                        }
-
-                        func.FoundInvokeFunction = true;
-                    }
                 }
             }
 
@@ -368,7 +248,7 @@ public class DataQueryGenerator : IIncrementalGenerator
             var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
             var fullName = attributeContainingTypeSymbol.ToDisplayString();
 
-            if (fullName == "DataQuery.LanguageExt.Sql.NormNet.DataQueryAttribute")
+            if (fullName == "DataQuery.LanguageExt.Sql.NormNet.DbQueryAttribute")
                 return classDeclarationSyntax;
         }
 

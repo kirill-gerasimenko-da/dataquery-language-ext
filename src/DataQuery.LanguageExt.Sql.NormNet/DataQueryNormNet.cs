@@ -1,21 +1,27 @@
+// ReSharper disable MemberCanBePrivate.Global
 namespace DataQuery.LanguageExt.Sql.NormNet;
 
 using System.Data.Common;
 using System.Threading;
+using global::LanguageExt;
 using global::LanguageExt.Effects.Traits;
+using static global::LanguageExt.Prelude;
 
 public static class DataQueryNormNet
 {
     public abstract class QueryContext
     {
-        public static CancellationToken Token => default(QueryRuntime).CancellationToken;
-        public static DbConnection Connection => default(QueryRuntime).Connection;
+        public static Aff<QueryRuntime, CancellationToken> token() =>
+            Eff<QueryRuntime, CancellationToken>(rt => rt.CancellationToken);
+
+        public static Aff<QueryRuntime, DbConnection> connection() =>
+            Eff<QueryRuntime, DbConnection>(rt => rt.Connection);
     }
 
     public interface HasConnection<out RT> : HasCancel<RT>
         where RT : struct, HasConnection<RT>
     {
-        public DbConnection Connection { get; }
+        DbConnection Connection { get; }
     }
 
     public readonly struct QueryRuntime : HasConnection<QueryRuntime>

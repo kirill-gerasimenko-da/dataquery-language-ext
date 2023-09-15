@@ -1,17 +1,15 @@
 namespace ConsoleApp1;
 
-using Norm;
-using static QueryContext;
+using System.Data.Common;
 
-[DataQuery]
+[DbQuery]
 public class GetUser
 {
-    public async Task<Unit> Invoke()
+    // public Aff<QueryRuntime, Unit> Invoke() => connection().MapAsync(Invoke2);
+
+    public async Task<Unit> Invoke(DbConnection conn)
     {
-        var t  = await Connection.WithCancellationToken(Token).ReadAsync("").FirstOrDefaultAsync();
-
-        var tt = t.Map(x => new { x.name, x.value});
-
+        // await connection.ReadAsync("").SingleAsync();
         return unit;
     }
 }
