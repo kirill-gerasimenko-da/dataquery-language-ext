@@ -30,8 +30,6 @@ public record DataQueryMetadata
     public List<InputParameter> Parameters { get; } = new();
 
     public bool ReturnIsTask { get; set; }
-    public bool ReturnIsAff { get; set; }
-    public bool ReturnIsEff { get; set; }
 
     public string ReturnTypeName { get; set; }
     public string ReturnSubTypeName { get; set; }
@@ -80,8 +78,9 @@ public class DataQueryGenerator : IIncrementalGenerator
         {
             if (!del.FoundInvokeFunction)
             {
-                context.ReportDiagnostic(
-                    Diagnostic.Create(NoInvokeMethodFound, del.ClassDeclarationSyntax.GetLocation(), del.FuncName));
+                // kir: this is now done via analyzer
+                // context.ReportDiagnostic(
+                //     Diagnostic.Create(NoInvokeMethodFound, del.ClassDeclarationSyntax.GetLocation(), del.FuncName));
             }
             else
             {

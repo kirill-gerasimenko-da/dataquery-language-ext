@@ -30,25 +30,52 @@ public static class DataQuerySourcesGeneratorTask
 
         var inputParams = string.Join(", ", meta
             .Parameters
+            .Where(p => p.TypeName != "System.Data.Common.DbConnection" &&
+                        p.TypeName != "Option<System.Data.Common.DbTransaction>" &&
+                        p.TypeName != "CancellationToken")
             .Select(p => $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
 
         var inputTypes = string.Join(", ", meta
             .Parameters
             .Select(p => p.TypeName));
 
-        var inputAsLambdaParams = string.Join(", ", meta.Parameters
+        var inputAsLambdaParams = string.Join(", ", meta
+            .Parameters
+            .Where(p => p.TypeName != "System.Data.Common.DbConnection" &&
+                        p.TypeName != "Option<System.Data.Common.DbTransaction>" &&
+                        p.TypeName != "CancellationToken")
             .Select(p => $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
+
+        // Option<System.Data.Common.DbTransaction>
+
+        var inputAsInvokeParams = string.Join(", ", meta
+            .Parameters
+            .Select(p =>
+            {
+                if (p.TypeName == "System.Data.Common.DbConnection")
+                    return "___y.___conn";
+                if (p.TypeName == "CancellationToken")
+                    return "___y.___token";
+                if (p.TypeName == "Option<System.Data.Common.DbTransaction>")
+                    return "___y.___trans";
+
+                return $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}";
+            }));
 
         return @$"
 #pragma warning disable CS0105
 
+using Norm;
 using System.Threading;
 using System.Threading.Tasks;
 using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
+using static DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext;
 using TheUtils;
 using System.Runtime.CompilerServices;
+
+// TYPES: {inputTypes}
 
 namespace {meta.NamespaceName}
 {{
@@ -57,12 +84,9 @@ namespace {meta.NamespaceName}
     {outerClassBegin}
     public delegate Aff
     <
-        DataQuery.LanguageExt.Sql.NormNet.QueryRuntime,
+        DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryRuntime,
         {meta.ReturnSubTypeName}
-    > {meta.FuncName}Aff({inputParams});
-
-    public delegate ValueTask<Fin<{meta.ReturnSubTypeName}>> {meta.FuncName}Safe({inputParams});
-    public delegate ValueTask<{meta.ReturnSubTypeName}> {meta.FuncName}Unsafe({inputParams});
+    > {meta.FuncName}Query({inputParams});
     {outerClassEnd}
 }}
 
@@ -71,21 +95,13 @@ namespace TheUtils.DependencyInjection
     using Unit = LanguageExt.Unit;
     using {meta.NamespaceName};
     using Microsoft.Extensions.DependencyInjection;
-    using TheUtils;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.Extensions.DependencyInjection;
-    using TheUtils;
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using static TheUtils.FunctionTransforms;
-    using static TheUtils.FunctionTransforms;
 
     public static partial class ServiceCollectionFunctionExtensions
     {{
-        public static IServiceCollection Add{meta.FuncName}Function
+        public static IServiceCollection Add{meta.FuncName}Query
         (
             this IServiceCollection services,
             ServiceLifetime lifetime
@@ -97,33 +113,16 @@ namespace TheUtils.DependencyInjection
                 lifetime));
 
             services.Add(new(
-                serviceType: typeof({parentClassPrefix}{meta.FuncName}Aff),
-                factory: x => new {parentClassPrefix}{meta.FuncName}Aff(
-                    ({inputAsLambdaParams}) =>
-                        Transform(async () =>
-                            await x.GetRequiredService<{parentClassPrefix}{meta.FuncName}>().Invoke({inputAsLambdaParams})
-                        )
-                ),
-                lifetime));
-
-            services.Add(new(
-                serviceType: typeof({parentClassPrefix}{meta.FuncName}Safe),
-                factory: x => new {parentClassPrefix}{meta.FuncName}Safe(
-                    ({inputAsLambdaParams}) =>
-                        Transform(async () =>
-                            await x.GetRequiredService<{parentClassPrefix}{meta.FuncName}>().Invoke({inputAsLambdaParams})
-                        ).Run()
-                ),
-                lifetime));
-
-            services.Add(new(
-                serviceType: typeof({parentClassPrefix}{meta.FuncName}Unsafe),
-                factory: x => new {parentClassPrefix}{meta.FuncName}Unsafe(
-                    ({inputAsLambdaParams}) => 
-                        Transform(async () =>
-                            await x.GetRequiredService<{parentClassPrefix}{meta.FuncName}>().Invoke({inputAsLambdaParams})
-                        ).Run().ThrowIfFail()
-                ),
+                serviceType: typeof({parentClassPrefix}{meta.FuncName}Query),
+                factory: ___x => new {parentClassPrefix}{meta.FuncName}Query(
+                    ({inputAsLambdaParams}) => (
+                         from ___conn in DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext.connection()
+                         from ___token in DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext.token()
+                         from ___trans in DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext.transaction()
+                         select (___conn, ___token)
+                        ).MapAsync(async ___y =>
+                            await ___x.GetRequiredService<GetUser>()
+                                .Invoke({inputAsInvokeParams}))),
                 lifetime));
 
             return services;

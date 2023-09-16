@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <PackageReference Include="DataQuery.LanguageExt.Sql.NormNet" Version="0.0.9" />
-      <PackageReference Include="DataQuery.LanguageExt.Sql.NormNet.SourceGenerator" Version="0.0.10" />
+      <PackageReference Include="DataQuery.LanguageExt.Sql.NormNet.SourceGenerator" Version="0.0.23" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     </ItemGroup>
 

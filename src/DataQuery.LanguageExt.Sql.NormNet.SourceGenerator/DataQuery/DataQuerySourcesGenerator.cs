@@ -17,26 +17,6 @@ public static class DataQuerySourcesGenerator
                 ReturnSubTypeName = meta.ReturnSubTypeName
             }
         ),
-        { ReturnIsAff: true } => DataQuerySourcesGeneratorAff.GenerateAff(
-            new DataQuerySourcesGeneratorAff.DataQueryAff
-            {
-                FuncName = meta.FuncName,
-                Parameters = meta.Parameters,
-                NamespaceName = meta.NamespaceName,
-                ParentClassName = meta.ParentClassName,
-                ParentClassIsStatic = meta.ParentClassIsStatic,
-                ReturnSubTypeName = meta.ReturnSubTypeName
-            }),
-        { ReturnIsEff: true } => DataQuerySourcesGeneratorEff.GenerateEff(
-            new DataQuerySourcesGeneratorEff.DataQueryEff
-            {
-                FuncName = meta.FuncName,
-                Parameters = meta.Parameters,
-                NamespaceName = meta.NamespaceName,
-                ParentClassName = meta.ParentClassName,
-                ParentClassIsStatic = meta.ParentClassIsStatic,
-                ReturnSubTypeName = meta.ReturnSubTypeName
-            }),
         _ => throw new ArgumentOutOfRangeException(nameof(meta))
     };
 }

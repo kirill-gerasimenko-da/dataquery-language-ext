@@ -66,12 +66,11 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
                     if (msr.Parameters.Length == 0)
                         break;
 
-                    var dbConnection = msr.Parameters.First();
-                    if (dbConnection.Type.ToDisplayString() == "System.Data.Common.DbConnection" &&
+                    if (msr.Parameters.Any(dbConn => dbConn.Type.ToDisplayString() == "System.Data.Common.DbConnection" &&
                         (msr.ReturnType.MetadataName == "ValueTask`1" ||
                          msr.ReturnType.MetadataName == "ValueTask" ||
                          msr.ReturnType.MetadataName == "Task`1" ||
-                         msr.ReturnType.MetadataName == "Task"))
+                         msr.ReturnType.MetadataName == "Task")))
                         hasInvokeMethod = true;
 
                     break;
