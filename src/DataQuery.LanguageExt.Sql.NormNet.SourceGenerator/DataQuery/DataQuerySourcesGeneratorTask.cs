@@ -119,7 +119,7 @@ namespace TheUtils.DependencyInjection
                          from ___conn in DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext.connection()
                          from ___token in DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext.token()
                          from ___trans in DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext.transaction()
-                         select (___conn, ___token)
+                         select (___conn, ___token, ___trans)
                         ).MapAsync(async ___y =>
                             await ___x.GetRequiredService<GetUser>()
                                 .Invoke({inputAsInvokeParams}))),

@@ -1,10 +1,12 @@
 // ReSharper disable MemberCanBePrivate.Global
+
 namespace DataQuery.LanguageExt.Sql.NormNet;
 
 using System.Data.Common;
 using System.Threading;
 using global::LanguageExt;
 using global::LanguageExt.Effects.Traits;
+using Norm;
 using static global::LanguageExt.Prelude;
 
 public static class DataQueryNormNet
@@ -72,4 +74,7 @@ public static class DataQueryNormNet
 
         public QueryRuntimeEnv LocalCancel => new(new CancellationTokenSource(), Connection, None);
     }
+
+    public static Norm WithTransaction(this DbConnection connection, Option<DbTransaction> transaction) =>
+        NormExtensions.WithTransaction(connection, transaction.IfNoneUnsafe((DbTransaction)null));
 }
