@@ -1,9 +1,9 @@
 namespace ConsoleApp1;
 
 using System.Data.Common;
+using DataQuery.LanguageExt.SystemData;
 using Norm;
 using TheUtils;
-using static SystemDataCommon;
 
 [DbQuery]
 public class GetUser

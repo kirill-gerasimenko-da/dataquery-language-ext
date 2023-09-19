@@ -1,4 +1,4 @@
-namespace DataQuery.LanguageExt.SourceGenerator.SystemDataCommon;
+namespace DataQuery.LanguageExt.SourceGenerator.SystemData;
 
 using System.Collections.Immutable;
 using System.Linq;
@@ -37,7 +37,7 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
             var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
             var fullName = attributeContainingTypeSymbol.ToDisplayString();
 
-            if (fullName == "DataQuery.LanguageExt.SystemDataCommon.DbQueryAttribute")
+            if (fullName == "DataQuery.LanguageExt.SystemData.DbQueryAttribute")
             {
                 hasFunctionAttribute = true;
                 break;

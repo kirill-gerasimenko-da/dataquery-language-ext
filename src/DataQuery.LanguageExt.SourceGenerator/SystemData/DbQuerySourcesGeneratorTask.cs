@@ -1,4 +1,4 @@
-namespace DataQuery.LanguageExt.SourceGenerator.SystemDataCommon;
+namespace DataQuery.LanguageExt.SourceGenerator.SystemData;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -71,7 +71,6 @@ using System.Threading.Tasks;
 using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
-using static DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext;
 using TheUtils;
 using System.Runtime.CompilerServices;
 
@@ -84,7 +83,7 @@ namespace {meta.NamespaceName}
     {outerClassBegin}
     public delegate Aff
     <
-        DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryRuntime,
+        DataQuery.LanguageExt.DbQueryRuntime,
         {meta.ReturnSubTypeName}
     > {meta.FuncName}Query({inputParams});
     {outerClassEnd}
@@ -116,9 +115,9 @@ namespace TheUtils.DependencyInjection
                 serviceType: typeof({parentClassPrefix}{meta.FuncName}Query),
                 factory: ___x => new {parentClassPrefix}{meta.FuncName}Query(
                     ({inputAsLambdaParams}) => (
-                         from ___conn in DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext.connection()
-                         from ___token in DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext.token()
-                         from ___trans in DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet.QueryContext.transaction()
+                         from ___conn in DataQuery.LanguageExt.DbQueryContext.connection()
+                         from ___token in DataQuery.LanguageExt.DbQueryContext.token()
+                         from ___trans in DataQuery.LanguageExt.DbQueryContext.transaction()
                          select (___conn, ___token, ___trans)
                         ).MapAsync(async ___y =>
                             await ___x.GetRequiredService<GetUser>()
