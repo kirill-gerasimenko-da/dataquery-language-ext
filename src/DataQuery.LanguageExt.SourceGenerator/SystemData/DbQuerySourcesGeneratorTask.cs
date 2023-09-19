@@ -103,7 +103,7 @@ namespace TheUtils.DependencyInjection
         public static IServiceCollection Add{meta.FuncName}Query
         (
             this IServiceCollection services,
-            ServiceLifetime lifetime
+            ServiceLifetime lifetime = ServiceLifetime.Singleton
         )
         {{
             services.Add(new(
