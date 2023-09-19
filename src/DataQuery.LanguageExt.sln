@@ -10,9 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{AE
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Sql.NormNet", "DataQuery.LanguageExt.Sql.NormNet\DataQuery.LanguageExt.Sql.NormNet.csproj", "{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt", "DataQuery.LanguageExt\DataQuery.LanguageExt.csproj", "{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Sql.NormNet.SourceGenerator", "DataQuery.LanguageExt.Sql.NormNet.SourceGenerator\DataQuery.LanguageExt.Sql.NormNet.SourceGenerator.csproj", "{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.SourceGenerator", "DataQuery.LanguageExt.SourceGenerator\DataQuery.LanguageExt.SourceGenerator.csproj", "{1040E0A4-E11B-4A82-A515-8C52A37C9FAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{C0E222DF-BF50-4DAD-8877-44A395DD5635}"
 EndProject

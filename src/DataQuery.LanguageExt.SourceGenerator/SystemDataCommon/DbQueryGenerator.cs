@@ -1,4 +1,4 @@
-namespace DataQuery.LanguageExt.Sql.NormNet.SourceGenerator.DataQuery;
+namespace DataQuery.LanguageExt.SourceGenerator.SystemDataCommon;
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -39,7 +39,7 @@ public record DataQueryMetadata
 
 [Generator]
 [SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1036:Specify analyzer banned API enforcement setting")]
-public class DataQueryGenerator : IIncrementalGenerator
+public class DbQueryGenerator : IIncrementalGenerator
 {
     public static readonly DiagnosticDescriptor NoInvokeMethodFound = new(
         id: "TUTLS01",
@@ -84,7 +84,7 @@ public class DataQueryGenerator : IIncrementalGenerator
             }
             else
             {
-                var result = DataQuerySourcesGenerator.GenerateDelegates(del);
+                var result = DbQuerySourcesGenerator.GenerateDelegates(del);
                 context.AddSource($"{del.NamespaceName}.{del.FuncName}.g.cs", SourceText.From(result, Encoding.UTF8));
             }
         }

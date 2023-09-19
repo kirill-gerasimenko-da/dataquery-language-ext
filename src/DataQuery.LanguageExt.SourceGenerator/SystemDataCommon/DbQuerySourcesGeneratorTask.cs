@@ -1,9 +1,9 @@
-namespace DataQuery.LanguageExt.Sql.NormNet.SourceGenerator.DataQuery;
+namespace DataQuery.LanguageExt.SourceGenerator.SystemDataCommon;
 
 using System.Collections.Generic;
 using System.Linq;
 
-public static class DataQuerySourcesGeneratorTask
+public static class DbQuerySourcesGeneratorTask
 {
     public class DataQueryTask
     {

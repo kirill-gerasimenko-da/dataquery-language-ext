@@ -1,8 +1,7 @@
-namespace DataQuery.LanguageExt.Sql.NormNet.SourceGenerator;
+namespace DataQuery.LanguageExt.SourceGenerator.SystemDataCommon;
 
 using System.Collections.Immutable;
 using System.Linq;
-using DataQuery;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -79,11 +78,11 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
         }
 
         if (!hasInvokeMethod)
-            context.ReportDiagnostic(Diagnostic.Create(DataQueryGenerator.NoInvokeMethodFound,
+            context.ReportDiagnostic(Diagnostic.Create(DbQueryGenerator.NoInvokeMethodFound,
                 classSymbol.Locations.FirstOrDefault(),
                 classSymbol.Name));
     }
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-        ImmutableArray.Create(DataQueryGenerator.NoInvokeMethodFound);
+        ImmutableArray.Create(DbQueryGenerator.NoInvokeMethodFound);
 }

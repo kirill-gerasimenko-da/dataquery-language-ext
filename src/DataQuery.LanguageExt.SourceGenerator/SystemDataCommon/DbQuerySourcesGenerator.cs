@@ -1,13 +1,13 @@
-namespace DataQuery.LanguageExt.Sql.NormNet.SourceGenerator.DataQuery;
+namespace DataQuery.LanguageExt.SourceGenerator.SystemDataCommon;
 
 using System;
 
-public static class DataQuerySourcesGenerator
+public static class DbQuerySourcesGenerator
 {
     public static string GenerateDelegates(DataQueryMetadata meta) => meta switch
     {
-        { ReturnIsTask: true } => DataQuerySourcesGeneratorTask.GenerateAff(
-            new DataQuerySourcesGeneratorTask.DataQueryTask
+        { ReturnIsTask: true } => DbQuerySourcesGeneratorTask.GenerateAff(
+            new DbQuerySourcesGeneratorTask.DataQueryTask
             {
                 FuncName = meta.FuncName,
                 Parameters = meta.Parameters,

@@ -12,15 +12,13 @@
     <PackageLicenseUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>language-ext sql norm</PackageTags>
     <LangVersion>11</LangVersion>
-    <PackageId>DataQuery.LanguageExt.Sql.NormNet</PackageId>
+    <PackageId>DataQuery.LanguageExt</PackageId>
     <Product>DataQuery.LanguageExt.Sql</Product>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Norm.net" Version="5.3.8" />
-    <PackageReference Include="Npgsql" Version="7.0.4" />
+    <PackageReference Include="LanguageExt.Core" Version="4.4.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-    <PackageReference Include="TheUtils" Version="0.0.18" />
   </ItemGroup>
 </Project>

@@ -2,8 +2,8 @@
 
 global using static LanguageExt.Prelude;
 global using LanguageExt;
-global using DataQuery.LanguageExt.Sql.NormNet;
-global using static DataQuery.LanguageExt.Sql.NormNet.DataQueryNormNet;
+global using DataQuery.LanguageExt;
+global using static DataQuery.LanguageExt.DataQueryNormNet;
 using ConsoleApp1;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
