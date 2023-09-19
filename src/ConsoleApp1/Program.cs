@@ -3,13 +3,9 @@
 global using static LanguageExt.Prelude;
 global using LanguageExt;
 global using DataQuery.LanguageExt;
-global using static DataQuery.LanguageExt.DataQueryNormNet;
-using ConsoleApp1;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
-using TheUtils;
-using TheUtils.DependencyInjection;
 
 var builder = Host.CreateDefaultBuilder();
 
@@ -28,7 +24,7 @@ var qqq =
     from _2 in query("", 600)
     select _1 + _2;
 
-var results  = await qqq.Run(QueryRuntime.New(conn, None, new CancellationTokenSource().Token)).ThrowIfFail();
+var results  = await qqq.Run(DbQueryRuntime.New(conn, None, new CancellationTokenSource().Token)).ThrowIfFail();
 
 Console.WriteLine(results);
 

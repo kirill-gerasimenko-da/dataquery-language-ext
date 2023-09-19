@@ -7,7 +7,8 @@
         <Nullable>disable</Nullable>
         <LangVersion>10</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.25</Version>
+        <Version>0.0.2</Version>
+        <PackageId>DataQuery.LanguageExtV2.SourceGenerator</PackageId>
     </PropertyGroup>
 
     <ItemGroup>

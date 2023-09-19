@@ -8,9 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="DataQuery.LanguageExt.Sql.NormNet" Version="0.0.25" />
-      <PackageReference Include="DataQuery.LanguageExt.Sql.NormNet.SourceGenerator" Version="0.0.25" />
+      <PackageReference Include="DataQuery.LanguageExtV2" Version="0.0.1" />
+      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator" Version="0.0.2" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+      <PackageReference Include="Norm.net" Version="5.3.8" />
+      <PackageReference Include="Npgsql" Version="7.0.6" />
+      <PackageReference Include="TheUtils" Version="0.0.18" />
     </ItemGroup>
 
 </Project>
