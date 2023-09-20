@@ -1,18 +1,16 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-global using static LanguageExt.Prelude;
 global using LanguageExt;
 global using DataQuery.LanguageExt;
 using ConsoleApp1;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
-using TheUtils;
 using TheUtils.DependencyInjection;
 
 var builder = Host.CreateDefaultBuilder();
 
-builder.ConfigureServices(services => { services.AddGetUserQuery(ServiceLifetime.Singleton); });
+builder.ConfigureServices(services => { services.AddGetUserQuery(); });
 
 var app = builder.Build();
 
@@ -27,7 +25,7 @@ var qqq =
     from _2 in query("", 600)
     select _1 + _2;
 
-var results = await qqq.Run(DbQueryRuntime.New(conn, None, new CancellationTokenSource().Token)).ThrowIfFail();
+var results = await qqq.Run(conn, default);
 
 Console.WriteLine(results);
 

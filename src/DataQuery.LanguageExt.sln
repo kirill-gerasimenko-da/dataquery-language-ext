@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Sourc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{C0E222DF-BF50-4DAD-8877-44A395DD5635}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Tests", "DataQuery.LanguageExt.Tests\DataQuery.LanguageExt.Tests.csproj", "{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,5 +43,9 @@ Global
 		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

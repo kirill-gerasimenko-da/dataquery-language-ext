@@ -19,6 +19,6 @@ public class GetUser
         await conn
             .WithTransaction(tran.IfNoneDefault())
             .WithCancellationToken(token)
-            .ReadAsync<int>("Select 42")
+            .ReadAsync<int>("Select @input", new {input = value})
             .SingleAsync(cancellationToken: token);
 }
