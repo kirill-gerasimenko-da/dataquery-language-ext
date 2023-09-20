@@ -1,6 +1,7 @@
 namespace ConsoleApp1;
 
 using System.Data.Common;
+using Dapper;
 using DataQuery.LanguageExt.NormNet;
 using Norm;
 using TheUtils;
@@ -21,6 +22,18 @@ public class GetUser
         .WithCancellationToken(token)
         .ReadAsync<int>("Select @input + 1", new {input = value})
         .SingleAsync(cancellationToken: token);
+}
+
+[DataQuery.LanguageExt.SystemData.DbQuery]
+public class GetUserDapper
+{
+    public async Task<int> Invoke
+    (
+        int value,
+        DbConnection conn,
+        Option<DbTransaction> tran
+    ) => await conn
+        .QuerySingleAsync<int>("Select @input", new {input = value}, transaction: tran.IfNoneDefault());
 }
 
 [DataQuery.LanguageExt.SystemData.DbQuery]

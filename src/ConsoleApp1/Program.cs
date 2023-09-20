@@ -16,8 +16,8 @@ builder.ConfigureServices(services => { services
     .AddGetUserQuery()
     .AddGetUserNormQuery()
     .AddGetUsersCombinedQuery()
-    .AddGetUsersCombinedSystemDQuery();
-
+    .AddGetUsersCombinedSystemDQuery()
+    .AddGetUserDapperQuery();
 });
 
 var app = builder.Build();
@@ -26,6 +26,7 @@ var getUserQuery = app.Services.GetService<GetUserQuery>();
 var getUserCombinedQuery = app.Services.GetService<GetUsersCombinedQuery>();
 var getUserNormQuery = app.Services.GetService<GetUserNormQuery>();
 var getSd = app.Services.GetService<GetUsersCombinedSystemDQuery>();
+var getDapper = app.Services.GetService<GetUserDapperQuery>();
 
 await using var conn =
     new NpgsqlConnection(
@@ -39,7 +40,8 @@ var qqq =
         .SingleAsync(token))
     from _4 in getUserCombinedQuery(100, 200)
     from _5 in getSd(2, 8)
-    select _1 + _2 + _3 + _4;
+    from _6 in getDapper(1000)
+    select _1 + _2 + _3 + _4 + _6;
 
 var results = await qqq.Run(conn, default);
 
