@@ -9,12 +9,13 @@
 
     <ItemGroup>
       <PackageReference Include="DataQuery.LanguageExtV2" Version="0.0.12" />
-      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator" Version="0.0.17" />
+      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator" Version="0.0.21" />
       <PackageReference Include="LanguageExt.Core" Version="4.4.4" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
       <PackageReference Include="Norm.net" Version="5.3.8" />
       <PackageReference Include="Npgsql" Version="7.0.6" />
       <PackageReference Include="TheUtils" Version="0.0.18" />
+      <PackageReference Include="TheUtils.SourceGenerator" Version="0.0.35" />
     </ItemGroup>
 
 </Project>

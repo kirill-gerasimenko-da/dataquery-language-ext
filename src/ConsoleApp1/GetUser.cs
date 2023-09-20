@@ -2,8 +2,10 @@ namespace ConsoleApp1;
 
 using System.Data.Common;
 using DataQuery.LanguageExt.NormNet;
+using LanguageExt.Effects.Traits;
 using Norm;
 using TheUtils;
+using static DataQuery.LanguageExt.NormNet.DbQuery;
 
 [DataQuery.LanguageExt.SystemData.DbQuery]
 public class GetUser
@@ -50,5 +52,8 @@ public class GetUsersCombined
     public Aff<DbQueryRuntime, int> Invoke() =>
         from _1 in _getUser("", 400)
         from _2 in _getUserNorm(300)
+        from _3 in query((norm, token) => norm
+            .ReadAsync<int>("select 200")
+            .SingleAsync(token))
         select _1 + _2;
 }
