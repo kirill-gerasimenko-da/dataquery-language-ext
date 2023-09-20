@@ -26,6 +26,8 @@ using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Norm;
+using global::LanguageExt;
+using static global::LanguageExt.Prelude;
 
 public static class DbQuery
 {

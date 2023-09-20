@@ -1,11 +1,11 @@
 namespace ConsoleApp1;
 
 using System.Data.Common;
-using DataQuery.LanguageExt.SystemData;
+using DataQuery.LanguageExt.NormNet;
 using Norm;
 using TheUtils;
 
-[DbQuery]
+[DataQuery.LanguageExt.SystemData.DbQuery]
 public class GetUser
 {
     public async Task<int> Invoke
@@ -22,7 +22,7 @@ public class GetUser
         .SingleAsync(cancellationToken: token);
 }
 
-[DataQuery.LanguageExt.NormNet.DbQuery]
+[DbQuery]
 public class GetUserNorm
 {
     public async Task<int> Invoke
@@ -35,8 +35,7 @@ public class GetUserNorm
         .SingleAsync(token);
 }
 
-/*
-[DataQuery.LanguageExt.NormNet.DbQuery]
+[DbQuery]
 public class GetUsersCombined
 {
     readonly GetUserQuery _getUser;
@@ -53,4 +52,3 @@ public class GetUsersCombined
         from _2 in _getUserNorm(300)
         select _1 + _2;
 }
-*/
