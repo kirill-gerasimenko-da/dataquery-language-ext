@@ -34,3 +34,23 @@ public class GetUserNorm
         .ReadAsync<int>("Select @input + 2", new {input = value})
         .SingleAsync(token);
 }
+
+/*
+[DataQuery.LanguageExt.NormNet.DbQuery]
+public class GetUsersCombined
+{
+    readonly GetUserQuery _getUser;
+    readonly GetUserNormQuery _getUserNorm;
+
+    public GetUsersCombined(GetUserQuery getUser, GetUserNormQuery getUserNorm)
+    {
+        _getUser = getUser;
+        _getUserNorm = getUserNorm;
+    }
+
+    public Aff<DbQueryRuntime, int> Invoke() =>
+        from _1 in _getUser("", 400)
+        from _2 in _getUserNorm(300)
+        select _1 + _2;
+}
+*/

@@ -8,8 +8,18 @@ using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
-public static class DbQueryRuntimeExtensions
+public static class DbQueryExtensions
 {
+    static async Task ensureIsOpen(DbConnection connection, CancellationToken token)
+    {
+        if (connection.State == ConnectionState.Open)
+            return;
+
+        token.ThrowIfCancellationRequested();
+
+        await connection.OpenAsync(token);
+    }
+
     /// <summary>
     /// Runs the query using the specified connection. No transaction is created.
     /// </summary>
@@ -19,6 +29,8 @@ public static class DbQueryRuntimeExtensions
     {
         if (connection == null)
             throw new ArgumentNullException(nameof(connection));
+
+        await ensureIsOpen(connection, token);
 
         var runtime = DbQueryRuntime.New(connection, None, token);
         var result = (await query.Run(runtime)).ThrowIfFail();
@@ -51,6 +63,7 @@ public static class DbQueryRuntimeExtensions
         if (!Enum.IsDefined(typeof(IsolationLevel), isolationLevel))
             throw new ArgumentOutOfRangeException(nameof(isolationLevel));
 
+        await ensureIsOpen(connection, token);
         await using var transaction = await connection.BeginTransactionAsync(isolationLevel, token);
 
         var runtime = DbQueryRuntime.New(connection, transaction, token);
@@ -88,6 +101,7 @@ public static class DbQueryRuntimeExtensions
         if (transaction == null)
             throw new ArgumentNullException(nameof(transaction));
 
+        await ensureIsOpen(connection, token);
         var runtime = DbQueryRuntime.New(connection, transaction, token);
         var result = await query.Run(runtime);
 

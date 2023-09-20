@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Nullable>disable</Nullable>
-    <PackageVersion>0.0.5</PackageVersion>
+    <PackageVersion>0.0.10</PackageVersion>
     <Title>Opiniated dataquery approach, using Norm.Net, LanguageExt and Npgsql</Title>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Norm.Net + Npgsql database utilities using Language.Ext</Description>
@@ -20,5 +20,10 @@
     <PackageReference Include="LanguageExt.Core" Version="4.4.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Norm">
+      <HintPath>..\..\..\..\.nuget\packages\norm.net\5.3.8\lib\netstandard2.1\Norm.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
