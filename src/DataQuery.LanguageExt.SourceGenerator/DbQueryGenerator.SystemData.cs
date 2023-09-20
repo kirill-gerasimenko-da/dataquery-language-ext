@@ -7,19 +7,19 @@ using Microsoft.CodeAnalysis.Text;
 
 [Generator]
 [SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1036:Specify analyzer banned API enforcement setting")]
-public class DbQueryCommonGenerator : IIncrementalGenerator
+public class DbSystemDataQueryCommonGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         context.RegisterSourceOutput(context.CompilationProvider,
             static (spc, _) =>
             {
-                spc.AddSource($"DataQuery.LanguageExt.Common.g.cs", SourceText.From(Content, Encoding.UTF8));
+                spc.AddSource("DataQuery.LanguageExt.SystemData.Common.g.cs", SourceText.From(Content, Encoding.UTF8));
             });
     }
 
     static readonly string Content = @"
-namespace DataQuery.LanguageExt;
+namespace DataQuery.LanguageExt.SystemData;
 
 using System;
 using System.Data.Common;
@@ -34,16 +34,6 @@ public static class DbQuery
         if (query == null) throw new ArgumentNullException(nameof(query));
 
         return Aff<DbQueryRuntime, T>(async rt => await query(rt.Connection, rt.CancellationToken));
-    }
-
-    public static Aff<DbQueryRuntime, T> query<T>(Func<Norm, ValueTask<T>> query)
-    {
-        if (query == null) throw new ArgumentNullException(nameof(query));
-
-        return Aff<DbQueryRuntime, T>(async rt => await query(
-            rt.Connection
-                .WithTransaction(rt.Transaction.IfNoneUnsafe((DbTransaction) null))
-                .WithCancellationToken(rt.CancellationToken)));
     }
 
     public static Aff<DbQueryRuntime, T> query<T>(

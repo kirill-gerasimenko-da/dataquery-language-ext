@@ -4,13 +4,11 @@ global using LanguageExt;
 global using DataQuery.LanguageExt;
 using System.Data;
 using ConsoleApp1;
-using static DataQuery.LanguageExt.DbQuery;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Norm;
 using Npgsql;
-using TheUtils;
 using TheUtils.DependencyInjection;
+using static DataQuery.LanguageExt.NormNet.DbQuery;
 
 var builder = Host.CreateDefaultBuilder();
 
@@ -28,7 +26,7 @@ await using var conn =
 var qqq =
     from _1 in getUserQuery("", 500)
     from _2 in getUserNormQuery(600)
-    from _3 in query(norm => norm
+    from _3 in query((norm, token) => norm
         .ReadAsync<int>("select 200")
         .SingleAsync(token))
     select _1 + _2 + _3;

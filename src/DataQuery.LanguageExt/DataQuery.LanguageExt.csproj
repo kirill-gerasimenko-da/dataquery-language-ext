@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Nullable>disable</Nullable>
-    <PackageVersion>0.0.10</PackageVersion>
+    <PackageVersion>0.0.12</PackageVersion>
     <Title>Opiniated dataquery approach, using Norm.Net, LanguageExt and Npgsql</Title>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Norm.Net + Npgsql database utilities using Language.Ext</Description>
