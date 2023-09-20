@@ -1,4 +1,4 @@
-namespace DataQuery.LanguageExt.SourceGenerator.SystemData;
+namespace DataQuery.LanguageExt.SourceGenerator.NormNet;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -30,8 +30,7 @@ public static class DbQuerySourcesGeneratorTask
 
         var inputParams = string.Join(", ", meta
             .Parameters
-            .Where(p => p.TypeName != "System.Data.Common.DbConnection" &&
-                        p.TypeName != "Option<System.Data.Common.DbTransaction>" &&
+            .Where(p => p.TypeName != "Norm.Norm" &&
                         p.TypeName != "CancellationToken")
             .Select(p => $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
 
@@ -41,8 +40,7 @@ public static class DbQuerySourcesGeneratorTask
 
         var inputAsLambdaParams = string.Join(", ", meta
             .Parameters
-            .Where(p => p.TypeName != "System.Data.Common.DbConnection" &&
-                        p.TypeName != "Option<System.Data.Common.DbTransaction>" &&
+            .Where(p => p.TypeName != "Norm.Norm" &&
                         p.TypeName != "CancellationToken")
             .Select(p => $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
 
@@ -52,12 +50,10 @@ public static class DbQuerySourcesGeneratorTask
             .Parameters
             .Select(p =>
             {
-                if (p.TypeName == "System.Data.Common.DbConnection")
-                    return "___y.___conn";
+                if (p.TypeName == "Norm.Norm")
+                    return "___y.___norm";
                 if (p.TypeName == "CancellationToken")
                     return "___y.___token";
-                if (p.TypeName == "Option<System.Data.Common.DbTransaction>")
-                    return "___y.___trans";
 
                 return $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}";
             }));
@@ -118,7 +114,10 @@ namespace TheUtils.DependencyInjection
                          from ___conn in DataQuery.LanguageExt.DbQueryContext.connection()
                          from ___token in DataQuery.LanguageExt.DbQueryContext.token()
                          from ___trans in DataQuery.LanguageExt.DbQueryContext.transaction()
-                         select (___conn, ___token, ___trans)
+                         let ___norm = ___conn
+                            .WithTransaction(___trans.IfNoneUnsafe((System.Data.Common.DbTransaction)null))
+                            .WithCancellationToken(___token)
+                          select (___norm, ___token)
                         ).MapAsync(async ___y =>
                             await ___x.GetRequiredService<{parentClassPrefix}{meta.FuncName}>()
                                 .Invoke({inputAsInvokeParams}))),
