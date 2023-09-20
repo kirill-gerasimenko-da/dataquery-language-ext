@@ -35,6 +35,8 @@ public record DataQueryMetadata
     public string ReturnSubTypeName { get; set; }
 
     public bool FoundInvokeFunction { get; set; }
+
+    public bool IsAffVersion { get; set; }
 }
 
 [Generator]
@@ -124,7 +126,28 @@ public class DbQueryGenerator : IIncrementalGenerator
                                            && msr.IsStatic == false
                                            && msr.DeclaredAccessibility == Accessibility.Public)
                 {
-                    if (msr.Name == "Invoke" && msr.ReturnType.MetadataName == "ValueTask`1")
+                    if (msr.Name == "Invoke" && msr.ReturnType.MetadataName == "Aff`2" &&
+                        (msr.ReturnType as INamedTypeSymbol)?.TypeArguments.First().ToDisplayString() ==
+                        "DataQuery.LanguageExt.DbQueryRuntime")
+                    {
+                        func.ReturnTypeName = msr.ReturnType.ToMinimalDisplayString(semanticModel, 0);
+                        func.ReturnSubTypeName = (msr.ReturnType as INamedTypeSymbol)?.TypeArguments
+                            .Last().ToDisplayString();
+
+                        func.IsAffVersion = true;
+
+                        foreach (var p in msr.Parameters)
+                        {
+                            func.Parameters.Add(new InputParameter
+                            {
+                                Name = p.Name,
+                                TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
+                            });
+                        }
+
+                        func.FoundInvokeFunction = true;
+                    }
+                    else if (msr.Name == "Invoke" && msr.ReturnType.MetadataName == "ValueTask`1")
                     {
                         func.ReturnTypeName = msr.ReturnType.ToMinimalDisplayString(semanticModel, 0);
                         func.ReturnIsTask = true;
@@ -219,7 +242,7 @@ public class DbQueryGenerator : IIncrementalGenerator
                 }
             }
 
-            if (classSymbol.ContainingType is { DeclaredAccessibility: Accessibility.Public })
+            if (classSymbol.ContainingType is {DeclaredAccessibility: Accessibility.Public})
             {
                 func.ParentClassName = classSymbol.ContainingType.Name;
                 func.ParentClassIsStatic = classSymbol.ContainingType.IsStatic;
@@ -232,11 +255,11 @@ public class DbQueryGenerator : IIncrementalGenerator
     }
 
     static bool IsSyntaxTargetForGeneration(SyntaxNode node)
-        => node is ClassDeclarationSyntax { AttributeLists.Count: > 0 };
+        => node is ClassDeclarationSyntax {AttributeLists.Count: > 0};
 
     static ClassDeclarationSyntax GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
     {
-        var classDeclarationSyntax = (ClassDeclarationSyntax)context.Node;
+        var classDeclarationSyntax = (ClassDeclarationSyntax) context.Node;
 
         foreach (var attributeListSyntax in classDeclarationSyntax.AttributeLists)
         foreach (var attributeSyntax in attributeListSyntax.Attributes)

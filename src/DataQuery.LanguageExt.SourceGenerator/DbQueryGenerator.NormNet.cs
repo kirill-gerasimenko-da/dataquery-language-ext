@@ -41,6 +41,9 @@ public static class DbQuery
                 .WithCancellationToken(rt.CancellationToken),
             rt.CancellationToken));
     }
+
+    public static Aff<DbQueryRuntime, T> transform<T>(Func<Aff<DbQueryRuntime, T>> aff) =>
+        Eff(aff).Bind(identity);
 }
 ";
 

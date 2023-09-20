@@ -12,11 +12,15 @@ using static DataQuery.LanguageExt.NormNet.DbQuery;
 
 var builder = Host.CreateDefaultBuilder();
 
-builder.ConfigureServices(services => { services.AddGetUserQuery().AddGetUserNormQuery(); });
+builder.ConfigureServices(services => { services
+    .AddGetUserQuery()
+    .AddGetUserNormQuery()
+    .AddGetUsersCombinedQuery(); });
 
 var app = builder.Build();
 
 var getUserQuery = app.Services.GetService<GetUserQuery>();
+var getUserCombinedQuery = app.Services.GetService<GetUsersCombinedQuery>();
 var getUserNormQuery = app.Services.GetService<GetUserNormQuery>();
 
 await using var conn =
@@ -29,12 +33,14 @@ var qqq =
     from _3 in query((norm, token) => norm
         .ReadAsync<int>("select 200")
         .SingleAsync(token))
-    select _1 + _2 + _3;
+    from _4 in getUserCombinedQuery()
+    select _1 + _2 + _3 + _4;
 
 var results = await qqq.Run(conn, default);
 
 await getUserQuery("", 500).Run(conn, IsolationLevel.ReadCommitted, default);
 
 Console.WriteLine(results);
+
 
 await app.RunAsync();
