@@ -50,6 +50,9 @@ public static class DbQuery
 
         return Aff<DbQueryRuntime, T>(async rt => await query(rt.Connection, rt.Transaction, rt.CancellationToken));
     }
+
+    public static Aff<DbQueryRuntime, T> transform<T>(Func<Aff<DbQueryRuntime, T>> aff) =>
+        Eff(aff).Bind(identity);
 }
 ";
 

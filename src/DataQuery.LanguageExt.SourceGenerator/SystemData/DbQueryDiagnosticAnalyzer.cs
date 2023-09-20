@@ -62,14 +62,19 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
             {
                 if (msr.Name == "Invoke")
                 {
-                    if (msr.Parameters.Length == 0)
-                        break;
+                    var hasNormParameter = msr.Parameters.Any(dbConn => dbConn.Type.ToDisplayString() == "System.Data.Common.DbConnection");
+                    var hasValidReturnType = msr.ReturnType.MetadataName
+                        is "ValueTask`1"
+                        or "ValueTask"
+                        or "Task`1"
+                        or "Task";
 
-                    if (msr.Parameters.Any(dbConn => dbConn.Type.ToDisplayString() == "System.Data.Common.DbConnection" &&
-                        (msr.ReturnType.MetadataName == "ValueTask`1" ||
-                         msr.ReturnType.MetadataName == "ValueTask" ||
-                         msr.ReturnType.MetadataName == "Task`1" ||
-                         msr.ReturnType.MetadataName == "Task")))
+                    var hasAffWithRtReturnType = msr.ReturnType.MetadataName == "Aff`2";
+
+                    var nts = msr.ReturnType as INamedTypeSymbol;
+                    var isRt = nts?.TypeArguments.First().ToDisplayString() == "DataQuery.LanguageExt.DbQueryRuntime";
+
+                    if ((hasNormParameter && hasValidReturnType) || (hasAffWithRtReturnType && isRt))
                         hasInvokeMethod = true;
 
                     break;

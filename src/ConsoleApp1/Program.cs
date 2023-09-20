@@ -33,7 +33,7 @@ var qqq =
     from _3 in query((norm, token) => norm
         .ReadAsync<int>("select 200")
         .SingleAsync(token))
-    from _4 in getUserCombinedQuery()
+    from _4 in getUserCombinedQuery(100, 200)
     select _1 + _2 + _3 + _4;
 
 var results = await qqq.Run(conn, default);

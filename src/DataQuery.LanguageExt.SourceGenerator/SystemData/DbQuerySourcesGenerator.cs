@@ -17,6 +17,17 @@ public static class DbQuerySourcesGenerator
                 ReturnSubTypeName = meta.ReturnSubTypeName
             }
         ),
+        { IsAffVersion: true } => DbQuerySourcesGeneratorAff.GenerateAff(
+            new DbQuerySourcesGeneratorAff.DataQueryTask
+            {
+                FuncName = meta.FuncName,
+                Parameters = meta.Parameters,
+                NamespaceName = meta.NamespaceName,
+                ParentClassName = meta.ParentClassName,
+                ParentClassIsStatic = meta.ParentClassIsStatic,
+                ReturnSubTypeName = meta.ReturnSubTypeName
+            }
+        ),
         _ => throw new ArgumentOutOfRangeException(nameof(meta))
     };
 }

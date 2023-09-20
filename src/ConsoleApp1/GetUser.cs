@@ -2,7 +2,6 @@ namespace ConsoleApp1;
 
 using System.Data.Common;
 using DataQuery.LanguageExt.NormNet;
-using LanguageExt.Effects.Traits;
 using Norm;
 using TheUtils;
 using static DataQuery.LanguageExt.NormNet.DbQuery;
@@ -24,6 +23,26 @@ public class GetUser
         .SingleAsync(cancellationToken: token);
 }
 
+[DataQuery.LanguageExt.SystemData.DbQuery]
+public class GetUsersCombinedSystemD
+{
+    readonly GetUserQuery _getUser;
+    readonly GetUserNormQuery _getUserNorm;
+
+    public GetUsersCombinedSystemD(GetUserQuery getUser, GetUserNormQuery getUserNorm)
+    {
+        _getUser = getUser;
+        _getUserNorm = getUserNorm;
+    }
+
+    public Aff<DbQueryRuntime, int> Invoke(int x1, int x2) =>
+        from _1 in _getUser("", x1)
+        from _2 in _getUserNorm(x2)
+        from _3 in query((norm, token) => norm
+            .ReadAsync<int>("select 200")
+            .SingleAsync(token))
+        select _1 + _2;
+}
 [DbQuery]
 public class GetUserNorm
 {
@@ -49,9 +68,9 @@ public class GetUsersCombined
         _getUserNorm = getUserNorm;
     }
 
-    public Aff<DbQueryRuntime, int> Invoke() =>
-        from _1 in _getUser("", 400)
-        from _2 in _getUserNorm(300)
+    public Aff<DbQueryRuntime, int> Invoke(int x1, int x2) =>
+        from _1 in _getUser("", x1)
+        from _2 in _getUserNorm(x2)
         from _3 in query((norm, token) => norm
             .ReadAsync<int>("select 200")
             .SingleAsync(token))
