@@ -15,13 +15,17 @@ var builder = Host.CreateDefaultBuilder();
 builder.ConfigureServices(services => { services
     .AddGetUserQuery()
     .AddGetUserNormQuery()
-    .AddGetUsersCombinedQuery(); });
+    .AddGetUsersCombinedQuery()
+    .AddGetUsersCombinedSystemDQuery();
+
+});
 
 var app = builder.Build();
 
 var getUserQuery = app.Services.GetService<GetUserQuery>();
 var getUserCombinedQuery = app.Services.GetService<GetUsersCombinedQuery>();
 var getUserNormQuery = app.Services.GetService<GetUserNormQuery>();
+var getSd = app.Services.GetService<GetUsersCombinedSystemDQuery>();
 
 await using var conn =
     new NpgsqlConnection(
@@ -34,6 +38,7 @@ var qqq =
         .ReadAsync<int>("select 200")
         .SingleAsync(token))
     from _4 in getUserCombinedQuery(100, 200)
+    from _5 in getSd(2, 8)
     select _1 + _2 + _3 + _4;
 
 var results = await qqq.Run(conn, default);

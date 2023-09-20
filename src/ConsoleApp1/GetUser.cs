@@ -43,6 +43,7 @@ public class GetUsersCombinedSystemD
             .SingleAsync(token))
         select _1 + _2;
 }
+
 [DbQuery]
 public class GetUserNorm
 {
