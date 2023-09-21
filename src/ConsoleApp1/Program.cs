@@ -5,25 +5,15 @@ global using DataQuery.LanguageExt;
 using System.Data;
 using System.Reflection;
 using ConsoleApp1;
+using DataQuery.LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
-using TheUtils.DependencyInjection;
 using static DataQuery.LanguageExt.NormNet.DbQuery;
 
 var builder = Host.CreateDefaultBuilder();
 
-builder.ConfigureServices(services =>
-{
-    services
-        .AddGetUserQuery()
-        .AddGetUserNormQuery()
-        .AddGetUsersCombinedQuery()
-        .AddGetUsersCombinedSystemDQuery()
-        .AddGetUserDapperQuery();
-
-    services.AddAllFunctions(new[] {Assembly.GetExecutingAssembly()});
-});
+builder.ConfigureServices(services => services.AddAllFunctions(new[] {Assembly.GetExecutingAssembly()}));
 
 var app = builder.Build();
 
