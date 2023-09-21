@@ -3,6 +3,7 @@
 global using LanguageExt;
 global using DataQuery.LanguageExt;
 using System.Data;
+using System.Reflection;
 using ConsoleApp1;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,12 +13,16 @@ using static DataQuery.LanguageExt.NormNet.DbQuery;
 
 var builder = Host.CreateDefaultBuilder();
 
-builder.ConfigureServices(services => { services
-    .AddGetUserQuery()
-    .AddGetUserNormQuery()
-    .AddGetUsersCombinedQuery()
-    .AddGetUsersCombinedSystemDQuery()
-    .AddGetUserDapperQuery();
+builder.ConfigureServices(services =>
+{
+    services
+        .AddGetUserQuery()
+        .AddGetUserNormQuery()
+        .AddGetUsersCombinedQuery()
+        .AddGetUsersCombinedSystemDQuery()
+        .AddGetUserDapperQuery();
+
+    services.AddAllFunctions(new[] {Assembly.GetExecutingAssembly()});
 });
 
 var app = builder.Build();
