@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 public static class DbQueryExtensions
 {
@@ -122,39 +121,4 @@ public static class DbQueryExtensions
         CancellationToken token
     )
         => await query.Run(connection, transaction, token);
-
-    /// <summary>
-    /// Registers all db queries in the DI.
-    /// </summary>
-    public static IServiceCollection AddAllFunctions(this IServiceCollection services,
-        IEnumerable<Assembly> assemblies,
-        ServiceLifetime lifetime = ServiceLifetime.Singleton)
-    {
-        bool IsNormQuery(ICustomAttributeProvider t) =>
-            toSeq(t.GetCustomAttributes(typeof(NormNet.DbQueryAttribute), false))
-                .Cast<NormNet.DbQueryAttribute>()
-                .HeadOrNone()
-                .IsSome;
-
-        bool IsSystemDataQuery(ICustomAttributeProvider t) =>
-            toSeq(t.GetCustomAttributes(typeof(SystemData.DbQueryAttribute), false))
-                .Cast<SystemData.DbQueryAttribute>()
-                .HeadOrNone()
-                .IsSome;
-
-        var types = toSeq(assemblies).Bind(a => toSeq(a.GetTypes()));
-        var queryTypes = types.Filter(t => IsNormQuery(t) || IsSystemDataQuery(t));
-        if (queryTypes == Empty)
-            return services;
-
-        var extensionsType = Assembly.GetCallingAssembly()
-            .GetType("TheUtils.DependencyInjection.ServiceCollectionFunctionExtensions");
-
-        queryTypes
-            .Map(t => extensionsType?.GetMethod($"Add{t.Name}Query"))
-            .Filter(notnull)
-            .Iter(m => m.Invoke(null, new object[] { services, lifetime }));
-
-        return services;
-    }
 }
