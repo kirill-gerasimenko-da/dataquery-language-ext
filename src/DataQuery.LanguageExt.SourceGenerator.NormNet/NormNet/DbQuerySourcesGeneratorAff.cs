@@ -1,4 +1,4 @@
-namespace DataQuery.LanguageExt.SourceGenerator.NormNet;
+namespace DataQuery.LanguageExt.SourceGenerator.NormNet.NormNet;
 
 using System.Collections.Generic;
 using System.Linq;

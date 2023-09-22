@@ -1,4 +1,4 @@
-namespace DataQuery.LanguageExt.SourceGenerator;
+namespace DataQuery.LanguageExt.SourceGenerator.Common;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text;

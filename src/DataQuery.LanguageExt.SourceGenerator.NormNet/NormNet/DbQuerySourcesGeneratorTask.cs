@@ -1,9 +1,9 @@
-namespace DataQuery.LanguageExt.SourceGenerator.SystemData;
+namespace DataQuery.LanguageExt.SourceGenerator.NormNet.NormNet;
 
 using System.Collections.Generic;
 using System.Linq;
 
-public static class DbQuerySourcesGeneratorAff
+public static class DbQuerySourcesGeneratorTask
 {
     public class DataQueryTask
     {
@@ -30,6 +30,8 @@ public static class DbQuerySourcesGeneratorAff
 
         var inputParams = string.Join(", ", meta
             .Parameters
+            .Where(p => p.TypeName != "Norm.Norm" &&
+                        p.TypeName != "CancellationToken")
             .Select(p => $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
 
         var inputTypes = string.Join(", ", meta
@@ -38,22 +40,34 @@ public static class DbQuerySourcesGeneratorAff
 
         var inputAsLambdaParams = string.Join(", ", meta
             .Parameters
+            .Where(p => p.TypeName != "Norm.Norm" &&
+                        p.TypeName != "CancellationToken")
             .Select(p => $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
 
         // Option<System.Data.Common.DbTransaction>
 
         var inputAsInvokeParams = string.Join(", ", meta
             .Parameters
-            .Select(p => $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
+            .Select(p =>
+            {
+                if (p.TypeName == "Norm.Norm")
+                    return "___y.___norm";
+                if (p.TypeName == "CancellationToken")
+                    return "___y.___token";
+
+                return $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}";
+            }));
 
         return @$"
 #pragma warning disable CS0105
 
+using Norm;
 using System.Threading;
 using System.Threading.Tasks;
 using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
+using TheUtils;
 using System.Runtime.CompilerServices;
 
 // TYPES: {inputTypes}
@@ -96,8 +110,16 @@ namespace TheUtils.DependencyInjection
             services.Add(new(
                 serviceType: typeof({parentClassPrefix}{meta.FuncName}Query),
                 factory: ___x => new {parentClassPrefix}{meta.FuncName}Query(
-                    ({inputAsLambdaParams}) => DataQuery.LanguageExt.NormNet.DbQuery.transform(() =>
-                         ___x.GetRequiredService<{parentClassPrefix}{meta.FuncName}>()
+                    ({inputAsLambdaParams}) => (
+                         from ___conn in DataQuery.LanguageExt.DbQueryContext.connection()
+                         from ___token in DataQuery.LanguageExt.DbQueryContext.token()
+                         from ___trans in DataQuery.LanguageExt.DbQueryContext.transaction()
+                         let ___norm = ___conn
+                            .WithTransaction(___trans.IfNoneUnsafe((System.Data.Common.DbTransaction)null))
+                            .WithCancellationToken(___token)
+                          select (___norm, ___token)
+                        ).MapAsync(async ___y =>
+                            await ___x.GetRequiredService<{parentClassPrefix}{meta.FuncName}>()
                                 .Invoke({inputAsInvokeParams}))),
                 lifetime));
 

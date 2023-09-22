@@ -1,4 +1,4 @@
-namespace DataQuery.LanguageExt.SourceGenerator.NormNet;
+namespace DataQuery.LanguageExt.SourceGenerator.SystemData.SystemData;
 
 using System;
 
