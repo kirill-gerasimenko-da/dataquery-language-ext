@@ -33,5 +33,3 @@ public readonly struct DbQueryRuntimeEnv
 
     public DbQueryRuntimeEnv LocalCancel => new(new CancellationTokenSource(), Connection, None);
 }
-// public static Norm WithTransaction(this DbConnection connection, Option<DbTransaction> transaction) =>
-//     NormExtensions.WithTransaction(connection, transaction.IfNoneUnsafe((DbTransaction)null));
