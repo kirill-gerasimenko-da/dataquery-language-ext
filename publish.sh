@@ -3,7 +3,7 @@
 dotnet build ./src/DataQuery.LanguageExt.Sql/DataQuery.LanguageExt.Sql.csproj -c Release
 dotnet pack ./src/DataQuery.LanguageExt.Sql/DataQuery.LanguageExt.Sql.csproj -c Release -o ./publish /p:PackageVersion=0.0.41
 
-VER=0.0.6
+VER=0.0.8
 
 dotnet build ./src/DataQuery.LanguageExt/DataQuery.LanguageExt.csproj -c Release
 dotnet pack ./src/DataQuery.LanguageExt/DataQuery.LanguageExt.csproj -c Release -o ./publish /p:PackageVersion=$VER

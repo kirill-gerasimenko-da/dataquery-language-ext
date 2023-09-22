@@ -90,7 +90,7 @@ namespace TheUtils.DependencyInjection
             services.Add(new(
                 serviceType: typeof({parentClassPrefix}{meta.FuncName}Query),
                 factory: ___x => new {parentClassPrefix}{meta.FuncName}Query(
-                    ({inputAsLambdaParams}) => DataQuery.LanguageExt.NormNet.DbQuery.transform(() =>
+                    ({inputAsLambdaParams}) => DataQuery.LanguageExt.NormNet.DbQueryInline.transform(() =>
                          ___x.GetRequiredService<{parentClassPrefix}{meta.FuncName}>()
                                 .Invoke({inputAsInvokeParams}))),
                 lifetime));

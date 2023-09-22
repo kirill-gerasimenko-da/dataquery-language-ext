@@ -5,9 +5,9 @@ using Dapper;
 using DataQuery.LanguageExt.NormNet;
 using Norm;
 using TheUtils;
-using static DataQuery.LanguageExt.NormNet.DbQuery;
+using static DataQuery.LanguageExt.NormNet.DbQueryInline;
 
-[DataQuery.LanguageExt.SystemData.]
+[DataQuery.LanguageExt.SystemData.DbQuery]
 public class GetUser
 {
     public async Task<int> Invoke

@@ -9,7 +9,7 @@ using DataQuery.LanguageExt;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
-using static DataQuery.LanguageExt.NormNet.DbQuery;
+using static DataQuery.LanguageExt.NormNet.DbQueryInline;
 
 var builder = Host.CreateDefaultBuilder();
 
