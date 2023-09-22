@@ -1,4 +1,5 @@
-namespace DataQuery.LanguageExt.SourceGenerator.NormNet;
+// ReSharper disable CheckNamespace
+namespace DataQuery.LanguageExt.SourceGenerator.NormNet.Attributes;
 
 using System;
 
