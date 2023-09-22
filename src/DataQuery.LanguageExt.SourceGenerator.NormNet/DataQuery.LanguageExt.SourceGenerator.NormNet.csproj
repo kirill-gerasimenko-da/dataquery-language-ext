@@ -8,7 +8,7 @@
         <LangVersion>10</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Version>0.0.34</Version>
-        <PackageId>DataQuery.LanguageExtV2.SourceGenerator</PackageId>
+        <PackageId>DataQuery.LanguageExtV2.SourceGenerator.NormNet</PackageId>
     </PropertyGroup>
 
     <ItemGroup>
