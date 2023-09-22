@@ -1,4 +1,4 @@
-namespace DataQuery.LanguageExt.SourceGenerator.NormNet.NormNet;
+namespace DataQuery.LanguageExt.SourceGenerator.NormNet;
 
 using System.Collections.Immutable;
 using System.Linq;

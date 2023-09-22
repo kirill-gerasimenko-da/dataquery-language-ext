@@ -1,4 +1,4 @@
-namespace DataQuery.LanguageExt.SourceGenerator.SystemData.SystemData;
+namespace DataQuery.LanguageExt.SourceGenerator.SystemData;
 
 using System.Collections.Immutable;
 using System.Linq;

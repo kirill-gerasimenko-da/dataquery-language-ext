@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Text;
 
 [Generator]
 [SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1036:Specify analyzer banned API enforcement setting")]
-public class DbNormNetQueryCommonGenerator : IIncrementalGenerator
+public class DbQueryCommonGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {

@@ -1,6 +1,4 @@
-// ReSharper disable CheckNamespace
-
-namespace DataQuery.LanguageExt.SystemData;
+namespace DataQuery.LanguageExt.SourceGenerator.SystemData;
 
 using System;
 
