@@ -65,13 +65,11 @@ public static class DbQuerySourcesGeneratorTask
         return @$"
 #pragma warning disable CS0105
 
-using Norm;
 using System.Threading;
 using System.Threading.Tasks;
 using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
-using TheUtils;
 using System.Runtime.CompilerServices;
 
 // TYPES: {inputTypes}
