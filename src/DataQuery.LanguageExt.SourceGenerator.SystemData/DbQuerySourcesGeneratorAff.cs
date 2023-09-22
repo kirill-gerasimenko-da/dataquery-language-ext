@@ -32,15 +32,9 @@ public static class DbQuerySourcesGeneratorAff
             .Parameters
             .Select(p => $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
 
-        var inputTypes = string.Join(", ", meta
-            .Parameters
-            .Select(p => p.TypeName));
-
         var inputAsLambdaParams = string.Join(", ", meta
             .Parameters
             .Select(p => $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
-
-        // Option<System.Data.Common.DbTransaction>
 
         var inputAsInvokeParams = string.Join(", ", meta
             .Parameters
@@ -55,8 +49,6 @@ using LanguageExt;
 using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using System.Runtime.CompilerServices;
-
-// TYPES: {inputTypes}
 
 namespace {meta.NamespaceName}
 {{

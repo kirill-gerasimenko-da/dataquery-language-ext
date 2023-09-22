@@ -44,8 +44,6 @@ public static class DbQuerySourcesGeneratorTask
                         p.TypeName != "CancellationToken")
             .Select(p => $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
 
-        // Option<System.Data.Common.DbTransaction>
-
         var inputAsInvokeParams = string.Join(", ", meta
             .Parameters
             .Select(p =>
@@ -69,8 +67,6 @@ using LanguageExt.Common;
 using static LanguageExt.Prelude;
 using TheUtils;
 using System.Runtime.CompilerServices;
-
-// TYPES: {inputTypes}
 
 namespace {meta.NamespaceName}
 {{
