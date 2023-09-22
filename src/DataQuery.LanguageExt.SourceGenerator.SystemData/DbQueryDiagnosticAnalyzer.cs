@@ -37,7 +37,7 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
             var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
             var fullName = attributeContainingTypeSymbol.ToDisplayString();
 
-            if (fullName == "DataQuery.LanguageExt.SourceGenerator.SystemData.DbQueryAttribute")
+            if (fullName == "DataQuery.LanguageExt.SystemData.DbQueryAttribute")
             {
                 hasFunctionAttribute = true;
                 break;

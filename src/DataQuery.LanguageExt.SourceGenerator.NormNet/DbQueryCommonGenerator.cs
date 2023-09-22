@@ -29,7 +29,7 @@ using Norm;
 using global::LanguageExt;
 using static global::LanguageExt.Prelude;
 
-public static class DbQuery
+public static class DbQueryInline
 {
     public static Aff<DbQueryRuntime, T> query<T>(Func<Norm, CancellationToken, ValueTask<T>> query)
     {

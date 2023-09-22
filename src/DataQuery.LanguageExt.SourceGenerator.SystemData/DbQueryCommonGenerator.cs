@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 using global::LanguageExt;
 using static global::LanguageExt.Prelude;
 
-public static class DbQuery
+public static class DbQueryInline
 {
     public static Aff<DbQueryRuntime, T> query<T>(Func<DbConnection, CancellationToken, ValueTask<T>> query)
     {

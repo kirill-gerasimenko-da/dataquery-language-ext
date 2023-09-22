@@ -7,7 +7,7 @@ using Norm;
 using TheUtils;
 using static DataQuery.LanguageExt.NormNet.DbQuery;
 
-[DataQuery.LanguageExt.SystemData.DbQuery]
+[DataQuery.LanguageExt.SystemData.]
 public class GetUser
 {
     public async Task<int> Invoke
