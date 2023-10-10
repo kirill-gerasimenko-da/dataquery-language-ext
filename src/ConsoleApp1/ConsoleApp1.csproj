@@ -9,13 +9,13 @@
 
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.1.4" />
-      <PackageReference Include="DataQuery.LanguageExtV2" Version="0.0.7" />
-      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.Common" Version="0.0.7" />
-      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.NormNet" Version="0.0.7" />
-      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.SystemData" Version="0.0.7" />
-      <PackageReference Include="LanguageExt.Core" Version="4.4.4" />
+      <PackageReference Include="DataQuery.LanguageExtV2" Version="0.0.8" />
+      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.Common" Version="0.0.8" />
+      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.NormNet" Version="0.0.8" />
+      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.SystemData" Version="0.0.8" />
+      <PackageReference Include="LanguageExt.Core" Version="4.4.6" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-      <PackageReference Include="Norm.net" Version="5.3.8" />
+      <PackageReference Include="Norm.net" Version="5.3.9" />
       <PackageReference Include="Npgsql" Version="7.0.6" />
       <PackageReference Include="System.Linq.Async" Version="6.0.1" />
       <PackageReference Include="TheUtils" Version="0.0.18" />
