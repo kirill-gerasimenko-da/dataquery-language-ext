@@ -39,7 +39,7 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Registers all db queries in the DI.
     /// </summary>
-    public static IServiceCollection AddAllFunctions(this IServiceCollection services,
+    public static IServiceCollection AddAllQueries(this IServiceCollection services,
         IEnumerable<Assembly> assemblies,
         ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
