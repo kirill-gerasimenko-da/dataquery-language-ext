@@ -13,7 +13,7 @@ using static DataQuery.LanguageExt.NormNet.DbQueryInline;
 
 var builder = Host.CreateDefaultBuilder();
 
-builder.ConfigureServices(services => services.AddAllFunctions(new[] {Assembly.GetExecutingAssembly()}));
+builder.ConfigureServices(services => services.AddAllQueries(new[] {Assembly.GetExecutingAssembly()}));
 
 var app = builder.Build();
 
