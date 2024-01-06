@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dapper" Version="2.1.24" />
+      <PackageReference Include="Dapper" Version="2.1.28" />
       <PackageReference Include="DataQuery.LanguageExtV2" Version="0.0.12" />
       <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.Common" Version="0.0.12" />
       <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.NormNet" Version="0.0.12" />
