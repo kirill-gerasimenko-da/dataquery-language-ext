@@ -18,37 +18,44 @@ public static class DbQuerySourcesGeneratorTask
 
     public static string GenerateAff(DataQueryTask meta)
     {
-        var outerClassBegin = meta.ParentClassName != null
-            ? $@"public {(meta.ParentClassIsStatic ? "static" : "")} partial class {meta.ParentClassName}
+        var outerClassBegin =
+            meta.ParentClassName != null
+                ? $@"public {(meta.ParentClassIsStatic ? "static" : "")} partial class {meta.ParentClassName}
     {{
 "
-            : "";
+                : "";
 
         var outerClassEnd = meta.ParentClassName != null ? "}" : "";
 
         var parentClassPrefix = meta.ParentClassName != null ? $"{meta.ParentClassName}." : "";
 
-        var inputParams = string.Join(", ", meta
-            .Parameters
-            .Where(p => p.TypeName != "System.Data.Common.DbConnection" &&
-                        p.TypeName != "Option<System.Data.Common.DbTransaction>" &&
-                        p.TypeName != "CancellationToken")
-            .Select(p => $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
+        var inputParams = string.Join(
+            ", ",
+            meta.Parameters.Where(p =>
+                p.TypeName != "System.Data.Common.DbConnection"
+                && p.TypeName != "Option<System.Data.Common.DbTransaction>"
+                && p.TypeName != "CancellationToken"
+            )
+                .Select(p =>
+                    $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"
+                )
+        );
 
-        var inputTypes = string.Join(", ", meta
-            .Parameters
-            .Select(p => p.TypeName));
+        var inputTypes = string.Join(", ", meta.Parameters.Select(p => p.TypeName));
 
-        var inputAsLambdaParams = string.Join(", ", meta
-            .Parameters
-            .Where(p => p.TypeName != "System.Data.Common.DbConnection" &&
-                        p.TypeName != "Option<System.Data.Common.DbTransaction>" &&
-                        p.TypeName != "CancellationToken")
-            .Select(p => $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"));
+        var inputAsLambdaParams = string.Join(
+            ", ",
+            meta.Parameters.Where(p =>
+                p.TypeName != "System.Data.Common.DbConnection"
+                && p.TypeName != "Option<System.Data.Common.DbTransaction>"
+                && p.TypeName != "CancellationToken"
+            )
+                .Select(p => $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}")
+        );
 
-        var inputAsInvokeParams = string.Join(", ", meta
-            .Parameters
-            .Select(p =>
+        var inputAsInvokeParams = string.Join(
+            ", ",
+            meta.Parameters.Select(p =>
             {
                 if (p.TypeName == "System.Data.Common.DbConnection")
                     return "___y.___conn";
@@ -58,7 +65,8 @@ public static class DbQuerySourcesGeneratorTask
                     return "___y.___trans";
 
                 return $"{char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}";
-            }));
+            })
+        );
 
         return @$"
 #pragma warning disable CS0105
@@ -97,7 +105,7 @@ namespace TheUtils.DependencyInjection
         public static IServiceCollection Add{meta.FuncName}Query
         (
             this IServiceCollection services,
-            ServiceLifetime lifetime = ServiceLifetime.Singleton
+            ServiceLifetime lifetime
         )
         {{
             services.Add(new(

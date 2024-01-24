@@ -6,19 +6,28 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
 [Generator]
-[SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1036:Specify analyzer banned API enforcement setting")]
+[SuppressMessage(
+    "MicrosoftCodeAnalysisCorrectness",
+    "RS1036:Specify analyzer banned API enforcement setting"
+)]
 public class DbQueryCommonGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterSourceOutput(context.CompilationProvider,
+        context.RegisterSourceOutput(
+            context.CompilationProvider,
             static (spc, _) =>
             {
-                spc.AddSource("DataQuery.LanguageExt.SystemData.Common.g.cs", SourceText.From(Content, Encoding.UTF8));
-            });
+                spc.AddSource(
+                    "DataQuery.LanguageExt.SystemData.Common.g.cs",
+                    SourceText.From(Content, Encoding.UTF8)
+                );
+            }
+        );
     }
 
-    static readonly string Content = @"
+    static readonly string Content =
+        @"
 namespace DataQuery.LanguageExt.SystemData;
 
 using System;
@@ -54,5 +63,4 @@ public static class DbQueryInline
         Eff(aff).Bind(identity);
 }
 ";
-
 }

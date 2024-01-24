@@ -23,9 +23,11 @@ public static class DbQueryExtensions
     /// <summary>
     /// Runs the query using the specified connection. No transaction is created.
     /// </summary>
-    public static async ValueTask<T> Run<T>(this Aff<DbQueryRuntime, T> query,
+    public static async ValueTask<T> Run<T>(
+        this Aff<DbQueryRuntime, T> query,
         DbConnection connection,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
         if (connection == null)
             throw new ArgumentNullException(nameof(connection));
@@ -41,21 +43,23 @@ public static class DbQueryExtensions
     /// <summary>
     /// Runs the query using the specified connection. No transaction is created.
     /// </summary>
-    public static async ValueTask<T> Run<T>(this DbConnection connection,
+    public static async ValueTask<T> Run<T>(
+        this DbConnection connection,
         Aff<DbQueryRuntime, T> query,
         CancellationToken token
-    )
-        => await query.Run(connection, token);
+    ) => await query.Run(connection, token);
 
     /// <summary>
     /// Runs the query using the specified connection and creating the transaction
     /// with specified isolation level. Created transaction is scoped
     /// to the method. Specified connection is not manipulated.
     /// </summary>
-    public static async ValueTask<T> Run<T>(this Aff<DbQueryRuntime, T> query,
+    public static async ValueTask<T> Run<T>(
+        this Aff<DbQueryRuntime, T> query,
         DbConnection connection,
         IsolationLevel isolationLevel,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
         if (connection == null)
             throw new ArgumentNullException(nameof(connection));
@@ -79,21 +83,23 @@ public static class DbQueryExtensions
     /// with specified isolation level. Created transaction is scoped
     /// to the method. Specified connection is not manipulated.
     /// </summary>
-    public static async ValueTask<T> Run<T>(this DbConnection connection,
+    public static async ValueTask<T> Run<T>(
+        this DbConnection connection,
         Aff<DbQueryRuntime, T> query,
         IsolationLevel isolationLevel,
         CancellationToken token
-    )
-        => await query.Run(connection, isolationLevel, token);
+    ) => await query.Run(connection, isolationLevel, token);
 
     /// <summary>
     /// Runs the query using the specified connection and transaction objects.
     /// Specified connection and transaction are not manipulated.
     /// </summary>
-    public static async ValueTask<T> Run<T>(this Aff<DbQueryRuntime, T> query,
+    public static async ValueTask<T> Run<T>(
+        this Aff<DbQueryRuntime, T> query,
         DbConnection connection,
         DbTransaction transaction,
-        CancellationToken token)
+        CancellationToken token
+    )
     {
         if (connection == null)
             throw new ArgumentNullException(nameof(connection));
@@ -112,10 +118,10 @@ public static class DbQueryExtensions
     /// Runs the query using the specified connection and transaction objects.
     /// Specified connection and transaction are not manipulated.
     /// </summary>
-    public static async ValueTask<T> Run<T>(this DbConnection connection,
+    public static async ValueTask<T> Run<T>(
+        this DbConnection connection,
         DbTransaction transaction,
         Aff<DbQueryRuntime, T> query,
         CancellationToken token
-    )
-        => await query.Run(connection, transaction, token);
+    ) => await query.Run(connection, transaction, token);
 }

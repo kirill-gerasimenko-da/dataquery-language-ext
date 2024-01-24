@@ -7,8 +7,11 @@ public readonly struct DbQueryRuntime : HasDbConnection<DbQueryRuntime>
 {
     private DbQueryRuntime(DbQueryRuntimeEnv env) => Env = env;
 
-    public static DbQueryRuntime New(DbConnection cnn, Option<DbTransaction> tran, CancellationToken cancelToken) =>
-        new(new DbQueryRuntimeEnv(new CancellationTokenSource(), cancelToken, cnn, tran));
+    public static DbQueryRuntime New(
+        DbConnection cnn,
+        Option<DbTransaction> tran,
+        CancellationToken cancelToken
+    ) => new(new DbQueryRuntimeEnv(new CancellationTokenSource(), cancelToken, cnn, tran));
 
     private DbQueryRuntimeEnv Env { get; }
 

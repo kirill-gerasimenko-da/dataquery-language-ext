@@ -3,8 +3,9 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <OutputType>Exe</OutputType>
+        <LangVersion>12</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,13 +15,13 @@
       <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.NormNet" Version="0.0.12" />
       <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.SystemData" Version="0.0.12" />
       <PackageReference Include="LanguageExt.Core" Version="4.4.7" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
       <PackageReference Include="Norm.net" Version="5.4.0" />
-      <PackageReference Include="Npgsql" Version="7.0.6" />
+      <PackageReference Include="Npgsql" Version="8.0.1" />
       <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-      <PackageReference Include="TheUtils" Version="0.0.20" />
-      <PackageReference Include="TheUtils.SourceGenerator" Version="0.0.38" />
+      <PackageReference Include="TheUtils" Version="1.0.2" />
+      <PackageReference Include="TheUtils.SourceGenerator" Version="1.0.2" />
     </ItemGroup>
 
 </Project>

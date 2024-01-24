@@ -16,7 +16,8 @@ public readonly struct DbQueryRuntimeEnv
         CancellationTokenSource source,
         CancellationToken token,
         DbConnection connection,
-        Option<DbTransaction> transaction)
+        Option<DbTransaction> transaction
+    )
     {
         Source = source;
         Token = token;
@@ -27,9 +28,9 @@ public readonly struct DbQueryRuntimeEnv
     private DbQueryRuntimeEnv(
         CancellationTokenSource source,
         DbConnection connection,
-        Option<DbTransaction> transaction)
-        : this(source, source.Token, connection, transaction)
-    { }
+        Option<DbTransaction> transaction
+    )
+        : this(source, source.Token, connection, transaction) { }
 
     public DbQueryRuntimeEnv LocalCancel => new(new CancellationTokenSource(), Connection, None);
 }

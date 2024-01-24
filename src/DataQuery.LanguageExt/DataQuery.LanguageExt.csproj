@@ -11,14 +11,14 @@
     <Authors>Kirill Gerasimenko</Authors>
     <PackageLicenseUrl>https://github.com/kirill-gerasimenko-da/dataquery-language-ext/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>language-ext sql norm</PackageTags>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
     <PackageId>DataQuery.LanguageExtV2</PackageId>
     <Product>DataQuery.LanguageExt.Sql</Product>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.7" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 </Project>

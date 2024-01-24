@@ -19,7 +19,8 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
 
     private void AnalyzeNode(SyntaxNodeAnalysisContext context)
     {
-        var classDeclarationSyntax = context.Node is ClassDeclarationSyntax { AttributeLists.Count: > 0 } node
+        var classDeclarationSyntax = context.Node
+            is ClassDeclarationSyntax { AttributeLists.Count: > 0 } node
             ? node
             : null;
 
@@ -31,7 +32,10 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
         foreach (var attributeListSyntax in classDeclarationSyntax.AttributeLists)
         foreach (var attributeSyntax in attributeListSyntax.Attributes)
         {
-            if (context.SemanticModel.GetSymbolInfo(attributeSyntax).Symbol is not IMethodSymbol attributeSymbol)
+            if (
+                context.SemanticModel.GetSymbolInfo(attributeSyntax).Symbol
+                is not IMethodSymbol attributeSymbol
+            )
                 continue;
 
             var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
@@ -56,25 +60,35 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
         var members = classSymbol.GetMembers();
         foreach (var m in members)
         {
-            if (m is IMethodSymbol msr && msr.MethodKind == MethodKind.Ordinary
-                                       && msr.IsStatic == false
-                                       && msr.DeclaredAccessibility == Accessibility.Public)
+            if (
+                m is IMethodSymbol msr
+                && msr.MethodKind == MethodKind.Ordinary
+                && msr.IsStatic == false
+                && msr.DeclaredAccessibility == Accessibility.Public
+            )
             {
                 if (msr.Name == "Invoke")
                 {
-                    var hasNormParameter = msr.Parameters.Any(dbConn => dbConn.Type.ToDisplayString() == "System.Data.Common.DbConnection");
-                    var hasValidReturnType = msr.ReturnType.MetadataName
-                        is "ValueTask`1"
-                        or "ValueTask"
-                        or "Task`1"
-                        or "Task";
+                    var hasNormParameter = msr.Parameters.Any(dbConn =>
+                        dbConn.Type.ToDisplayString() == "System.Data.Common.DbConnection"
+                    );
+                    var hasValidReturnType =
+                        msr.ReturnType.MetadataName
+                            is "ValueTask`1"
+                                or "ValueTask"
+                                or "Task`1"
+                                or "Task";
 
                     var hasAffWithRtReturnType = msr.ReturnType.MetadataName == "Aff`2";
 
                     var nts = msr.ReturnType as INamedTypeSymbol;
-                    var isRt = nts?.TypeArguments.First().ToDisplayString() == "DataQuery.LanguageExt.DbQueryRuntime";
+                    var isRt =
+                        nts?.TypeArguments.First().ToDisplayString()
+                        == "DataQuery.LanguageExt.DbQueryRuntime";
 
-                    if ((hasNormParameter && hasValidReturnType) || (hasAffWithRtReturnType && isRt))
+                    if (
+                        (hasNormParameter && hasValidReturnType) || (hasAffWithRtReturnType && isRt)
+                    )
                         hasInvokeMethod = true;
 
                     break;
@@ -83,9 +97,13 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
         }
 
         if (!hasInvokeMethod)
-            context.ReportDiagnostic(Diagnostic.Create(DbQueryGenerator.NoInvokeMethodFound,
-                classSymbol.Locations.FirstOrDefault(),
-                classSymbol.Name));
+            context.ReportDiagnostic(
+                Diagnostic.Create(
+                    DbQueryGenerator.NoInvokeMethodFound,
+                    classSymbol.Locations.FirstOrDefault(),
+                    classSymbol.Name
+                )
+            );
     }
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Sql", "DataQuery.LanguageExt.Sql\DataQuery.LanguageExt.Sql.csproj", "{A43B52E6-5310-414E-8987-222243A07C85}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{AEBA3976-6F22-45A7-9D75-CE8B81018C54}"
 	ProjectSection(SolutionItems) = preProject
 		..\README.md = ..\README.md
@@ -13,10 +11,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt", "DataQuery.LanguageExt\DataQuery.LanguageExt.csproj", "{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{C0E222DF-BF50-4DAD-8877-44A395DD5635}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.Tests", "DataQuery.LanguageExt.Tests\DataQuery.LanguageExt.Tests.csproj", "{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "V2", "V2", "{2A97A013-DCD6-4820-A222-87AA102210A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataQuery.LanguageExt.SourceGenerator.Common", "DataQuery.LanguageExt.SourceGenerator.Common\DataQuery.LanguageExt.SourceGenerator.Common.csproj", "{AC738394-0AEC-403F-9AB4-374118FD846E}"
 EndProject
@@ -33,10 +27,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A43B52E6-5310-414E-8987-222243A07C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A43B52E6-5310-414E-8987-222243A07C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A43B52E6-5310-414E-8987-222243A07C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A43B52E6-5310-414E-8987-222243A07C85}.Release|Any CPU.Build.0 = Release|Any CPU
 		{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,10 +35,6 @@ Global
 		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0E222DF-BF50-4DAD-8877-44A395DD5635}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F6C03E3-1EEA-4D6B-BFAA-2AD417AA38E3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC738394-0AEC-403F-9AB4-374118FD846E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC738394-0AEC-403F-9AB4-374118FD846E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC738394-0AEC-403F-9AB4-374118FD846E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,9 +49,5 @@ Global
 		{7CD3F6A7-4E93-41D2-A7C6-43CEBD80596B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{31D4BDB7-8B37-43A7-AD52-DD9B070D84A4} = {2A97A013-DCD6-4820-A222-87AA102210A9}
-		{AC738394-0AEC-403F-9AB4-374118FD846E} = {2A97A013-DCD6-4820-A222-87AA102210A9}
-		{9A440D4E-150B-41B7-82B2-F471DC2CFE15} = {2A97A013-DCD6-4820-A222-87AA102210A9}
-		{7CD3F6A7-4E93-41D2-A7C6-43CEBD80596B} = {2A97A013-DCD6-4820-A222-87AA102210A9}
 	EndGlobalSection
 EndGlobal

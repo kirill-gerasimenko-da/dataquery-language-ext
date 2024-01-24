@@ -6,19 +6,28 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
 [Generator]
-[SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1036:Specify analyzer banned API enforcement setting")]
+[SuppressMessage(
+    "MicrosoftCodeAnalysisCorrectness",
+    "RS1036:Specify analyzer banned API enforcement setting"
+)]
 public class DbCommonGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterSourceOutput(context.CompilationProvider,
+        context.RegisterSourceOutput(
+            context.CompilationProvider,
             static (spc, _) =>
             {
-                spc.AddSource("DataQuery.LanguageExt.Common.g.cs", SourceText.From(Content, Encoding.UTF8));
-            });
+                spc.AddSource(
+                    "DataQuery.LanguageExt.Common.g.cs",
+                    SourceText.From(Content, Encoding.UTF8)
+                );
+            }
+        );
     }
 
-    static readonly string Content = @"
+    static readonly string Content =
+        @"
 namespace DataQuery.LanguageExt;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -41,7 +50,7 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddAllQueries(this IServiceCollection services,
         IEnumerable<Assembly> assemblies,
-        ServiceLifetime lifetime = ServiceLifetime.Singleton)
+        ServiceLifetime lifetime)
     {
         bool IsNormQuery(ICustomAttributeProvider t) =>
             toSeq(t.GetCustomAttributes(typeof(NormNet.DbQueryAttribute), false))
@@ -66,5 +75,4 @@ public static class ServiceCollectionExtensions
         return services;
     }
 }";
-
 }
