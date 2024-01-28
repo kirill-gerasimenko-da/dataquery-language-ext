@@ -119,7 +119,7 @@ public class DbQueryGenerator : IIncrementalGenerator
         var functionsToGenerate = new List<DataQueryMetadata>();
 
         var recordAttribute = compilation.GetTypeByMetadataName(
-            "DataQuery.LanguageExt.SystemData.DbQueryAttribute"
+            "DataQuery.LanguageExt.SystemData.DatabaseQueryAttribute"
         );
         if (recordAttribute == null)
             return functionsToGenerate;
@@ -317,7 +317,7 @@ public class DbQueryGenerator : IIncrementalGenerator
             var attributeContainingTypeSymbol = attributeSymbol.ContainingType;
             var fullName = attributeContainingTypeSymbol.ToDisplayString();
 
-            if (fullName == "DataQuery.LanguageExt.SystemData.DbQueryAttribute")
+            if (fullName == "DataQuery.LanguageExt.SystemData.DatabaseQueryAttribute")
                 return classDeclarationSyntax;
         }
 

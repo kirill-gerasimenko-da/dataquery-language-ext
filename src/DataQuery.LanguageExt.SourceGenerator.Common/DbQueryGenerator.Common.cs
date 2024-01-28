@@ -53,13 +53,13 @@ public static class ServiceCollectionExtensions
         ServiceLifetime lifetime)
     {
         bool IsNormQuery(ICustomAttributeProvider t) =>
-            toSeq(t.GetCustomAttributes(typeof(NormNet.DbQueryAttribute), false))
-                .Cast<NormNet.DbQueryAttribute>()
+            toSeq(t.GetCustomAttributes(typeof(NormNet.DatabaseQueryAttribute), false))
+                .Cast<NormNet.DatabaseQueryAttribute>()
                 .HeadOrNone()
                 .IsSome;
         bool IsSystemDataQuery(ICustomAttributeProvider t) =>
-            toSeq(t.GetCustomAttributes(typeof(SystemData.DbQueryAttribute), false))
-                .Cast<SystemData.DbQueryAttribute>()
+            toSeq(t.GetCustomAttributes(typeof(SystemData.DatabaseQueryAttribute), false))
+                .Cast<SystemData.DatabaseQueryAttribute>()
                 .HeadOrNone()
                 .IsSome;
         var types = toSeq(assemblies).Bind(a => toSeq(a.GetTypes()));
