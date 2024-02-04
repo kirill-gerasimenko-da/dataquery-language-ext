@@ -10,18 +10,18 @@
 
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.1.28" />
-      <PackageReference Include="DataQuery.LanguageExtV2" Version="0.0.12" />
-      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.Common" Version="0.0.12" />
-      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.NormNet" Version="0.0.12" />
-      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.SystemData" Version="0.0.12" />
+      <PackageReference Include="DataQuery.LanguageExtV2" Version="0.0.14" />
+      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.Common" Version="0.0.14" />
+      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.NormNet" Version="3.0.19" />
+      <PackageReference Include="DataQuery.LanguageExtV2.SourceGenerator.SystemData" Version="0.0.14" />
       <PackageReference Include="LanguageExt.Core" Version="4.4.7" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
       <PackageReference Include="Norm.net" Version="5.4.0" />
       <PackageReference Include="Npgsql" Version="8.0.1" />
       <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-      <PackageReference Include="TheUtils" Version="1.0.2" />
-      <PackageReference Include="TheUtils.SourceGenerator" Version="1.0.2" />
+      <PackageReference Include="TheUtils" Version="1.0.7" />
+      <PackageReference Include="TheUtils.SourceGenerator" Version="1.0.7" />
     </ItemGroup>
 
 </Project>

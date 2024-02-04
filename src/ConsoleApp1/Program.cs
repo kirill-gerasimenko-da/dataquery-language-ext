@@ -14,34 +14,34 @@ using static DataQuery.LanguageExt.NormNet.DbQueryInline;
 var builder = Host.CreateDefaultBuilder();
 
 builder.ConfigureServices(services =>
-    services.AddAllQueries(new[] { Assembly.GetExecutingAssembly() })
+    services.AddAllQueries(new[] { Assembly.GetExecutingAssembly() }, ServiceLifetime.Singleton)
 );
 
 var app = builder.Build();
 
-var getUserQuery = app.Services.GetService<GetUserQuery>();
-var getUserCombinedQuery = app.Services.GetService<GetUsersCombinedQuery>();
-var getUserNormQuery = app.Services.GetService<GetUserNormQuery>();
-var getSd = app.Services.GetService<GetUsersCombinedSystemDQuery>();
-var getDapper = app.Services.GetService<GetUserDapperQuery>();
-
-await using var conn = new NpgsqlConnection(
-    "Port=5432;Host=localhost;Username=postgres;Password=gv9f0IeQ6B;Database=postgres;Pooling=True;SSL Mode=Disable;Include Error Detail=True"
-);
-
-var qqq =
-    from _1 in getUserQuery("", 500)
-    from _2 in getUserNormQuery(600)
-    from _3 in query((norm, token) => norm.ReadAsync<int>("select 200").SingleAsync(token))
-    from _4 in getUserCombinedQuery(100, 200)
-    from _5 in getSd(2, 8)
-    from _6 in getDapper(1000)
-    select _1 + _2 + _3 + _4 + _6;
-
-var results = await qqq.Run(conn, default);
-
-await getUserQuery("", 500).Run(conn, IsolationLevel.ReadCommitted, default);
-
-Console.WriteLine(results);
+// var getUserQuery = app.Services.GetService<GetUserQuery>();
+// var getUserCombinedQuery = app.Services.GetService<GetUsersCombinedQuery>();
+// var getUserNormQuery = app.Services.GetService<GetUserNormQuery>();
+// var getSd = app.Services.GetService<GetUsersCombinedSystemDQuery>();
+// var getDapper = app.Services.GetService<GetUserDapperQuery>();
+//
+// await using var conn = new NpgsqlConnection(
+//     "Port=5432;Host=localhost;Username=postgres;Password=gv9f0IeQ6B;Database=postgres;Pooling=True;SSL Mode=Disable;Include Error Detail=True"
+// );
+//
+// var qqq =
+//     from _1 in getUserQuery("", 500)
+//     from _2 in getUserNormQuery(600)
+//     from _3 in query((norm, token) => norm.ReadAsync<int>("select 200").SingleAsync(token))
+//     from _4 in getUserCombinedQuery(100, 200)
+//     from _5 in getSd(2, 8)
+//     from _6 in getDapper(1000)
+//     select _1 + _2 + _3 + _4 + _6;
+//
+// var results = await qqq.Run(conn, default);
+//
+// await getUserQuery("", 500).Run(conn, IsolationLevel.ReadCommitted, default);
+//
+// Console.WriteLine(results);
 
 await app.RunAsync();

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VER=0.0.14
+VER=0.0.15
 
 dotnet build ./src/DataQuery.LanguageExt/DataQuery.LanguageExt.csproj -c Release
 dotnet pack ./src/DataQuery.LanguageExt/DataQuery.LanguageExt.csproj -c Release -o ./publish /p:PackageVersion=$VER
