@@ -32,7 +32,7 @@ public static class DbQuerySourcesGeneratorAff
         var inputParams = string.Join(
             ", ",
             meta.Parameters.Select(p =>
-                $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"
+                $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)} {(p.IsDefault ? p.Default : "")}"
             )
         );
 

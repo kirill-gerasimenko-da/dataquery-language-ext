@@ -37,7 +37,7 @@ public static class DbQuerySourcesGeneratorTask
                 && p.TypeName != "CancellationToken"
             )
                 .Select(p =>
-                    $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)}"
+                    $"{p.TypeName} {char.ToLowerInvariant(p.Name[0]) + p.Name.Substring(1)} {(p.IsDefault ? p.Default : "")}"
                 )
         );
 
@@ -123,11 +123,19 @@ namespace TheUtils.DependencyInjection
                          select (___conn, ___token, ___trans)
                         ).MapAsync(async ___y =>
                             await ___x.GetRequiredService<{parentClassPrefix}{meta.FuncName}>()
-                                .Invoke({inputAsInvokeParams}))),
+                                .Invoke({inputAsInvokeParams})
+                                {(meta.ReturnSubTypeName == "Unit" ? ".ToUnit()" : "")}
+                                )),
                 lifetime));
 
             return services;
-        }}       
+        }}
+
+        private static async ValueTask<Unit> ToUnit(this ValueTask<Unit> source)
+        {{
+            await source.ConfigureAwait(false);
+            return Prelude.unit;
+        }}
     }}
 }}
 ";

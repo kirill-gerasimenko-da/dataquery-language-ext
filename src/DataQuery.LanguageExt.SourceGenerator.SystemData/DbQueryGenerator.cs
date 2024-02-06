@@ -15,6 +15,8 @@ public record InputParameter
 {
     public string Name { get; set; }
     public string TypeName { get; set; }
+    public bool IsDefault { get; set; }
+    public string Default { get; set; }
 }
 
 public record DataQueryMetadata
@@ -176,11 +178,15 @@ public class DbQueryGenerator : IIncrementalGenerator
 
                         foreach (var p in msr.Parameters)
                         {
+                            var def = GetDefaultValue(p);
+
                             func.Parameters.Add(
                                 new InputParameter
                                 {
                                     Name = p.Name,
                                     TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
+                                    Default = def,
+                                    IsDefault = def != null
                                 }
                             );
                         }
@@ -202,11 +208,15 @@ public class DbQueryGenerator : IIncrementalGenerator
 
                         foreach (var p in msr.Parameters)
                         {
+                            var def = GetDefaultValue(p);
+
                             func.Parameters.Add(
                                 new InputParameter
                                 {
                                     Name = p.Name,
                                     TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
+                                    Default = def,
+                                    IsDefault = def != null
                                 }
                             );
                         }
@@ -224,11 +234,15 @@ public class DbQueryGenerator : IIncrementalGenerator
 
                         foreach (var p in msr.Parameters)
                         {
+                            var def = GetDefaultValue(p);
+
                             func.Parameters.Add(
                                 new InputParameter
                                 {
                                     Name = p.Name,
                                     TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
+                                    Default = def,
+                                    IsDefault = def != null
                                 }
                             );
                         }
@@ -250,11 +264,15 @@ public class DbQueryGenerator : IIncrementalGenerator
 
                         foreach (var p in msr.Parameters)
                         {
+                            var def = GetDefaultValue(p);
+
                             func.Parameters.Add(
                                 new InputParameter
                                 {
                                     Name = p.Name,
                                     TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
+                                    Default = def,
+                                    IsDefault = def != null
                                 }
                             );
                         }
@@ -272,11 +290,15 @@ public class DbQueryGenerator : IIncrementalGenerator
 
                         foreach (var p in msr.Parameters)
                         {
+                            var def = GetDefaultValue(p);
+
                             func.Parameters.Add(
                                 new InputParameter
                                 {
                                     Name = p.Name,
                                     TypeName = p.Type.ToMinimalDisplayString(semanticModel, 0),
+                                    Default = def,
+                                    IsDefault = def != null
                                 }
                             );
                         }
@@ -296,6 +318,16 @@ public class DbQueryGenerator : IIncrementalGenerator
         }
 
         return functionsToGenerate;
+    }
+
+    static string GetDefaultValue(IParameterSymbol p)
+    {
+        string def = null;
+
+        if (p.DeclaringSyntaxReferences[0].GetSyntax() is ParameterSyntax { Default: not null } syn)
+            def = syn.Default.ToFullString();
+
+        return def;
     }
 
     static bool IsSyntaxTargetForGeneration(SyntaxNode node) =>
