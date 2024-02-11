@@ -129,12 +129,6 @@ namespace TheUtils.DependencyInjection
 
             return services;
         }}
-
-        private static async ValueTask<Unit> ToUnit(this ValueTask<Unit> source)
-        {{
-            await source.ConfigureAwait(false);
-            return Prelude.unit;
-        }}
     }}
 }}
 ";

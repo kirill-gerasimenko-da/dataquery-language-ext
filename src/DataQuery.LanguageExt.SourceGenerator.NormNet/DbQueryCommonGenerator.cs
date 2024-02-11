@@ -20,13 +20,48 @@ public class DbQueryCommonGenerator : IIncrementalGenerator
             {
                 spc.AddSource(
                     "DataQuery.LanguageExt.NormNet.Common.g.cs",
-                    SourceText.From(Content, Encoding.UTF8)
+                    SourceText.From(ContentInlines, Encoding.UTF8)
+                );
+                spc.AddSource(
+                    "DataQuery.LanguageExt.NormNet.Common.g.cs",
+                    SourceText.From(ContentCommon, Encoding.UTF8)
                 );
             }
         );
     }
 
-    static readonly string Content =
+
+    static readonly string ContentCommon = @"
+#pragma warning disable CS0105
+
+using System.Threading;
+using System.Threading.Tasks;
+using LanguageExt;
+using LanguageExt.Common;
+using static LanguageExt.Prelude;
+using System.Runtime.CompilerServices;
+
+namespace TheUtils.DependencyInjection
+{
+    using Unit = LanguageExt.Unit;
+    using Microsoft.Extensions.DependencyInjection;
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public static partial class ServiceCollectionFunctionExtensions
+    {
+        public static async ValueTask<Unit> ToUnit(this ValueTask<Unit> source)
+        {
+            await source.ConfigureAwait(false);
+            return Prelude.unit;
+        }
+    }
+}
+";
+
+
+    static readonly string ContentInlines =
         @"
 namespace DataQuery.LanguageExt.NormNet;
 
