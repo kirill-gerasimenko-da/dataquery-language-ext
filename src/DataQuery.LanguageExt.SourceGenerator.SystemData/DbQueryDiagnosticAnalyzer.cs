@@ -83,7 +83,7 @@ public class DbQueryDiagnosticAnalyzer : DiagnosticAnalyzer
 
                     var nts = msr.ReturnType as INamedTypeSymbol;
                     var isRt =
-                        nts?.TypeArguments.FirstOrDefault().ToDisplayString()
+                        nts?.TypeArguments.FirstOrDefault()?.ToDisplayString()
                         == "DataQuery.LanguageExt.DbQueryRuntime";
 
                     if (
